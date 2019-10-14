@@ -4,10 +4,10 @@ html * {
 
 /* applies roboto font to all elements*/
 
-/* CSS code should go here */
+/* [CSS code should go here] */
 
 /* media queries */
 
-@media only screen and (max-device-width: 1366px) {
-	/* should make site display on lower resolution devices i.e. laptops */
-}
+/* @media only screen and (max-device-width: [screen size goes here]px) {
+	
+} */
