@@ -1,4 +1,5 @@
 # files that should be removed go here:
+# format : "**/[filename.file extension]
 **/.DS_Store
 **/thumbs.db
 **/Folder.jpg
