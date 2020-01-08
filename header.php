@@ -9,6 +9,9 @@ $dbpass = '';
 $dbname = 'movie_database';
 /////
 
+$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+
+// style sheet and header:
 echo <<<_END
     <!DOCTYPE html>
     <html lang="en">
@@ -19,12 +22,9 @@ echo <<<_END
         </head>
     <h1>2CWK50: A Survey Website</h1>
     <nav>
-    <ul>
 _END;
 
 session_start();
-
-// style sheet:
 
 
 

@@ -1,7 +1,8 @@
 <?php
 
 // function to sanitise (clean) user data:
-function sanitise($str, $connection) {
+function sanitise($str, $connection)
+{
     if (get_magic_quotes_gpc()) {
         // just in case server is running an old version of PHP with "magic quotes" running:
         $str = stripslashes($str);
@@ -19,7 +20,8 @@ function sanitise($str, $connection) {
 }
 
 // sanitise user inputs when they are creating their account:
-function sanitiseUserData($connection, &$username, &$email, &$password, &$firstname, &$surname) {
+function sanitiseUserData($connection, &$username, &$email, &$password, &$firstname, &$surname)
+{
     $username = sanitise($_POST['username'], $connection);
     $email = sanitise($_POST['email'], $connection);
     $password = sanitise($_POST['password'], $connection);
@@ -28,7 +30,8 @@ function sanitiseUserData($connection, &$username, &$email, &$password, &$firstn
 }
 
 // displays the account creation form:
-function displayCreateAccountForm($username, $email, $password, $firstname, $surname, $arrayOfAccountErrors) {
+function displayCreateAccountForm($username, $email, $password, $firstname, $surname, $arrayOfAccountErrors)
+{
 
     $currentURL = $_SERVER['REQUEST_URI'];
 
@@ -52,7 +55,8 @@ _END;
 }
 
 // inserts new account into database:
-function createAccount($connection, $username, $email, $password, $firstname, $surname, $arrayOfAccountCreationErrors) {
+function createAccount($connection, $username, $email, $password, $firstname, $surname, $arrayOfAccountCreationErrors)
+{
     $randomPasswordGenerated = false;
     $plaintextPassword = "";
 
@@ -75,7 +79,7 @@ function createAccount($connection, $username, $email, $password, $firstname, $s
         $password = encryptInput($password);
 
         // try to insert the new details:
-        $query = "INSERT INTO users (username, firstname, surname, password, email) VALUES ('$username','$firstname','$surname','$password','$email')";
+        $query = "INSERT INTO user (id, username, firstname, surname, password, email) VALUES (null, '$username','$firstname','$surname','$password','$email')";
         $result = mysqli_query($connection, $query);
 
         // if no data returned, we set result to true(success)/false(failure):
@@ -103,14 +107,16 @@ function createAccount($connection, $username, $email, $password, $firstname, $s
 }
 
 // initialises every element in an array with a null value
-function initEmptyArray(&$array, $size) {
+function initEmptyArray(&$array, $size)
+{
     for ($i = 0; $i <= $size; $i++) {
         $array[$i] = "";
     }
 }
 
 // this function validates all user inputs, and adds each validation message to an array of errors
-function createArrayOfAccountErrors($username, $email, $password, $firstname, $surname, &$arrayOfErrors) {
+function createArrayOfAccountErrors($username, $email, $password, $firstname, $surname, &$arrayOfErrors)
+{
     $arrayOfErrors[0] = validateStringLength($username, 1, 20);
     $arrayOfErrors[1] = validateEmail($email, 1, 64);
     $arrayOfErrors[2] = validatePassword($password, 12, 32);
@@ -144,7 +150,8 @@ function validateName($field, $minlength, $maxlength) // master function +
 }
 
 // this function checks if an inputted email address is valid, and then returns an error message if it isn't
-function validateEmail($field, $minLength, $maxLength) {
+function validateEmail($field, $minLength, $maxLength)
+{
     $errors = "";
     $errors = $errors . validateStringLength($field, $minLength, $maxLength);
     $errors = $errors . checkIsEmail($field);
@@ -153,7 +160,8 @@ function validateEmail($field, $minLength, $maxLength) {
 
 // if password length = 0, generate a random password,
 // otherwise check if password is correct length
-function validatePassword($field, $minLength, $maxLength) {
+function validatePassword($field, $minLength, $maxLength)
+{
     if (strlen($field) == 0) {
         return "Generate random password";
     } else {
@@ -162,7 +170,8 @@ function validatePassword($field, $minLength, $maxLength) {
 }
 
 // if the input contains the @ symbol then return an empty string, if the data is invalid return a help message
-function checkIsEmail($field) {
+function checkIsEmail($field)
+{
     if (strpos($field, '@') == false) {
         return "Email must contain an '@'";
     } else {
@@ -171,7 +180,8 @@ function checkIsEmail($field) {
 }
 
 // if the input is contains only numbers then return an empty string, if the data is invalid return a help message
-function checkIsNonNumeric($field) {
+function checkIsNonNumeric($field)
+{
     $charArray = str_split($field);
     $lengthOfCharArray = count($charArray);
 
@@ -184,8 +194,59 @@ function checkIsNonNumeric($field) {
 }
 
 // this function encrypts a user input
-function encryptInput($input) {
+function encryptInput($input)
+{
     return password_hash($input, PASSWORD_BCRYPT); // leave third parameter empty to generate random salt every time
+}
+
+// this function generates 32 random alphanumeric characters, converts them to ascii, combines the combination of characters, then returns the combination
+function generateAlphanumericString()
+{
+    $charArray = createArrayOfUsableCharacters();
+    $lengthOfCharArray = count($charArray) - 1;
+
+    $tempPassword[] = "";
+
+    for ($i = 0; $i <= 31; $i++) {
+        $randNumber = rand(0, $lengthOfCharArray);
+        $tempPassword[$i] = chr($charArray[$randNumber]);
+    }
+
+    $finalPassword = "";
+
+    for ($i = 0; $i <= 31; $i++) {
+        $finalPassword = $finalPassword . $tempPassword[$i];
+    }
+
+    return $finalPassword;
+}
+
+// this function creates an array of all alphanumeric characters
+function createArrayOfUsableCharacters()
+{
+    $charArray[] = "";
+
+    $j = 0;
+
+    // get characters 0 to 9
+    for ($i = 48; $i <= 57; $i++) {
+        $charArray[$j] = $i;
+        $j++;
+    }
+
+    // get capital letters
+    for ($i = 65; $i <= 90; $i++) {
+        $charArray[$j] = $i;
+        $j++;
+    }
+
+    // get lower case letters
+    for ($i = 97; $i <= 122; $i++) {
+        $charArray[$j] = $i;
+        $j++;
+    }
+
+    return $charArray;
 }
 
 ?>

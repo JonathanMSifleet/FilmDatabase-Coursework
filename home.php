@@ -1,8 +1,11 @@
 <?php
 
+require_once "header.php";
+
 // main page
 
 echo "<p>Home page</p>";
+
 echo <<<_END
 
 <ul>

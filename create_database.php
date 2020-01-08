@@ -8,7 +8,9 @@ createDatabase($connection, $dbname);
 
 createUserTable($connection);
 
-createMovieTable();
+//createMovieTable();
+
+echo "<a href = home.php> Return to main page </a>";
 
 function createDatabase($connection, $dbname)
 {
@@ -34,7 +36,7 @@ function createUserTable($connection)
         die("Error checking for user table: " . mysqli_error($connection));
     }
 
-    $sql = "CREATE TABLE user (id INT, username VARCHAR(20), firstname VARCHAR(16), surname VARCHAR(20), password VARCHAR(60), email VARCHAR(64))";
+    $sql = "CREATE TABLE user (id INT AUTO_INCREMENT, username VARCHAR(20), firstname VARCHAR(16), surname VARCHAR(20), password VARCHAR(60), email VARCHAR(64), PRIMARY KEY (id))";
 
     if (mysqli_query($connection, $sql)) {
         echo "Table created successfully: user<br>";
