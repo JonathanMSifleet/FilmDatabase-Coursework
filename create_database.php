@@ -8,11 +8,11 @@ createDatabase($connection, $dbname);
 
 createUserTable($connection);
 
-$dumpedFile = readDataDump($connection);
+//$dumpedFile = readDataDump($connection);
 
-var_dump($dumpedFile);
+//var_dump($dumpedFile);
 
-//createMovieTable();
+createMovieTable($connection);
 
 echo "<a href = home.php> Return to main page </a>";
 
@@ -83,7 +83,7 @@ function getNumLines($tempFile)
 	return $lineCount;
 }
 
-/* function createMovieTable($connection) {
+function createMovieTable($connection) {
     $sql = "DROP TABLE IF EXISTS movie";
 
     if (mysqli_query($connection, $sql)) {
@@ -92,12 +92,13 @@ function getNumLines($tempFile)
         die("Error checking for user table: " . mysqli_error($connection));
     }
 
-    $sql = "CREATE TABLE movie (VARCHAR)";
-        echo "Table created successfully: movie<br>";
+    $sql = "CREATE TABLE movie (adult TINYINT(1), budget INT, movie_ID MEDIUMINT, tmdb_ID VARCHAR(8), original_language VARCHAR(2), overview VARCHAR(4096), release_date DATE, revenue BIGINT, title VARCHAR(64), PRIMARY KEY (movie_ID))";
+       	if (mysqli_query($connection, $sql)) {
+	   echo "Table created successfully: movie<br>";
     } else {
         die("Error creating table: " . mysqli_error($connection));
     }
 
-} */
+}
 
 ?>
