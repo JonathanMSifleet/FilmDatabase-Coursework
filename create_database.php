@@ -5,14 +5,12 @@ require_once "header.php";
 $connection = mysqli_connect($dbhost, $dbuser, $dbpass);
 
 createDatabase($connection, $dbname);
-
 createUserTable($connection);
 
-//$dumpedFile = readDataDump($connection);
+$filename = "dumps/movies_metadata.csv";
+$dataDump = readDataDump($filename);
 
-//var_dump($dumpedFile);
-
-createMovieTable($connection);
+createMovieTable($connection, $dataDump);
 
 echo "<a href = home.php> Return to main page </a>";
 
@@ -49,21 +47,18 @@ function createUserTable($connection)
 	}
 }
 
-function readDataDump($connection)
+function readDataDump($filename)
 {
 
-	$tempFile = fopen("movies_metadata.csv", "r") or die ("Unable to open");
+	$tempFile = fopen($filename, "r") or die ("Unable to open");
 	$arrayOfLines = array();
 
-	$numLines = getNumLines($tempFile);
-
-	$tempFile = fopen("movies_metadata.csv", "r") or die ("Unable to open");
+	$tempFile = fopen($filename, "r") or die ("Unable to open");
 
 	$i = 0;
 	while (($line = fgets($tempFile)) !== false) {
-		$arrayOfLines[] = explode(',', $line);
+		$arrayOfLines[] = $line;
 		$i++;
-		//echo "Line " . $i . " of " . $numLines . "<br>";
 	}
 
 	fclose($tempFile);
@@ -72,32 +67,44 @@ function readDataDump($connection)
 
 }
 
-function getNumLines($tempFile)
+function createMovieTable($connection, $dataDump)
 {
-	$lineCount = 0;
-	while (!feof($tempFile)) {
-		$line = fgets($tempFile);
-		$lineCount++;
+	$sql = "DROP TABLE IF EXISTS movie";
+
+	if (mysqli_query($connection, $sql)) {
+		echo "Dropped existing table: movies<br>";
+	} else {
+		die("Error checking for user table: " . mysqli_error($connection));
 	}
 
-	return $lineCount;
-}
+	$sql = "CREATE TABLE movie (movie_ID MEDIUMINT, overview VARCHAR(4096), title VARCHAR(64),  release_date DATE, tmdb_ID VARCHAR(9), adult TINYINT(1), budget INT,  original_language VARCHAR(2), revenue BIGINT, PRIMARY KEY (movie_ID))";
+	if (mysqli_query($connection, $sql)) {
+		echo "Table created successfully: movie<br>";
+	} else {
+		die("Error creating table: " . mysqli_error($connection));
+	}
 
-function createMovieTable($connection) {
-    $sql = "DROP TABLE IF EXISTS movie";
+	// remove first line:
+	array_shift($dataDump);
 
-    if (mysqli_query($connection, $sql)) {
-        echo "Dropped existing table: users<br>";
-    } else {
-        die("Error checking for user table: " . mysqli_error($connection));
-    }
+	for ($i = 0; $i < 1; $i++) {
 
-    $sql = "CREATE TABLE movie (adult TINYINT(1), budget INT, movie_ID MEDIUMINT, tmdb_ID VARCHAR(8), original_language VARCHAR(2), overview VARCHAR(4096), release_date DATE, revenue BIGINT, title VARCHAR(64), PRIMARY KEY (movie_ID))";
-       	if (mysqli_query($connection, $sql)) {
-	   echo "Table created successfully: movie<br>";
-    } else {
-        die("Error creating table: " . mysqli_error($connection));
-    }
+		$dataToInsert = explode(",", $dataDump[$i]);
+
+		print_r($dataToInsert);
+
+/* 		for($j =0; $j < count($dataToInsert); $j++) {
+			str_replace("|", ",", $dataToInsert[$j]);
+		} */
+
+		$sql = "INSERT INTO movie (movie_ID, overview, title, release_date, tmdb_id, adult, budget, original_language, revenue) VALUES ($dataToInsert[0], $dataToInsert[1], $dataToInsert[2], $dataToInsert[3], $dataToInsert[4], $dataToInsert[5], $dataToInsert[6], $dataToInsert[7], $dataToInsert[8])";
+
+		if (mysqli_query($connection, $sql)) {
+		} else {
+			die("Error inserting row: " . mysqli_error($connection));
+		}
+
+	}
 
 }
 
