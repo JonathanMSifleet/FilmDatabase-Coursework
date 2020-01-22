@@ -2,175 +2,181 @@
 
 require_once "header.php";
 
+set_time_limit(1200);
+
 $connection = mysqli_connect($dbhost, $dbuser, $dbpass);
 
 createDatabase($connection, $dbname);
 createUserTable($connection);
 
-$filename = "dumps/keywords.csv";
-$dataDump = readDataDump($filename);
-
-createKeywordTable($connection, $dataDump);
-
+//$filename = "dumps/movies.csv";
+//$dataDump = readDataDump($filename);
 //createMovieTable($connection, $dataDump);
 
-echo "<a href = home.php> Return to main page </a>";
+$filename = "dumps/keywords.csv";
+$dataDump = readDataDump($filename);
+createKeywordTable($connection, $dataDump);
+tidyTable($connection);
+
+
+
+echo "<br><a href = home.php> Return to main page </a>";
 
 function createDatabase($connection, $dbname)
 {
-    // build a statement to create a new database:
-    $sql = "CREATE DATABASE IF NOT EXISTS " . $dbname;
-    // no data returned, we just test for true(success)/false(failure):
-    if (mysqli_query($connection, $sql)) {
-        echo "Database created successfully <br>";
-    } else {
-        die("Error creating database: " . mysqli_error($connection));
-    }
-    // connect to our database:
-    mysqli_select_db($connection, $dbname);
+	// build a statement to create a new database:
+	$sql = "CREATE DATABASE IF NOT EXISTS " . $dbname;
+	// no data returned, we just test for true(success)/false(failure):
+	if (mysqli_query($connection, $sql)) {
+		echo "Database created successfully <br>";
+	} else {
+		die("Error creating database: " . mysqli_error($connection));
+	}
+	// connect to our database:
+	mysqli_select_db($connection, $dbname);
 }
 
 function createUserTable($connection)
 {
-    $sql = "DROP TABLE IF EXISTS user";
+	$sql = "DROP TABLE IF EXISTS user";
 
-    if (mysqli_query($connection, $sql)) {
-        echo "Dropped existing table: user<br>";
-    } else {
-        die("Error checking for user table: " . mysqli_error($connection));
-    }
+	if (mysqli_query($connection, $sql)) {
+		echo "Dropped existing table: user<br>";
+	} else {
+		die("Error checking for user table: " . mysqli_error($connection));
+	}
 
-    $sql = "CREATE TABLE user (id INT AUTO_INCREMENT, username VARCHAR(20), firstname VARCHAR(16), surname VARCHAR(20), password VARCHAR(60), email VARCHAR(64), PRIMARY KEY (id))";
+	$sql = "CREATE TABLE user (id INT AUTO_INCREMENT, username VARCHAR(20), firstname VARCHAR(16), surname VARCHAR(20), password VARCHAR(60), email VARCHAR(64), PRIMARY KEY (id))";
 
-    if (mysqli_query($connection, $sql)) {
-        echo "Table created successfully: user<br>";
-    } else {
-        die("Error creating table: " . mysqli_error($connection));
-    }
+	if (mysqli_query($connection, $sql)) {
+		echo "Table created successfully: user<br>";
+	} else {
+		die("Error creating table: " . mysqli_error($connection));
+	}
 }
 
 function readDataDump($filename)
 {
 
-    $tempFile = fopen($filename, "r") or die ("Unable to open");
-    $arrayOfLines = array();
+	$tempFile = fopen($filename, "r") or die ("Unable to open");
+	$arrayOfLines = array();
 
-    $tempFile = fopen($filename, "r") or die ("Unable to open");
+	$tempFile = fopen($filename, "r") or die ("Unable to open");
 
-    $i = 0;
-    while (($line = fgets($tempFile)) !== false) {
-        $arrayOfLines[] = $line;
-        $i++;
-    }
+	$i = 0;
+	while (($line = fgets($tempFile)) !== false) {
+		$arrayOfLines[] = $line;
+		$i++;
+	}
 
-    fclose($tempFile);
+	fclose($tempFile);
 
-    return $arrayOfLines;
-
-}
-
-function createKeywordTable($connection, $dataDump)
-{
-
-    $sql = "DROP TABLE IF EXISTS keywords";
-
-    if (mysqli_query($connection, $sql)) {
-        echo "Dropped existing table: keywords<br>";
-    } else {
-        die("Error checking for user table: " . mysqli_error($connection));
-    }
-
-    $sql = "CREATE TABLE keywords (uniqueID VARCHAR(32), movie_ID MEDIUMINT,  id MEDIUMINT, name VARCHAR(64), PRIMARY KEY (uniqueID))";
-    if (mysqli_query($connection, $sql)) {
-        echo "Table created successfully: keyword<br>";
-    } else {
-        die("Error creating table: " . mysqli_error($connection));
-    }
-
-    //remove header from array:
-    array_shift($dataDump);
-
-    foreach ($dataDump as $line) {
-        $lineAsArray = explode(",", $line);
-
-        $movieID = $lineAsArray[0];
-
-        $keywords = $lineAsArray[1] . "<br>";
-
-        $arrayOfKeywords = explode("|", $keywords);
-
-        foreach ($arrayOfKeywords as $keywordPairs) {
-
-            $temp = explode("_", $keywordPairs);
-
-            // get keyword ID:
-            $keywordID = $temp[0];
-            $keywordName = $temp[1];
-            $temp = explode(": ", $keywordID);
-            $keywordID = $temp[1];
-
-            // get keyword name:
-            $temp = explode(": '", $keywordName);
-            $keywordName = $temp[1];
-            $keywordName = substr($keywordName, 0, -1);
-            //echo $keywordName . "<br>";
-
-            $uniqueKID = md5($movieID . $keywordID . $keywordName);
-
-            //insert keyword into table:
-
-            $sql = "INSERT INTO keywords (uniqueID, movie_ID, id, name) VALUES ('$uniqueKID', $movieID, $keywordID, '$keywordName')";
-
-            if (mysqli_query($connection, $sql)) {
-            } else {
-                die("Error inserting row: " . mysqli_error($connection));
-            }
-
-        }
-
-    }
+	return $arrayOfLines;
 
 }
 
 function createMovieTable($connection, $dataDump)
 {
-    $sql = "DROP TABLE IF EXISTS movie";
+	$sql = "DROP TABLE IF EXISTS movie";
 
-    if (mysqli_query($connection, $sql)) {
-        echo "Dropped existing table: movies<br>";
-    } else {
-        die("Error checking for user table: " . mysqli_error($connection));
-    }
+	if (mysqli_query($connection, $sql)) {
+		echo "Dropped existing table: movie<br>";
+	} else {
+		die("Error checking for user table: " . mysqli_error($connection));
+	}
 
-    $sql = "CREATE TABLE movie (movie_ID MEDIUMINT, overview VARCHAR(4096), title VARCHAR(64),  release_date DATE, tmdb_ID VARCHAR(9), adult TINYINT(1), budget INT,  original_language VARCHAR(2), revenue BIGINT, PRIMARY KEY (movie_ID))";
-    if (mysqli_query($connection, $sql)) {
-        echo "Table created successfully: movie<br>";
-    } else {
-        die("Error creating table: " . mysqli_error($connection));
-    }
+	$sql = "CREATE TABLE movie (movie_ID MEDIUMINT, overview VARCHAR(4096), title VARCHAR(64),  release_date DATE, tmdb_ID VARCHAR(9), adult TINYINT(1), budget INT,  original_language VARCHAR(2), revenue BIGINT, PRIMARY KEY (movie_ID))";
+	if (mysqli_query($connection, $sql)) {
+		echo "Table created successfully: movie<br>";
+	} else {
+		die("Error creating table: " . mysqli_error($connection));
+	}
+}
 
-    /* // remove first line:
-    array_shift($dataDump);
+function createKeywordTable($connection, $dataDump)
+{
 
-    for ($i = 0; $i < 1; $i++) {
+	$sql = "DROP TABLE IF EXISTS keywords";
 
-        $dataToInsert = explode(",", $dataDump[$i]);
+	if (mysqli_query($connection, $sql)) {
+		echo "Dropped existing table: keywords<br>";
+	} else {
+		die("Error checking for user table: " . mysqli_error($connection));
+	}
 
-        print_r($dataToInsert);
+	$sql = "CREATE TABLE keywords (uniqueID VARCHAR(32), movie_ID MEDIUMINT,  id MEDIUMINT, name VARCHAR(64), PRIMARY KEY (uniqueID), FOREIGN KEY (movie_ID) REFERENCES movie(movie_ID) ON DELETE CASCADE)";
+	if (mysqli_query($connection, $sql)) {
+		echo "Table created successfully: keyword<br>";
+	} else {
+		die("Error creating table: " . mysqli_error($connection));
+	}
 
-        for($j =0; $j < count($dataToInsert); $j++) {
-            str_replace("|", ",", $dataToInsert[$j]);
-        }
+	//remove header from array:
+	array_shift($dataDump);
 
-        $sql = "INSERT INTO movie (movie_ID, overview, title, release_date, tmdb_id, adult, budget, original_language, revenue) VALUES ($dataToInsert[0], $dataToInsert[1], $dataToInsert[2], $dataToInsert[3], $dataToInsert[4], $dataToInsert[5], $dataToInsert[6], $dataToInsert[7], $dataToInsert[8])";
+	$time_pre = microtime(true);
 
-        if (mysqli_query($connection, $sql)) {
-        } else {
-            die("Error inserting row: " . mysqli_error($connection));
-        }
+	foreach ($dataDump as $line) {
 
-    } */
+		$lineAsArray = explode(",", $line);
+		$movieID = $lineAsArray[0];
+		$keywords = $lineAsArray[1];
+		$arrayOfKeywords = explode("|", $keywords);
 
+		foreach ($arrayOfKeywords as $keywordPairs) {
+
+			// get keyword ID:
+			$temp = explode("_", $keywordPairs);
+			$keywordID = $temp[0];
+			$keywordName = $temp[1];
+			$temp = explode(": ", $keywordID);
+			$keywordID = $temp[1];
+
+			// get keyword name:
+			$temp = explode(": '", $keywordName);
+			error_reporting(0);
+			$keywordName = $temp[1];
+			$keywordName = substr($keywordName, 0, -1);
+			error_reporting(1);
+
+			if (contains("'", $keywordName)) {
+				$keywordName = str_replace("'", "", $keywordName);
+			}
+
+			$uniqueKID = md5($movieID . $keywordID . $keywordName);
+			//insert keyword into table:
+			$sql = "INSERT IGNORE INTO keywords (uniqueID, movie_ID, id, name) VALUES ('$uniqueKID', $movieID, $keywordID, '$keywordName')";
+
+			if (mysqli_query($connection, $sql)) {
+			} else {
+				echo(mysqli_error($connection) . "<br>" . "movie ID: " . $movieID . ", keyword: " . $keywordName);
+			}
+		}
+	}
+
+	$time_post = microtime(true);
+
+	// calculate difference between stop and start time:
+	$timeTaken = $time_post - $time_pre;
+	$timeTaken = $timeTaken * 1000;
+	$timeTaken = floor($timeTaken);
+	$timeTaken = $timeTaken / 1000;
+
+	// display time taken to initiate database:
+	echo "<br>Time taken: " . $timeTaken . " seconds<br>";
+
+	echo "<br> Successfully populated keywords table";
+
+}
+
+function tidyTable($connection)
+{
+
+	$sql = "DELETE FROM keywords WHERE name = ''";
+	if (mysqli_query($connection, $sql)) {
+	} else {
+		echo(mysqli_error($connection));
+	}
 }
 
 ?>

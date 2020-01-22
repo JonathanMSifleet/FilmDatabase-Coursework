@@ -16,7 +16,7 @@ echo <<<_END
     <!DOCTYPE html>
     <html lang="en">
     <head>
-        <title>Jonathan's Survey Website</title>
+        <title>MDBT</title>
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
         <link rel="stylesheet" href="mystyle.css">
         </head>

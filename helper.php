@@ -249,4 +249,12 @@ function createArrayOfUsableCharacters()
     return $charArray;
 }
 
+function contains($needle, $haystack) {
+	if(strpos($haystack, $needle)) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 ?>
