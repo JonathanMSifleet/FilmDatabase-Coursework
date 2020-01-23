@@ -7,23 +7,24 @@ set_time_limit(1200);
 $connection = mysqli_connect($dbhost, $dbuser, $dbpass);
 
 createDatabase($connection, $dbname);
-createUserTable($connection);
 
-$filename = "dumps/movies.csv";
-$dataDump = readDataDump($filename);
-createMovieTable($connection, $dataDump);
+/* createUserTable($connection);
+createMovieTable($connection);
 
-// requires existence of movies table:
-/* $filename = "dumps/keywords.csv";
+$filename = "dumps/keywords.csv";
 $dataDump = readDataDump($filename);
 createKeywordTable($connection, $dataDump);
-tidyTable($connection); */
+tidyTable($connection,'keywords');
 
-// requires existence of movies table:
 $filename = "dumps/genres.csv";
 $dataDump = readDataDump($filename);
 createGenreTable($connection, $dataDump);
-tidyTable($connection);
+tidyTable($connection, 'genres');
+
+$filename = "dumps/countries.csv";
+$dataDump = readDataDump($filename);
+createCountryTable($connection, $dataDump);
+tidyTable($connection, 'countries'); */
 
 echo "<br><a href = home.php> Return to main page </a>";
 
@@ -80,7 +81,7 @@ function readDataDump($filename)
 
 }
 
-function createMovieTable($connection, $dataDump)
+function createMovieTable($connection)
 {
 	$sql = "DROP TABLE IF EXISTS movie";
 
@@ -90,7 +91,7 @@ function createMovieTable($connection, $dataDump)
 		die("Error checking for user table: " . mysqli_error($connection));
 	}
 
-	$sql = "CREATE TABLE movie (movie_ID MEDIUMINT, overview VARCHAR(4096), title VARCHAR(64),  release_date DATE, tmdb_ID VARCHAR(9), adult TINYINT(1), budget INT,  original_language VARCHAR(2), revenue BIGINT, PRIMARY KEY (movie_ID))";
+	$sql = "CREATE TABLE movie (movie_ID MEDIUMINT, overview VARCHAR(4096), title VARCHAR(64),  release_date DATE, imdb_ID VARCHAR(9), adult TINYINT(1), budget INT,  original_language VARCHAR(2), popularity DOUBLE, poster_path VARCHAR(32), revenue BIGINT, runtime SMALLINT, vote_average DOUBLE, vote_count MEDIUMINT, PRIMARY KEY (movie_ID))";
 	if (mysqli_query($connection, $sql)) {
 		echo "Table created successfully: movie<br>";
 	} else {
@@ -174,7 +175,8 @@ function createKeywordTable($connection, $dataDump)
 
 }
 
-function createGenreTable($connection, $dataDump) {
+function createGenreTable($connection, $dataDump)
+{
 
 	$sql = "DROP TABLE IF EXISTS genres";
 
@@ -223,6 +225,10 @@ function createGenreTable($connection, $dataDump) {
 				$genreName = str_replace("'", "", $genreName);
 			}
 
+			if (contains("}", $genreName)) {
+				$genreName = str_replace("}", "", $genreName);
+			}
+
 			$uniqueKID = md5($movieID . $genreID . $genreName);
 			//insert keyword into table:
 			$sql = "INSERT IGNORE INTO genres (uniqueID, movie_ID, genre_ID, name) VALUES ('$uniqueKID', $movieID, $genreID, '$genreName')";
@@ -248,10 +254,93 @@ function createGenreTable($connection, $dataDump) {
 	echo "<br> Successfully populated genres table";
 }
 
-function tidyTable($connection)
+function createCountryTable($connection, $dataDump)
 {
 
-	$sql = "DELETE FROM genres WHERE name = ''";
+	$sql = "DROP TABLE IF EXISTS genres";
+
+	if (mysqli_query($connection, $sql)) {
+		echo "Dropped existing table: countries<br>";
+	} else {
+		die("Error checking for user table: " . mysqli_error($connection));
+	}
+
+	$sql = "CREATE TABLE genres (uniqueID VARCHAR(32), movie_ID MEDIUMINT, iso_3166 VARCHAR(2), name VARCHAR(64), PRIMARY KEY (uniqueID), FOREIGN KEY (movie_ID) REFERENCES movie(movie_ID) ON DELETE CASCADE)";
+	if (mysqli_query($connection, $sql)) {
+		echo "Table created successfully: genres<br>";
+	} else {
+		die("Error creating table: " . mysqli_error($connection));
+	}
+
+	//remove header from array:
+	array_shift($dataDump);
+
+	$time_pre = microtime(true);
+
+	foreach ($dataDump as $line) {
+
+		$lineAsArray = explode(",", $line);
+		$movieID = $lineAsArray[0];
+		$countries = $lineAsArray[1];
+		$arrayOfCountries = explode("|", $countries);
+
+		foreach ($arrayOfCountries as $countryPairs) {
+
+			// get iso_3166 ID:
+			$temp = explode("_", $countryPairs);
+			$iso_3166 = $temp[0];
+			$countryName = $temp[1];
+			$temp = explode(": ", $iso_3166);
+			$iso_3166 = $temp[1];
+
+			$iso_3166 = trim($iso_3166, "'");
+
+			echo $iso_3166 . "<br>";
+
+			// get keyword name:
+			$temp = explode(": '", $countryName);
+			error_reporting(0);
+			$countryName = $temp[1];
+			$countryName = substr($countryName, 0, -1);
+			error_reporting(1);
+
+			if (contains("'", $countryName)) {
+				$countryName = str_replace("'", "", $countryName);
+			}
+
+			if (contains("}", $countryName)) {
+				$countryName = str_replace("}", "", $countryName);
+			}
+
+			$uniqueKID = md5($movieID . $iso_3166 . $countryName);
+			//insert keyword into table:
+			$sql = "INSERT IGNORE INTO countries (uniqueID, movie_ID, iso_3166, name) VALUES ('$uniqueKID', $movieID, '$iso_3166', '$countryName')";
+
+			if (mysqli_query($connection, $sql)) {
+			} else {
+				echo(mysqli_error($connection) . "<br>" . "movie ID: " . $movieID . ", country: " . $countryName);
+			}
+		}
+	}
+
+	$time_post = microtime(true);
+
+	// calculate difference between stop and start time:
+	$timeTaken = $time_post - $time_pre;
+	$timeTaken = $timeTaken * 1000;
+	$timeTaken = floor($timeTaken);
+	$timeTaken = $timeTaken / 1000;
+
+	// display time taken to initiate database:
+	echo "<br>Time taken: " . $timeTaken . " seconds<br>";
+
+	echo "<br> Successfully populated countries table";
+}
+
+function tidyTable($connection, $tableName)
+{
+
+	$sql = "DELETE FROM '$tableName' WHERE name = ''";
 	if (mysqli_query($connection, $sql)) {
 	} else {
 		echo(mysqli_error($connection));
