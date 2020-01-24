@@ -26,6 +26,11 @@ $dataDump = readDataDump($filename);
 createCountryTable($connection, $dataDump);
 tidyTable($connection, 'countries'); */
 
+$filename = "dumps/companies.csv";
+$dataDump = readDataDump($filename);
+createCompaniesTable($connection, $dataDump);
+//tidyTable($connection, 'countries');
+
 echo "<br><a href = home.php> Return to main page </a>";
 
 function createDatabase($connection, $dbname)
@@ -142,7 +147,6 @@ function createKeywordTable($connection, $dataDump)
 			$temp = explode(": '", $keywordName);
 			error_reporting(0);
 			$keywordName = $temp[1];
-			$keywordName = substr($keywordName, 0, -1);
 			error_reporting(1);
 
 			if (contains("'", $keywordName)) {
@@ -218,7 +222,6 @@ function createGenreTable($connection, $dataDump)
 			$temp = explode(": '", $genreName);
 			error_reporting(0);
 			$genreName = $temp[1];
-			$genreName = substr($genreName, 0, -1);
 			error_reporting(1);
 
 			if (contains("'", $genreName)) {
@@ -301,7 +304,6 @@ function createCountryTable($connection, $dataDump)
 			$temp = explode(": '", $countryName);
 			error_reporting(0);
 			$countryName = $temp[1];
-			$countryName = substr($countryName, 0, -1);
 			error_reporting(1);
 
 			if (contains("'", $countryName)) {
@@ -335,6 +337,93 @@ function createCountryTable($connection, $dataDump)
 	echo "<br>Time taken: " . $timeTaken . " seconds<br>";
 
 	echo "<br> Successfully populated countries table";
+}
+
+function createCompaniesTable($connection, $dataDump)
+{
+
+	$sql = "DROP TABLE IF EXISTS companies";
+
+	if (mysqli_query($connection, $sql)) {
+		echo "Dropped existing table: companies<br>";
+	} else {
+		die("Error checking for user table: " . mysqli_error($connection));
+	}
+
+	$sql = "CREATE TABLE companies (uniqueID VARCHAR(32), movie_ID MEDIUMINT, companyName VARCHAR(64), id MEDIUMINT, PRIMARY KEY (uniqueID), FOREIGN KEY (movie_ID) REFERENCES movie(movie_ID) ON DELETE CASCADE)";
+	if (mysqli_query($connection, $sql)) {
+		echo "Table created successfully: companies<br>";
+	} else {
+		die("Error creating table: " . mysqli_error($connection));
+	}
+
+	//remove header from array:
+	array_shift($dataDump);
+
+	$time_pre = microtime(true);
+
+	foreach ($dataDump as $line) {
+
+		$lineAsArray = explode(",", $line);
+		$movieID = $lineAsArray[0];
+		$companies = $lineAsArray[1];
+		$arrayOfCompanies = explode("|", $companies);
+
+		foreach ($arrayOfCompanies as $companyPairs) {
+
+			// get company name:
+			$temp = explode("_", $companyPairs);
+			$companyName = $temp[0];
+			$companyID = $temp[1];
+			$temp = explode(": ", $companyName);
+			$companyName = $temp[1];
+
+			$companyName = trim($companyName, "'");
+
+			if (contains("'", $companyName)) {
+				$companyName = str_replace("'", "", $companyName);
+			}
+
+			// get company id:
+			$temp = explode(": ", $companyID);
+			error_reporting(0);
+			$companyID = $temp[1];
+			error_reporting(1);
+
+			if (contains("}", $companyID)) {
+				$companyID = str_replace("}", "", $companyID);
+			}
+
+			/* if($movieID == 404) {
+				echo "company name: " . $companyName . ", ID:" . $companyID."<br>";
+			} */
+
+
+			$uniqueKID = md5($movieID . $companyName . $companyID);
+			//insert keyword into table:
+			$sql = "INSERT IGNORE INTO companies (uniqueID, movie_ID, companyName, id) VALUES ('$uniqueKID', $movieID, '$companyName', $companyID)";
+
+			if (mysqli_query($connection, $sql)) {
+			} else {
+				echo(mysqli_error($connection) . "<br>" . "movie ID: " . $movieID . ", id: " . $companyID);
+			}
+			
+		}
+	}
+
+	$time_post = microtime(true);
+
+	// calculate difference between stop and start time:
+	$timeTaken = $time_post - $time_pre;
+	$timeTaken = $timeTaken * 1000;
+	$timeTaken = floor($timeTaken);
+	$timeTaken = $timeTaken / 1000;
+
+	// display time taken to initiate database:
+	echo "<br>Time taken: " . $timeTaken . " seconds<br>";
+
+	echo "<br> Successfully populated companies table";
+
 }
 
 function tidyTable($connection, $tableName)
