@@ -29,7 +29,7 @@ echo <<<_END
 
     </head>
     <h1>2CWK50: A Survey Website</h1>
-    <nav>
+    <body>
 _END;
 
 session_start();
