@@ -2,7 +2,7 @@
 
 require_once "header.php";
 
-set_time_limit(1200);
+set_time_limit(12000);
 
 $connection = mysqli_connect($dbhost, $dbuser, $dbpass);
 
@@ -14,22 +14,22 @@ createMovieTable($connection);
 $filename = "dumps/keywords.csv";
 $dataDump = readDataDump($filename);
 createKeywordTable($connection, $dataDump);
-tidyTable($connection,'keywords');
 
 $filename = "dumps/genres.csv";
 $dataDump = readDataDump($filename);
 createGenreTable($connection, $dataDump);
-tidyTable($connection, 'genres');
 
 $filename = "dumps/countries.csv";
 $dataDump = readDataDump($filename);
 createCountryTable($connection, $dataDump);
-tidyTable($connection, 'countries'); */
 
 $filename = "dumps/companies.csv";
 $dataDump = readDataDump($filename);
-createCompaniesTable($connection, $dataDump);
-//tidyTable($connection, 'countries');
+createCompaniesTable($connection, $dataDump); */
+
+$filename = "dumps/spoken languages.csv";
+$dataDump = readDataDump($filename);
+createLanguagesTable($connection, $dataDump);
 
 echo "<br><a href = home.php> Return to main page </a>";
 
@@ -407,7 +407,7 @@ function createCompaniesTable($connection, $dataDump)
 			} else {
 				echo(mysqli_error($connection) . "<br>" . "movie ID: " . $movieID . ", id: " . $companyID);
 			}
-			
+
 		}
 	}
 
@@ -426,14 +426,84 @@ function createCompaniesTable($connection, $dataDump)
 
 }
 
-function tidyTable($connection, $tableName)
+function createLanguagesTable($connection, $dataDump)
 {
+	$sql = "DROP TABLE IF EXISTS languages";
 
-	$sql = "DELETE FROM '$tableName' WHERE name = ''";
 	if (mysqli_query($connection, $sql)) {
+		echo "Dropped existing table: languages<br>";
 	} else {
-		echo(mysqli_error($connection));
+		die("Error checking for user table: " . mysqli_error($connection));
 	}
+
+	$sql = "CREATE TABLE languages (uniqueID VARCHAR(32), movie_ID MEDIUMINT, iso_639 VARCHAR(2), name VARCHAR(64), PRIMARY KEY (uniqueID), FOREIGN KEY (movie_ID) REFERENCES movie(movie_ID) ON DELETE CASCADE)";
+	if (mysqli_query($connection, $sql)) {
+		echo "Table created successfully: languages<br>";
+	} else {
+		die("Error creating table: " . mysqli_error($connection));
+	}
+
+	//remove header from array:
+	array_shift($dataDump);
+
+	$time_pre = microtime(true);
+
+	foreach ($dataDump as $line) {
+
+		$lineAsArray = explode(",", $line);
+		$movieID = $lineAsArray[0];
+		$languages = $lineAsArray[1];
+		$arrayOfLanguages = explode("|", $languages);
+
+		foreach ($arrayOfLanguages as $languagePairs) {
+
+			// get iso_639:
+			$temp = explode("_", $languagePairs);
+			$iso_639 = $temp[0];
+			$languageName = $temp[1];
+			$temp = explode(": ", $iso_639);
+			$iso_639 = $temp[1];
+			$iso_639 = trim($iso_639, "'");
+
+			// get keyword name:
+			$temp = explode(": '", $languageName);
+			error_reporting(0);
+			$languageName = $temp[1];
+			error_reporting(1);
+
+			if (contains("'", $languageName)) {
+				$languageName = str_replace("'", "", $languageName);
+			}
+
+			if (contains("}", $languageName)) {
+				$languageName = str_replace("}", "", $languageName);
+			}
+
+			$uniqueKID = md5($movieID . $iso_639 . $languageName);
+			//insert keyword into table:
+			$sql = "INSERT IGNORE INTO languages (uniqueID, movie_ID, iso_639, name) VALUES ('$uniqueKID', $movieID, '$iso_639', '$languageName')";
+
+			if (mysqli_query($connection, $sql)) {
+			} else {
+				echo(mysqli_error($connection) . "<br>" . "movie ID: " . $movieID . ", language: " . $languageName);
+			}
+		}
+	}
+
+	$time_post = microtime(true);
+
+	// calculate difference between stop and start time:
+	$timeTaken = $time_post - $time_pre;
+	$timeTaken = $timeTaken * 1000;
+	$timeTaken = floor($timeTaken);
+	$timeTaken = $timeTaken / 1000;
+
+	// display time taken to initiate database:
+	echo "<br>Time taken: " . $timeTaken . " seconds<br>";
+
+	echo "<br> Successfully populated languages table";
+
 }
+
 
 ?>
