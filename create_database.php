@@ -2,7 +2,7 @@
 
 require_once "header.php";
 
-set_time_limit(12000);
+set_time_limit(36000);
 
 $connection = mysqli_connect($dbhost, $dbuser, $dbpass);
 
@@ -25,11 +25,15 @@ createCountryTable($connection, $dataDump);
 
 $filename = "dumps/companies.csv";
 $dataDump = readDataDump($filename);
-createCompaniesTable($connection, $dataDump); */
+createCompaniesTable($connection, $dataDump);
 
 $filename = "dumps/spoken languages.csv";
 $dataDump = readDataDump($filename);
-createLanguagesTable($connection, $dataDump);
+createLanguagesTable($connection, $dataDump); */
+
+$filename = "dumps/cast.csv";
+$dataDump = readDataDump($filename);
+createCastTable($connection, $dataDump);
 
 echo "<br><a href = home.php> Return to main page </a>";
 
@@ -505,5 +509,77 @@ function createLanguagesTable($connection, $dataDump)
 
 }
 
+function createCastTable($connection, $dataDump)
+{
+	$sql = "DROP TABLE IF EXISTS cast";
+
+	if (mysqli_query($connection, $sql)) {
+		echo "Dropped existing table: cast<br>";
+	} else {
+		die("Error checking for user table: " . mysqli_error($connection));
+	}
+
+	$sql = "CREATE TABLE cast (movie_ID MEDIUMINT, castID SMALLINT, character_name VARCHAR(64), creditID VARCHAR(32), gender TINYINT(1), actor_id MEDIUMINT, actor_name VARCHAR(64), display_order TINYINT(1), profile_path VARCHAR(64), PRIMARY KEY (creditID), FOREIGN KEY (movie_ID) REFERENCES movie(movie_ID) ON DELETE CASCADE)";
+	if (mysqli_query($connection, $sql)) {
+		echo "Table created successfully: cast<br>";
+	} else {
+		die("Error creating table: " . mysqli_error($connection));
+	}
+
+	//remove header from array:
+	array_shift($dataDump);
+
+	$time_pre = microtime(true);
+
+	foreach ($dataDump as $line) {
+
+		$lineAsArray = explode(",", $line);
+		$movieID = $lineAsArray[0];
+		$attributes = $lineAsArray[1];
+		$arrayOfAttributes = explode("|", $attributes);
+
+		$sqlValues = array();
+
+		foreach ($arrayOfAttributes as $curArray) {
+
+			$attributePairs = explode('_ ', $curArray);
+
+			foreach ($attributePairs as $curPair) {
+				$temp = explode(': ', $curPair);
+				error_reporting(0);
+				$temp[1] = str_replace("'", '', $temp[1]);
+				error_reporting(1);
+				$sqlValues[] = $temp[1];
+			}
+
+			str_replace('"', "", $sqlValues[1]);
+
+			array_unshift($sqlValues, $movieID);
+			$sqlString = implode("','", $sqlValues);
+			$sqlString = "'" . $sqlString . "'";
+
+			$sql = "INSERT IGNORE INTO `cast` (`movie_ID`, `castID`, `character_name`, `creditID`, `gender`, `actor_ID`, `actor_name`, `display_order`, `profile_path`) VALUES ($sqlString)";
+
+			if (mysqli_query($connection, $sql)) {
+			} else {
+				//echo(mysqli_error($connection) . ", movieID: " . $movieID . ", castID: " . $sqlValues[1] . "<br>");
+			}
+			$sqlValues = array();
+		}
+	}
+
+	$time_post = microtime(true);
+
+	// calculate difference between stop and start time:
+	$timeTaken = $time_post - $time_pre;
+	$timeTaken = $timeTaken * 1000;
+	$timeTaken = floor($timeTaken);
+	$timeTaken = $timeTaken / 1000;
+
+	// display time taken to initiate database:
+	echo "<br>Time taken: " . $timeTaken . " seconds<br>";
+
+	echo "<br> Successfully populated cast table";
+}
 
 ?>
