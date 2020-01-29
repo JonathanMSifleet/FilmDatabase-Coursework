@@ -9,8 +9,6 @@ $dbpass = '';
 $dbname = 'movie_database';
 /////
 
-$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-
 // style sheet and header:
 echo <<<_END
     <!DOCTYPE html>
