@@ -28,8 +28,13 @@ echo <<<_END
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     </head>
-    <h1>2CWK50: A Survey Website</h1>
+<<<<<<< Updated upstream
+
     <body>
+=======
+
+    <nav>
+>>>>>>> Stashed changes
 _END;
 
 session_start();
