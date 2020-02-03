@@ -4,12 +4,16 @@ require_once "header.php";
 
 set_time_limit(36000);
 
-$connection = mysqli_connect($dbhost, $dbuser, $dbpass);
+$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+mysqli_query($connection, 'SET foreign_key_checks = 1');
 
-createDatabase($connection, $dbname);
+/* createDatabase($connection, $dbname);
 
-/* createUserTable($connection);
-createMovieTable($connection);
+createUserTable($connection);
+
+$filename = "dumps/movies.csv";
+$dataDump = readDataDump($filename);
+createMovieTable($connection, $dataDump);
 
 $filename = "dumps/keywords.csv";
 $dataDump = readDataDump($filename);
@@ -29,11 +33,17 @@ createCompaniesTable($connection, $dataDump);
 
 $filename = "dumps/spoken languages.csv";
 $dataDump = readDataDump($filename);
-createLanguagesTable($connection, $dataDump); */
+createLanguagesTable($connection, $dataDump);
 
 $filename = "dumps/cast.csv";
 $dataDump = readDataDump($filename);
 createCastTable($connection, $dataDump);
+
+$filename = "dumps/crew.csv";
+$dataDump = readDataDump($filename);
+createCrewTable($connection, $dataDump); */
+
+echo "This page has been disabled. Please import the database via PHPMyAdmin <br>";
 
 echo "<br><a href = home.php> Return to main page </a>";
 
@@ -90,7 +100,7 @@ function readDataDump($filename)
 
 }
 
-function createMovieTable($connection)
+function createMovieTable($connection, $dataDump)
 {
 	$sql = "DROP TABLE IF EXISTS movie";
 
@@ -100,12 +110,57 @@ function createMovieTable($connection)
 		die("Error checking for user table: " . mysqli_error($connection));
 	}
 
-	$sql = "CREATE TABLE movie (movie_ID MEDIUMINT, overview VARCHAR(4096), title VARCHAR(64),  release_date DATE, imdb_ID VARCHAR(9), adult TINYINT(1), budget INT,  original_language VARCHAR(2), popularity DOUBLE, poster_path VARCHAR(32), revenue BIGINT, runtime SMALLINT, vote_average DOUBLE, vote_count MEDIUMINT, PRIMARY KEY (movie_ID))";
+	$sql = "CREATE TABLE movie (adult VARCHAR(5), budget INT, movie_id MEDIUMINT, imdb_id VARCHAR(9), language VARCHAR(2), overview VARCHAR(2048), popularity DOUBLE, poster_path VARCHAR(32), release_date date, revenue BIGINT, runtime SMALLINT, tagline VARCHAR(256), title VARCHAR(128),rating DOUBLE, votes MEDIUMINT, PRIMARY KEY (movie_ID))";
 	if (mysqli_query($connection, $sql)) {
 		echo "Table created successfully: movie<br>";
 	} else {
 		die("Error creating table: " . mysqli_error($connection));
 	}
+
+	/*
+	//remove header from array:
+	array_shift($dataDump);
+
+	$time_pre = microtime(true);
+
+	foreach ($dataDump as $line) {
+
+		str_replace("'", "''", $line);
+
+		$attributes = explode("|", $line);
+		if ($attributes[0] == FALSE) {
+			$attributes[0] = 0;
+		} else {
+			$attributes[0] = 1;
+		}
+
+		$sqlString = implode("','", $attributes);
+		$sqlString = "'" . $sqlString . "'";
+
+		//insert movie into table:
+		$sql = "INSERT IGNORE INTO movie (`adult`, `budget`, `movie_id`, `imdb_id`, `language`, `overview`, `popularity`, `poster_path`, `release_date`, `revenue`, `runtime`, `tagline`, `title`,`rating`, `votes`) VALUES ($sqlString)";
+
+		if (mysqli_query($connection, $sql)) {
+		} else {
+			echo $sqlString . "<br>";
+			echo(mysqli_error($connection) . "<br>");
+			exit();
+		}
+	}
+
+	$time_post = microtime(true);
+
+	// calculate difference between stop and start time:
+	$timeTaken = $time_post - $time_pre;
+	$timeTaken = $timeTaken * 1000;
+	$timeTaken = floor($timeTaken);
+	$timeTaken = $timeTaken / 1000;
+
+	// display time taken to initiate database:
+	echo "<br>Time taken: " . $timeTaken . " seconds<br>";
+
+	echo "<br> Successfully populated movie table";
+	*/
 }
 
 function createKeywordTable($connection, $dataDump)
@@ -580,6 +635,78 @@ function createCastTable($connection, $dataDump)
 	echo "<br>Time taken: " . $timeTaken . " seconds<br>";
 
 	echo "<br> Successfully populated cast table";
+}
+
+function createCrewTable($connection, $dataDump)
+{
+	$sql = "DROP TABLE IF EXISTS crew";
+
+	if (mysqli_query($connection, $sql)) {
+		echo "Dropped existing table: crew<br>";
+	} else {
+		die("Error checking for user table: " . mysqli_error($connection));
+	}
+
+	$sql = "CREATE TABLE crew (movie_ID MEDIUMINT, credit_ID VARCHAR(32), department VARCHAR(32), gender TINYINT(1), crew_ID MEDIUMINT, job VARCHAR(32), crew_name VARCHAR(64), profile_path VARCHAR(64), PRIMARY KEY (credit_ID), FOREIGN KEY (movie_ID) REFERENCES movie(movie_ID) ON DELETE CASCADE)";
+	if (mysqli_query($connection, $sql)) {
+		echo "Table created successfully: cast<br>";
+	} else {
+		die("Error creating table: " . mysqli_error($connection));
+	}
+
+	//remove header from array:
+	array_shift($dataDump);
+
+	$time_pre = microtime(true);
+
+	foreach ($dataDump as $line) {
+
+		$lineAsArray = explode(",", $line);
+		$movieID = $lineAsArray[0];
+		$attributes = $lineAsArray[1];
+		$arrayOfAttributes = explode("|", $attributes);
+
+
+		foreach ($arrayOfAttributes as $curArray) {
+
+			$sqlValues = array();
+
+			$attributePairs = explode('_', $curArray);
+
+			foreach ($attributePairs as $curPair) {
+				$temp = explode(':', $curPair);
+				error_reporting(0);
+				$temp[1] = str_replace("'", '', $temp[1]);
+				error_reporting(1);
+				$sqlValues[] = $temp[1];
+			}
+
+			array_unshift($sqlValues, $movieID);
+			$sqlString = implode("','", $sqlValues);
+			$sqlString = "'" . $sqlString . "'";
+
+			$sql = "INSERT IGNORE INTO `crew` (`movie_ID`, `credit_ID`, `department`, `gender`, `crew_ID`, `job`, `crew_name`, `profile_path`) VALUES ($sqlString)";
+
+			if (mysqli_query($connection, $sql)) {
+			} else {
+				echo(mysqli_error($connection) . "<br>");
+				exit();
+			}
+		}
+	}
+
+	$time_post = microtime(true);
+
+	// calculate difference between stop and start time:
+	$timeTaken = $time_post - $time_pre;
+	$timeTaken = $timeTaken * 1000;
+	$timeTaken = floor($timeTaken);
+	$timeTaken = $timeTaken / 1000;
+
+	// display time taken to initiate database:
+	echo "<br>Time taken: " . $timeTaken . " seconds<br>";
+
+	echo "<br> Successfully populated crew table";
 }
 
 ?>
