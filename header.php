@@ -9,6 +9,8 @@ $dbpass = '';
 $dbname = 'movie_database';
 /////
 
+$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+
 // style sheet and header:
 echo <<<_END
     <!DOCTYPE html>
@@ -27,7 +29,6 @@ echo <<<_END
     	<link href="https://fonts.googleapis.com/css?family=Barlow&display=swap" rel="stylesheet">
     	<meta http-equiv="X-UA-Compatible" content="ie=edge">
     </head>
-    <body>
 _END;
 
 session_start();

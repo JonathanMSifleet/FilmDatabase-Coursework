@@ -2,12 +2,9 @@
 
 require_once "header.php";
 
-set_time_limit(36000);
+/* $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 
-$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-mysqli_query($connection, 'SET foreign_key_checks = 1');
-
-/* createDatabase($connection, $dbname);
+createDatabase($connection, $dbname);
 
 createUserTable($connection);
 
