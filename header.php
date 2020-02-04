@@ -31,4 +31,5 @@ echo <<<_END
 _END;
 
 session_start();
+
 ?>
