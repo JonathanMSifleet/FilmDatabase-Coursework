@@ -28,17 +28,8 @@ echo <<<_END
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     </head>
-<<<<<<< Updated upstream
-
-    <body>
-=======
-
-    <nav>
->>>>>>> Stashed changes
 _END;
 
 session_start();
-
-
 
 ?>

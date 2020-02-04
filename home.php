@@ -5,15 +5,10 @@ require_once "header.php";
 // main page
 echo <<<_END
 
-
-<<<<<<< Updated upstream
-echo<<<_END
-
 <ul>
 
 <li><a href = register.php>Register account</li>
 <li><a href = create_database.php> create database </a></li>
-sdfgserh
 
 </ul>
     <header class="homeHeader">
@@ -80,8 +75,8 @@ sdfgserh
         <input class="btn" type="submit" value="Submit">
     </form> 
     </section>
-=======
-<header class="homeHeader">
+    
+<!-- <header class="homeHeader">
 
 <div class="headertitle"> 
 
@@ -93,7 +88,7 @@ sdfgserh
 </header>
 
 
-<section class="test">
+ <section class="test">
 <div class="insideDiv">
     <div class="row2">
         <div class="col2 span-1-of-22 norcol">
@@ -144,8 +139,7 @@ sdfgserh
 
 <input class="btn" type="submit" value="Submit">
 </form> 
-</section>
->>>>>>> Stashed changes
+</section> -->
 
 _END;
 
