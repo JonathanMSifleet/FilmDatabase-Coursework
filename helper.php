@@ -30,29 +30,7 @@ function sanitiseUserData($connection, &$username, &$email, &$password, &$firstn
 }
 
 // displays the account creation form:
-function displayCreateAccountForm($username, $email, $password, $firstname, $surname, $arrayOfAccountErrors)
-{
 
-    $currentURL = $_SERVER['REQUEST_URI'];
-
-    // form to create account:
-    echo <<<_END
-            <form action="$currentURL" method="post">
-              Please fill in the following fields:<br>
-              Username: <input type="text" name="username" minlength="3" maxlength="20" value="$username" required> $arrayOfAccountErrors[0]
-              <br>
-              Email: <input type="email" name="email" minlength="3" maxlength="64" value="$email" required> $arrayOfAccountErrors[1]
-              <br>
-              Password: <input type="password" name="password" maxlength="32" value="$password"> Leave blank for an auto-generated password $arrayOfAccountErrors[2]
-              <br>
-              First name: <input type="text" name="firstname" minlength="2" maxlength="16" value="$firstname" required> $arrayOfAccountErrors[3]
-              <br>
-              Surname: <input type="text" name="surname" minlength="2" maxlength="24" value="$surname" required> $arrayOfAccountErrors[4]
-              <br>
-              <input type="submit" value="Submit">
-            </form>
-_END;
-}
 
 // inserts new account into database:
 function createAccount($connection, $username, $email, $password, $firstname, $surname, $arrayOfAccountCreationErrors)
@@ -105,6 +83,102 @@ function createAccount($connection, $username, $email, $password, $firstname, $s
         echo "Account creation failed, please check the errors shown above and try again<br>";
     }
 }
+
+
+function displayCreateAccountForm($username, $email, $password, $firstname, $surname, $arrayOfAccountErrors)
+{
+
+    $currentURL = $_SERVER['REQUEST_URI'];
+
+    // form to create account:
+    echo <<<_END
+    
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script></script>
+    
+    <script type="text/javascript">
+        	$(document).ready(function(){
+        		$(".register").click(function(){
+        			$(".other").show();
+        			$(".content").hide();
+        			$(".register").addClass('active');
+        			$(".login").removeClass('active');
+        		});
+        		$(".login").click(function(){
+        			$(".content").show();
+        			$(".other").hide();
+        			$(".login").addClass('active');
+        			$(".register").removeClass('active');
+        		});
+        	});
+        </script>
+    
+    <div id="main">
+    
+        <div id="tab-btn">
+        
+        
+        <a href="#" class="login active">Sign In</a>
+        <a href="#" class="register">Sign Up</a>
+            
+    </div>
+    
+    
+            <div class="other">
+    
+            <form action="#" method="post" id="reg-box">
+              Please fill in the following fields:<br>
+              Username: <input type="text" name="username" minlength="3" maxlength="20" value="$username" class="inp" required> $arrayOfAccountErrors[0]
+              <br>
+              Email: <input type="email" name="email" minlength="3" maxlength="64" value="$email" class="inp" required> $arrayOfAccountErrors[1]
+              <br>
+              Password: <input type="password" name="password" maxlength="32" value="$password" class="inp"> Leave blank for an auto-generated password $arrayOfAccountErrors[2]
+              <br>  
+              First name: <input type="text" name="firstname" minlength="2" maxlength="16" value="$firstname" class="inp"" required> $arrayOfAccountErrors[3]
+              <br>
+              Surname: <input type="text" name="surname" minlength="2" maxlength="24" value="$surname" class="inp" required> $arrayOfAccountErrors[4]
+              <br>
+              <input type="submit" name= "submit" sign up id="sub-btn" >
+            </form>
+
+                </div>
+                
+               
+            
+    
+_END;
+}
+
+
+function displaySignInPrompt($username, $username_val, $password, $password_val)
+{
+    // show the form that allows users to log in
+    // Note we use an HTTP POST request to avoid their password appearing in the URL:
+    echo <<<_END
+        
+        <div class="content">
+        
+            <form action="#" method="post" id="login-box">
+              Please enter your username and password:<br>
+              Username: <input type="text" name="username" minlength="3" maxlength="20" value="$username" class="inp" required> $username_val
+              <br>
+              Password: <input type="password" name="password" minlength="6" maxlength="32" value="$password" class="inp" required> $password_val
+              <br>
+              <input type="submit" sign in id="sub-btn">
+            </form>
+    
+        </div>
+        
+  
+    </div>
+    
+    </div>
+        
+_END;
+    
+}
+
+
+
 
 // initialises every element in an array with a null value
 function initEmptyArray(&$array, $size)

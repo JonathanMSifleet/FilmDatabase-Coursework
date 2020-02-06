@@ -3,6 +3,34 @@
 // execute the header script:
 require_once "header.php";
 
+$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+
+    // if the connection fails, we need to know, so allow this exit:
+    if (!$connection) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    $arrayOfAccountCreationErrors = array();
+    initEmptyArray($arrayOfAccountCreationErrors, 4);
+
+    // default values we show in the form:
+    $username = "";
+    $email = "";
+    $password = "";
+    $firstname = "";
+    $surname = "";
+
+    if (isset($_POST['username'])) {
+        // user just tried to sign up:
+        sanitiseUserData($connection, $username, $email, $password, $firstname, $surname);
+        createAccount($connection, $username, $email, $password, $firstname, $surname, $arrayOfAccountCreationErrors);
+    } 
+    
+    else {
+        // just a normal visit to the page, show the signup form:
+        displayCreateAccountForm($username, $email, $password, $firstname, $surname, $arrayOfAccountCreationErrors);
+    }
+
 // default values we show in the form:
 $username = "";
 $password = "";
@@ -11,10 +39,15 @@ $username_val = "";
 $password_val = "";
 
 // checks the session variable named 'loggedInSkeleton'
+
+/*
+
 if (isset($_SESSION['loggedInSkeleton'])) {
     // user is already logged in, just display a message:
     echo "You are already logged in, please log out first.<br>";
 } elseif (isset($_POST['username'])) {
+
+*/
 
     // user has just tried to log in:
     // connect directly to our database (notice 4th argument) we need the connection for sanitisation:
@@ -26,8 +59,8 @@ if (isset($_SESSION['loggedInSkeleton'])) {
     }
 
     // take copies of the credentials the user submitted and sanitise (clean) them:
-    $username = sanitise($_POST['username'], $connection);
-    $password = sanitise($_POST['password'], $connection);
+    //$username = sanitise($_POST['username'], $connection);
+    //$password = sanitise($_POST['password'], $connection);
 
     // now validate the data (both strings must be between 1 and 16 characters long):
     // (reasons: we don't want empty credentials, and we used VARCHAR(16) in the database table)
@@ -74,24 +107,15 @@ if (isset($_SESSION['loggedInSkeleton'])) {
 
     // we're finished with the database, close the connection:
     mysqli_close($connection);
-} else {
-    displaySignInPrompt($username, $username_val, $password, $password_val);
-}
+// else {
+//    displaySignInPrompt($username, $username_val, $password, $password_val);
+//}
 
-function displaySignInPrompt($username, $username_val, $password, $password_val)
-{
-    // show the form that allows users to log in
-    // Note we use an HTTP POST request to avoid their password appearing in the URL:
-    echo <<<_END
-            <form action="sign_in.php" method="post">
-              Please enter your username and password:<br>
-              Username: <input type="text" name="username" minlength="3" maxlength="20" value="$username" required> $username_val
-              <br>
-              Password: <input type="password" name="password" minlength="6" maxlength="32" value="$password" required> $password_val
-              <br>
-              <input type="submit" value="Submit">
-            </form>
-_END;
-}
+
+
+
+
+
+
 
 ?>

@@ -3,6 +3,8 @@
 // execute the header script:
 require_once "header.php";
 
+
+
 // checks the session variable named 'loggedInSkeleton'
 if (isset($_SESSION['loggedInSkeleton'])) {
     // user is already logged in, just display a message:

@@ -14,7 +14,7 @@ $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 // style sheet and header:
 echo <<<_END
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="en"> 
     <head>
         <title>MDBT</title>
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -29,6 +29,9 @@ echo <<<_END
     	<link href="https://fonts.googleapis.com/css?family=Barlow&display=swap" rel="stylesheet">
     	<meta http-equiv="X-UA-Compatible" content="ie=edge">
     </head>
+        <link rel="stylesheet" href="style.css">
+        </head>
+    <h1>Movie Database Presentation Tool</h1>
 _END;
 
 session_start();
