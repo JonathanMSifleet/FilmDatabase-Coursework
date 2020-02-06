@@ -117,8 +117,8 @@ function displayCreateAccountForm($username, $email, $password, $firstname, $sur
         <div id="tab-btn">
         
         
-        <a href="#signIn" class="login active">Sign In</a>
-        <a href="#signUp" class="register">Sign Up</a>
+        <a href="#" class="login active">Sign In</a>
+        <a href="#" class="register">Sign Up</a>
             
     </div>
     
@@ -174,7 +174,7 @@ function displaySignInPrompt($username, $username_val, $password, $password_val)
     </div>
         
 _END;
-
+    
 }
 
 
