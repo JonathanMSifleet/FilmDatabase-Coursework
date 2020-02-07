@@ -124,10 +124,14 @@ _END;
 // languages:
 $listOfLanguages = getListOfLanguages($connection);
 echo "<br><br>";
+echo "<div id='languages'>";
 echo "Languages:<br>";
+echo "<ul>";
 foreach ($listOfLanguages as $curLanguage) {
-	echo "<input type='checkbox' name='[add]' value ='$curLanguage'>$curLanguage</input><br>";
+	echo "<li><input type='checkbox' name='$curLanguage' id ='$curLanguage' value ='$curLanguage'>$curLanguage</input></li>";
 }
+echo "</ul>";
+echo "</div>";
 
 /* production companies:
 $listOfProductionCompanies = getListOfProdCompanies($connection);
@@ -140,11 +144,15 @@ foreach($listOfProductionCompanies as $curCompany) {
 
 // production country:
 $listOfProdCountries = getListOfProdCountries($connection);
+echo "<br><br>";
+echo "<div id='countries'>";
+echo "<ul>";
 echo "Production countries:<br>";
 foreach ($listOfProdCountries as $curCountry) {
-	echo "<input type='checkbox' name='[add]' value ='$curCountry'>$curCountry</input><br>";
+	echo "<li><input type='checkbox' name='[add]' value ='$curCountry'>$curCountry</input></li><br>";
 }
-
+echo "</ul>";
+echo "</div>";
 
 echo "</div>";
 

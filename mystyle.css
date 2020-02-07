@@ -1,13 +1,11 @@
-
-
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html{
-	
+html {
+
     background-color: #fff;
     color: #727272;
     font-family: sans-serif;
@@ -15,37 +13,37 @@ html{
     font-size: 20px;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
-	
+
 }
 
+label {
+    display: inline;
+}
 
+.pageContainer {
 
-
-
-.pageContainer{
-    
     height: 100vh;
     position: relative;
     margin-left: auto;
-    
+
 }
 
 
-.row{
+.row {
     max-width: 1140px;
     margin-left: auto;
     margin-right: auto;
 }
 
-.row2{
+.row2 {
 
     margin-left: auto;
     margin-right: auto;
 }
 
-.homeHeader{
+.homeHeader {
 
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../imgs/hero.jpg);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../imgs/hero.jpg);
     height: 120vh;
     width: 100vw;
     background-size: cover;
@@ -54,67 +52,71 @@ html{
 
 }
 
-.headertitle{
+.headertitle {
     position: absolute;
     top: 30%;
     left: 50%;
-    transform:translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
-.headertitle h1{
+
+.headertitle h1 {
     color: white;
 }
 
-.test{
+.test {
     padding: 0rem 5rem;
     background-color: white;
-  
+
 }
 
-.dd{
+.dd {
     background-color: white;
 }
-.insideDiv{
+
+.insideDiv {
 
     background-color: white;
     position: relative;
     bottom: 100px;
-   
+
     box-shadow: 0rem 2rem 2rem rgba(0, 0, 0, 0.25);
 
 
 }
+
 /*
  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.25);
 */
-.norcol{
+.norcol {
 
     padding: 0 1rem;
-   
+
 
 }
 
-.norcol h1{
+.norcol h1 {
     margin-top: 3.5rem;
-  
+
 }
 
-.norcol p{
- 
+.norcol p {
+
     font-size: 90%;
     line-height: 145%;
     padding: 3%;
 }
+
 /*#fd1111*/
-.piccol{
+.piccol {
     background-color: #fd1111;
     padding: 3.5rem;
 }
 
-.piccol h1{
+.piccol h1 {
     color: white;
 }
 
-h1{
+h1 {
     color: #fd1111;
     text-align: center;
     font-family: 'Barlow Condensed', Condensed;
@@ -125,7 +127,7 @@ h1{
     font-weight: 600;
 }
 
-.btn{
+.btn {
     text-decoration: none;
     display: block;
     text-align: center;
@@ -146,10 +148,11 @@ h1{
 }
 
 
-.search_movie{
+.search_movie {
 
     margin-bottom: 2rem;
 }
+
 .wrapper {
     display: grid;
     margin: 2rem 0;
@@ -157,12 +160,12 @@ h1{
     grid-template-columns: 50% 50%;
 }
 
-.wrapper>div {
+.wrapper > div {
     padding: 1em;
 
 }
 
-.characterContent{
+.characterContent {
 
     font-family: 'Barlow Condensed', Condensed;
     background-color: red;
@@ -170,18 +173,18 @@ h1{
 }
 
 
-footer{
+footer {
 
     background-color: red;
     padding: 2rem;
 }
 
-footer h1{
+footer h1 {
     color: white;
 }
 
 
-@media only screen and (max-width: 750px){
+@media only screen and (max-width: 750px) {
 
     .test {
         padding: 1rem;
@@ -286,8 +289,6 @@ input {
     max-width: 100%;
     min-height: 480px;
 }
-
-
 
 
 .form-container {
