@@ -1,3 +1,4 @@
+/*
 * {
     margin: 0;
     padding: 0;
@@ -87,6 +88,7 @@ label {
 /*
  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.25);
 */
+/*
 .norcol {
 
     padding: 0 1rem;
@@ -107,6 +109,7 @@ label {
 }
 
 /*#fd1111*/
+/*
 .piccol {
     background-color: #fd1111;
     padding: 3.5rem;
@@ -190,9 +193,9 @@ footer h1 {
         padding: 1rem;
     }
 }
-
+*/
 /*/////////////////////////////////////////////////////////////////////////////////////// */
-
+/*
 h1 {
     font-weight: bold;
     margin: 0;
@@ -276,9 +279,9 @@ input {
     height: 40px;
     width: 40px;
 }
-
+*/
 /*/////////////////////////////////////////////////////////////////////////////////////// */
-
+/*
 .container {
     background-color: #ffffff;
     border-radius: 10px;
@@ -335,10 +338,10 @@ input {
         z-index: 5;
     }
 }
-
+*/
 /*/////////////////////////////////////////////////////////////////////////////////////// */
 
-
+/*
 .overlay-container {
     position: absolute;
     top: 0;
