@@ -8,6 +8,14 @@ html * {
     font-family: 'Roboto', sans-serif;
 }
 
+.card {
+    margin: 0 2%;
+}
+
+.card a {
+    color: #000000;
+}
+
 html {
 
     background-color: #fff;
