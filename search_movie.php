@@ -2,6 +2,11 @@
 
 require_once "header.php";
 
+////////////
+/// add genre page
+////////////
+
+
 echo "<div id='search'>";
 echo "<div id='searchContent'>";
 echo <<<_END
