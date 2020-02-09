@@ -13,7 +13,8 @@ echo "<br>";
 displayPoster($movieMetadata['poster_path']);
 
 $releaseDate = date('d-m-Y', strtotime($movieMetadata['release_date']));
-
+$revenue = '$' . $movieMetadata['revenue'];
+$budget = '$' . $movieMetadata['budget'];
 echo <<<_END
 	<br>Title: {$movieMetadata['title']}
 	<br>Rating: {$movieMetadata['rating']} ({$movieMetadata['votes']})
@@ -21,8 +22,8 @@ echo <<<_END
 	<br>Tagline: {$movieMetadata['tagline']}
 	<br>Overview: {$movieMetadata['overview']} 
 	<br>Release date: $releaseDate
-	<br>Revenue: $ {$movieMetadata['revenue']}
-	<br>Budget: $ {$movieMetadata['budget']} 
+	<br>Revenue: {$revenue}
+	<br>Budget: {$budget}
 	<br>Runtime {$movieMetadata['runtime']} minutes
 _END;
 
@@ -78,6 +79,38 @@ foreach ($prodCompanies as $curCompany) {
 
 ///////////////////////////
 
+// add crew and cast
+echo "<br><br>Crew:<br>";
+$crewData = getCrewCastData($connection, $movieID, "crew");
+
+foreach($crewData as $row) {
+	print_r($row);
+	echo "<br><br>";
+}
+
+echo "<br><br>Cast:<br>";
+$castData = getCrewCastData($connection, $movieID, "cast");
+
+foreach($castData as $row) {
+	print_r($row);
+	echo "<br><br>";
+}
+
+function getCrewCastData($connection, $movieID, $type) {
+
+	$sql = "SELECT * FROM $type WHERE movie_id=$movieID";
+
+	$result = mysqli_query($connection, $sql);
+
+	if (!$result) {
+		echo "<br>" . mysqli_error($connection);
+	} else {
+
+		return mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+	}
+}
+
 
 
 function getMovieData($connection, $movieID) {
@@ -95,8 +128,6 @@ function getMovieData($connection, $movieID) {
 	}
 
 }
-
-// add crew and cast
 
 function getData($connection, $movieID, $tableName, $dataToGet) {
 	$sql = "SELECT $dataToGet FROM $tableName WHERE movie_id=$movieID ORDER BY name ASC";
