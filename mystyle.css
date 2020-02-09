@@ -27,8 +27,14 @@ html {
 
 }
 
-label {
-    display: inline;
+#search {
+    background-color: #DCDCDC;
+    float: right;
+    clear: both;
+}
+
+#searchContent {
+    margin: 2% 2% 2% 2%;
 }
 
 .pageContainer {

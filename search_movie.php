@@ -2,8 +2,8 @@
 
 require_once "header.php";
 
-echo "<div id='search' style='float: right; clear: both;'>";
-
+echo "<div id='search'>";
+echo "<div id='searchContent'>";
 echo <<<_END
 Search for: <br>
 <select name = "searchType">
@@ -34,12 +34,12 @@ _END;
 
 echo <<<_END
 <br>
-<input type="radio" name="order" value="asc" checked>Ascending<br>
-<input type="radio" name="order" value="desc">Descending<br>
-
+<input type="radio" class ='radio' name="order" value="asc" checked>Ascending
+<br>
+<input type="radio" class='radio' name="order" value="desc">Descending
 _END;
 
-
+echo "</div>";
 echo "</div>";
 
 // id='filters' style='float: left;'>";
