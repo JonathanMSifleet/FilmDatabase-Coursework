@@ -83,7 +83,7 @@ foreach ($prodCompanies as $curCompany) {
 echo "<br><br>Crew:<br>";
 $crewData = getCrewCastData($connection, $movieID, "crew");
 
-foreach($crewData as $row) {
+foreach ($crewData as $row) {
 	print_r($row);
 	echo "<br><br>";
 }
@@ -91,7 +91,7 @@ foreach($crewData as $row) {
 echo "<br><br>Cast:<br>";
 $castData = getCrewCastData($connection, $movieID, "cast");
 
-foreach($castData as $row) {
+foreach ($castData as $row) {
 	print_r($row);
 	echo "<br><br>";
 }
@@ -110,7 +110,6 @@ function getCrewCastData($connection, $movieID, $type) {
 
 	}
 }
-
 
 
 function getMovieData($connection, $movieID) {

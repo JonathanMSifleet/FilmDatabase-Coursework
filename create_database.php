@@ -44,8 +44,7 @@ echo "This page has been disabled. Please import the database via PHPMyAdmin <br
 
 echo "<br><a href = home.php> Return to main page </a>";
 
-function createDatabase($connection, $dbname)
-{
+function createDatabase($connection, $dbname) {
 	// build a statement to create a new database:
 	$sql = "CREATE DATABASE IF NOT EXISTS " . $dbname;
 	// no data returned, we just test for true(success)/false(failure):
@@ -58,8 +57,7 @@ function createDatabase($connection, $dbname)
 	mysqli_select_db($connection, $dbname);
 }
 
-function createUserTable($connection)
-{
+function createUserTable($connection) {
 	$sql = "DROP TABLE IF EXISTS user";
 
 	if (mysqli_query($connection, $sql)) {
@@ -77,8 +75,7 @@ function createUserTable($connection)
 	}
 }
 
-function readDataDump($filename)
-{
+function readDataDump($filename) {
 
 	$tempFile = fopen($filename, "r") or die ("Unable to open");
 	$arrayOfLines = array();
@@ -97,8 +94,7 @@ function readDataDump($filename)
 
 }
 
-function createMovieTable($connection, $dataDump)
-{
+function createMovieTable($connection, $dataDump) {
 	$sql = "DROP TABLE IF EXISTS movie";
 
 	if (mysqli_query($connection, $sql)) {
@@ -160,8 +156,7 @@ function createMovieTable($connection, $dataDump)
 	*/
 }
 
-function createKeywordTable($connection, $dataDump)
-{
+function createKeywordTable($connection, $dataDump) {
 
 	$sql = "DROP TABLE IF EXISTS keywords";
 
@@ -235,8 +230,7 @@ function createKeywordTable($connection, $dataDump)
 
 }
 
-function createGenreTable($connection, $dataDump)
-{
+function createGenreTable($connection, $dataDump) {
 
 	$sql = "DROP TABLE IF EXISTS genres";
 
@@ -313,8 +307,7 @@ function createGenreTable($connection, $dataDump)
 	echo "<br> Successfully populated genres table";
 }
 
-function createCountryTable($connection, $dataDump)
-{
+function createCountryTable($connection, $dataDump) {
 
 	$sql = "DROP TABLE IF EXISTS genres";
 
@@ -395,8 +388,7 @@ function createCountryTable($connection, $dataDump)
 	echo "<br> Successfully populated countries table";
 }
 
-function createCompaniesTable($connection, $dataDump)
-{
+function createCompaniesTable($connection, $dataDump) {
 
 	$sql = "DROP TABLE IF EXISTS companies";
 
@@ -482,8 +474,7 @@ function createCompaniesTable($connection, $dataDump)
 
 }
 
-function createLanguagesTable($connection, $dataDump)
-{
+function createLanguagesTable($connection, $dataDump) {
 	$sql = "DROP TABLE IF EXISTS languages";
 
 	if (mysqli_query($connection, $sql)) {
@@ -561,8 +552,7 @@ function createLanguagesTable($connection, $dataDump)
 
 }
 
-function createCastTable($connection, $dataDump)
-{
+function createCastTable($connection, $dataDump) {
 	$sql = "DROP TABLE IF EXISTS cast";
 
 	if (mysqli_query($connection, $sql)) {
@@ -634,8 +624,7 @@ function createCastTable($connection, $dataDump)
 	echo "<br> Successfully populated cast table";
 }
 
-function createCrewTable($connection, $dataDump)
-{
+function createCrewTable($connection, $dataDump) {
 	$sql = "DROP TABLE IF EXISTS crew";
 
 	if (mysqli_query($connection, $sql)) {

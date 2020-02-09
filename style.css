@@ -1,109 +1,109 @@
 * {
-	margin: 0;
-	padding: 0;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	font-family: 'Cabin';
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: 'Cabin';
 }
 
 body {
-	background-color: #fff;
+    background-color: #fff;
     color: #727272;
 }
 
 #main {
-	width: 35%;
-	margin: 50px auto;
+    width: 35%;
+    margin: 50px auto;
 }
 
 #tab-btn {
-	display: -webkit-flex;
-	display: -moz-flex;
-	display: -ms-flex;
-	display: -o-flex;
-	display: flex;
-	width: 100%;
-	justify-content: center;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    width: 100%;
+    justify-content: center;
 }
 
 .login,
 .register {
-	text-decoration: none;
-	display: block;
-	width: 100%;
-	background-color: #37474f;
-	text-align: center;
-	color: #fff;
-	font-size: 25px;
-	padding: 10px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    background-color: #37474f;
+    text-align: center;
+    color: #fff;
+    font-size: 25px;
+    padding: 10px;
 }
 
 .active {
-	background-color: #eee;
-	color: #000;
+    background-color: #eee;
+    color: #000;
 }
 
 .content,
 .other {
-	width: 100%;
-	background-color: #eee;
-	padding: 20px 30px 30px 30px;
-	box-shadow: 2px 2px 5px #333;
+    width: 100%;
+    background-color: #eee;
+    padding: 20px 30px 30px 30px;
+    box-shadow: 2px 2px 5px #333;
 }
 
 .other {
-	display: none;
+    display: none;
 }
 
 .inp {
-	width: 100%;
-	padding: 12px;
-	margin-bottom: 15px;
-	font-size: 20px;
-	border: 2px solid #888;
-	border-bottom: 5px solid #888;
-	background-color: #fff;
-	color: #666;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    font-size: 20px;
+    border: 2px solid #888;
+    border-bottom: 5px solid #888;
+    background-color: #fff;
+    color: #666;
 }
 
 .inp:focus {
-	outline: none;
-	border: 2px solid #555;
-	border-bottom: 5px solid #555;
+    outline: none;
+    border: 2px solid #555;
+    border-bottom: 5px solid #555;
 }
 
 #sub-btn {
-	width: 100%;
-	padding: 12px;
-	border: none;
-	font-size: 20px;
-	font-weight: bold;
-	background-color: #f44336;
-	color: #fff;
-	cursor: pointer;
-	border-bottom: 5px solid #444;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f44336;
+    color: #fff;
+    cursor: pointer;
+    border-bottom: 5px solid #444;
 }
 
 #sub-btn:focus {
-	outline: none;
+    outline: none;
 }
 
 #sub-btn:active {
-	border: none;
-	margin-top: 5px;
+    border: none;
+    margin-top: 5px;
 }
 
 #forgot {
-	font-size: 20px;
-	color: #444;
-	display: block;
+    font-size: 20px;
+    color: #444;
+    display: block;
 }
 
 h2 {
-	text-align: center;
-	padding-bottom: 15px;
-	color: #333;
-	font-size: 30px;
-	font-variant: small-caps;
+    text-align: center;
+    padding-bottom: 15px;
+    color: #333;
+    font-size: 30px;
+    font-variant: small-caps;
 }
