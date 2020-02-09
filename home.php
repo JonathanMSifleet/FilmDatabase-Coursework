@@ -5,9 +5,6 @@ require_once "header.php";
 // main page
 echo <<<_END
 
-<ul>
-<li><a href = sign_in.php>Register or login</li>
-</ul>
     <header class="homeHeader">
 
         <div class="headertitle"> 
