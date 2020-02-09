@@ -56,7 +56,6 @@
   transition: all 0.5s;
 }
 .container input {
-  font-family: 'Barlow Condensed', Condensed;
   position: absolute;
   margin: auto;
   top: 0;

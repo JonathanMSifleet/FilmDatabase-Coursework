@@ -4,15 +4,6 @@ set_time_limit(6000);
 
 require_once "helper.php";
 
-////// MySQL credentials:
-$dbhost = 'localhost';
-$dbuser = 'root';
-$dbpass = '';
-$dbname = 'movie_database';
-/////
-
-$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-
 // style sheet and header:
 echo <<<_END
     <!DOCTYPE html>
@@ -30,10 +21,42 @@ echo <<<_END
     	<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed&display=swap" rel="stylesheet">
     	<link href="https://fonts.googleapis.com/css?family=Barlow&display=swap" rel="stylesheet">
     	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-    </head>
-        <link rel="stylesheet" href="style.css">
-        </head>
+    	<!-- Bootstrap: -->
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	</head>
     <h1>Movie Database Presentation Tool</h1>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
+  <a class="navbar-brand" href="home.php">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="search_movie.php">Search database</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="create_database.php">Initialise database</a>
+      </li>
+    </ul>
+  </div>
+  <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="sign_in.php">Sign-In</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Register</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
 _END;
 
 session_start();

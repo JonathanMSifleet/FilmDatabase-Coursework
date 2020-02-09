@@ -6,12 +6,6 @@ require_once "header.php";
 // main page
 echo <<<_END
 
-<ul>
-
-<li><a href = register.php>Register account</li>
-<li><a href = create_database.php> create database </a></li>
-
-</ul>
     <header class="homeHeader">
 
         <div class="headertitle"> 
