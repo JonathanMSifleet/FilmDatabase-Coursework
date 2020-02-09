@@ -120,41 +120,67 @@ Revenue: <br>
 <label for="maxBudget">Maximum</label>
 _END;
 
+echo <<<_END
+<div id="accordion">
 
-// languages:
+  <div class="card">
+    <div class="card-header">
+      <a class="card-link" data-toggle="collapse" href="#collapseOne">Languages</a>
+    </div>
+    <div id="collapseOne" class="collapse show" data-parent="#accordion">
+      <div class="card-body">
+_END;
+
 $listOfLanguages = getListOfLanguages($connection);
-echo "<br><br>";
-echo "<div id='languages'>";
-echo "Languages:<br>";
 echo "<ul>";
 foreach ($listOfLanguages as $curLanguage) {
 	echo "<li><input type='checkbox' name='$curLanguage' id ='$curLanguage' value ='$curLanguage'>$curLanguage</input></li>";
 }
 echo "</ul>";
-echo "</div>";
 
-/* production companies:
-$listOfProductionCompanies = getListOfProdCompanies($connection);
-echo "<br><br>";
-echo "Production companies:<br>";
-foreach($listOfProductionCompanies as $curCompany) {
-	echo "<input type='checkbox' name='[add]' value ='$curCompany'>$curCompany</input><br>";
-} */
+echo <<<_END
+      </div>
+    </div>
+  </div>
 
-
-// production country:
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">Production Countries</a>
+    </div>
+    <div id="collapseTwo" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+_END;
 $listOfProdCountries = getListOfProdCountries($connection);
-echo "<br><br>";
-echo "<div id='countries'>";
-echo "<ul>";
-echo "Production countries:<br>";
 foreach ($listOfProdCountries as $curCountry) {
 	echo "<li><input type='checkbox' name='[add]' value ='$curCountry'>$curCountry</input></li><br>";
 }
 echo "</ul>";
-echo "</div>";
 
-echo "</div>";
+echo <<<_END
+      </div>
+    </div>
+  </div>
+  
+    <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">Production Companies</a>
+    </div>
+    <div id="collapseThree" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+_END;
+
+$listOfProductionCompanies = getListOfProdCompanies($connection);
+foreach ($listOfProductionCompanies as $curCompany) {
+	echo "<input type='checkbox' name='[add]' value ='$curCompany'>$curCompany</input><br>";
+}
+
+echo <<<_END
+      </div>
+    </div>
+  </div>
+  
+</div>
+_END;
 
 function getMaxValue($connection, $maxValToFind) {
 
