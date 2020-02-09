@@ -84,8 +84,6 @@ for($i=0; $i <$n; $i++){
     
     <div class=card-container>
 
-    <form action ="film.php" method="get">
-
     <a href="view_movie.php?movieID={$row['movie_id']}" id="overlay">
     <p>Title: {$row['title']}</p>
     <br>
@@ -93,7 +91,7 @@ for($i=0; $i <$n; $i++){
     <br>
     <p>Rating: {$row['rating']}</p>
     </a>
-    </form>
+    
     </div>
 
 _END;
