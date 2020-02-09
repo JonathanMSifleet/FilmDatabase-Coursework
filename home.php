@@ -86,7 +86,7 @@ for($i=0; $i <$n; $i++){
 
     <form action ="film.php" method="get">
 
-    <a href="film.php?filmid={$row['movie_id']}" id="overlay">
+    <a href="view_movie.php?movieID={$row['movie_id']}" id="overlay">
     <p>Title: {$row['title']}</p>
     <br>
     <p>Date: {$row['release_date']}</p>
