@@ -9,6 +9,14 @@ html * {
     font-family: 'Roboto', sans-serif;
 }
 
+.card {
+    margin: 0 2%;
+}
+
+.card a {
+    color: #000000;
+}
+
 html {
 
     background-color: #fff;
@@ -20,8 +28,14 @@ html {
 
 }
 
-label {
-    display: inline;
+#search {
+    background-color: #DCDCDC;
+    float: right;
+    clear: both;
+}
+
+#searchContent {
+    margin: 2% 2% 2% 2%;
 }
 
 .pageContainer {

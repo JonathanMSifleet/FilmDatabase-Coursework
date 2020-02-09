@@ -2,8 +2,11 @@
 
 require_once "header.php";
 
-//$movieID = $_GET['movieID'];
-$movieID = 19995;
+if (isset($_GET['movieID'])) {
+	$movieID = $_GET['movieID'];
+} else {
+	$movieID = 19995;
+}
 
 $movieMetadata = getMovieData($connection, $movieID);
 //$movieMetadata = getMovieData($connection, $_GET['movieID']);

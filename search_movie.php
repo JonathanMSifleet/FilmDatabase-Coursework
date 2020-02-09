@@ -2,8 +2,8 @@
 
 require_once "header.php";
 
-echo "<div id='search' style='float: right; clear: both;'>";
-
+echo "<div id='search'>";
+echo "<div id='searchContent'>";
 echo <<<_END
 Search for: <br>
 <select name = "searchType">
@@ -34,99 +34,167 @@ _END;
 
 echo <<<_END
 <br>
-<input type="radio" name="order" value="asc" checked>Ascending<br>
-<input type="radio" name="order" value="desc">Descending<br>
-
+<input type="radio" class ='radio' name="order" value="asc" checked>Ascending
+<br>
+<input type="radio" class='radio' name="order" value="desc">Descending
 _END;
-
 
 echo "</div>";
+echo "</div>";
 
-echo "<div id='filters' style='float: left;'>";
+// id='filters' style='float: left;'>";
 
-// rating:
+echo "<div class ='sidebar-sticky' style='width: 20%; background-color: #ff726f;'>";
+
+echo "<div id='sidebarContent'>";
+
+echo "<h2>Filters:</h2>";
+
+echo "<div id='accordion'>";
+
 echo <<<_END
-<br><br>
+<div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseRating">Rating</a>
+    </div>
+    <div id="collapseRating" class="collapse toggle" data-parent="#accordion">
+      <div class="card-body">
 Minimum Rating: <br>
 <input type ="range" id="minRating" name ="minRating" min ="0" max ="10" step="0.1" value="0">
+      </div>
+    </div>
+</div>
 _END;
 
-// popularity:
 $maxPopularity = getMaxValue($connection, "popularity");
+
 echo <<<_END
-<br><br>
-Minimum popularity:<br>
+<br>
+<div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapsePopularity">Popularity</a>
+    </div>
+    <div id="collapsePopularity" class="collapse toggle" data-parent="#accordion">
+      <div class="card-body">
+Minimum popularity: <br>
 <input type ="range" id="minPop" name ="minPop" min ="0" max ="$maxPopularity" value="0">
+      </div>
+    </div>
+</div>
 _END;
 
 // year:
 $minYear = 1873;
 $maxYear = 2020;
+
 echo <<<_END
-<br><br>
+<br>
+<div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseYear">Year</a>
+    </div>
+    <div id="collapseYear" class="collapse toggle" data-parent="#accordion">
+      <div class="card-body">
 <label for="minYear">Minimum Year</label>
 <input type ="range" id="minYear" name ="minYear" min ="$minYear" max ="$maxYear" value="0">
 
 <br>
-<label for="maxBudget">Maximum Year</label>
-<input type ="range" id="maxYear" name="maxYear" min="$minYear" max ="$maxYear" value ="$maxYear">
+<label for="maxYear">Maximum Year</label>
+<input type ="range" id="maxYear" name="maxYear" min="$minYear" max ="$maxYear" value ="$maxYear">      </div>
+    </div>
+</div>
 _END;
 
-// runtime:
 $maxRuntime = getMaxValue($connection, "runtime");
+
 echo <<<_END
-<br><br>
-Runtime: <br>
-<input type ="range" id="minRuntime" name ="minRuntime" min ="0" max ="$maxYear" value="0">
-<label for="minYear">Minimum runtime</label>
+<br>
+<div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseRuntime">Runtime</a>
+    </div>
+    <div id="collapseRuntime" class="collapse toggle" data-parent="#accordion">
+      <div class="card-body">
+      <label for="minYear">Minimum runtime</label>
+<input type ="range" id="minRuntime" name ="minRuntime" min ="0" max ="$maxRuntime" value="0">
 
 <br>
-<input type ="range" id="maxYear" name="maxYear" min="$minYear" max ="$maxYear" value ="$maxYear">
-<label for="maxBudget">Maximum runtime</label>
+<label for="minYear">Maximum runtime</label>
+<input type ="range" id="maxRuntime" name ="maxRuntime" min ="0" max ="$maxRuntime" value="$maxRuntime">
+</div>
+</div>
+</div>
 _END;
 
-// number of votes:
 $maxVotes = getMaxValue($connection, "votes");
+
 echo <<<_END
-<br><br>
-Minimum number of votes:<br>
+<br>
+<div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseVotes">Votes</a>
+    </div>
+    <div id="collapseVotes" class="collapse toggle" data-parent="#accordion">
+      <div class="card-body">
+      
+      Minimum number of votes:<br>
 <input type ="range" id="minVotes" name ="minVotes" min ="0" max ="$maxVotes" value="0">
+
+      </div>
+</div>
+</div>
 _END;
 
-// budget:
 $maxBudget = getMaxValue($connection, "budget");
+
 echo <<<_END
-<br><br>
-Budget: <br>
+<br>
+<div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseBudget">Budget</a>
+    </div>
+    <div id="collapseBudget" class="collapse toggle" data-parent="#accordion">
+      <div class="card-body">
+<label for="minBudget">Minimum</label>
 <input type ="range" id="minBudget" name ="minBudget" min ="0" max ="$maxBudget" value ="0">
-<label for="minBudget">Minimum</label>
 
 <br>
+<label for="maxBudget">Maximum</label>
 <input type ="range" id="maxBudget" name="maxBudget" min="0" max ="$maxBudget" value="$maxBudget">
-<label for="maxBudget">Maximum</label>
+</div>
+</div>
+</div>
 _END;
 
-// revenue:
 $maxRevenue = getMaxValue($connection, "revenue");
+
 echo <<<_END
-<br><br>
+<br>
+<div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseRevenue">Revenue</a>
+    </div>
+    <div id="collapseRevenue" class="collapse toggle" data-parent="#accordion">
+      <div class="card-body">
 Revenue: <br>
-<input type ="range" id="minRevenue" name ="minRevenue" min ="0" max ="$maxRevenue" value="0">
 <label for="minBudget">Minimum</label>
+<input type ="range" id="minRevenue" name ="minRevenue" min ="0" max ="$maxRevenue" value="0">
 
 <br>
-<input type ="range" id="maxRevenue" name="maxRevenue" min="0" max ="$maxRevenue" value ="$maxRevenue">
 <label for="maxBudget">Maximum</label>
+<input type ="range" id="maxRevenue" name="maxRevenue" min="0" max ="$maxRevenue" value ="$maxRevenue">
+      </div>
+</div>
+</div>
 _END;
 
 echo <<<_END
-<div id="accordion">
-
+<br>
   <div class="card">
     <div class="card-header">
-      <a class="card-link" data-toggle="collapse" href="#collapseOne">Languages</a>
+      <a class="card-link" data-toggle="collapse" href="#collapseLanguages">Languages</a>
     </div>
-    <div id="collapseOne" class="collapse show" data-parent="#accordion">
+    <div id="collapseLanguages" class="collapse toggle" data-parent="#accordion">
       <div class="card-body">
 _END;
 
@@ -141,14 +209,18 @@ echo <<<_END
       </div>
     </div>
   </div>
+_END;
 
+echo <<<_END
+<br>
   <div class="card">
     <div class="card-header">
-      <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">Production Countries</a>
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseCountries">Production Countries</a>
     </div>
-    <div id="collapseTwo" class="collapse" data-parent="#accordion">
+    <div id="collapseCountries" class="collapse toggle " data-parent="#accordion">
       <div class="card-body">
 _END;
+
 $listOfProdCountries = getListOfProdCountries($connection);
 foreach ($listOfProdCountries as $curCountry) {
 	echo "<li><input type='checkbox' name='[add]' value ='$curCountry'>$curCountry</input></li><br>";
@@ -159,12 +231,15 @@ echo <<<_END
       </div>
     </div>
   </div>
-  
+_END;
+
+echo <<<_END
+<br>
     <div class="card">
     <div class="card-header">
-      <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">Production Companies</a>
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseCompanies">Production Companies</a>
     </div>
-    <div id="collapseThree" class="collapse" data-parent="#accordion">
+    <div id="collapseCompanies" class="collapse toggle" data-parent="#accordion">
       <div class="card-body">
 _END;
 
@@ -177,7 +252,8 @@ echo <<<_END
       </div>
     </div>
   </div>
-  
+  </div>
+  <br>
 </div>
 _END;
 
