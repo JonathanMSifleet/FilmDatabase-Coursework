@@ -1,5 +1,14 @@
 <?php
 
+////// MySQL credentials:
+$dbhost = 'localhost';
+$dbuser = 'root';
+$dbpass = '';
+$dbname = 'movie_database';
+/////
+
+$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+
 // function to sanitise (clean) user data:
 function sanitise($str, $connection)
 {
@@ -174,7 +183,7 @@ function displaySignInPrompt($username, $username_val, $password, $password_val)
     </div>
         
 _END;
-    
+
 }
 
 

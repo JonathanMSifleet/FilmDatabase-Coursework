@@ -64,13 +64,12 @@ $minYear = 1873;
 $maxYear = 2020;
 echo <<<_END
 <br><br>
-Minimum year: <br>
-<input type ="range" id="minYear" name ="minYear" min ="$minYear" max ="$maxYear" value="0">
 <label for="minYear">Minimum Year</label>
+<input type ="range" id="minYear" name ="minYear" min ="$minYear" max ="$maxYear" value="0">
 
 <br>
-<input type ="range" id="maxYear" name="maxYear" min="$minYear" max ="$maxYear" value ="$maxYear">
 <label for="maxBudget">Maximum Year</label>
+<input type ="range" id="maxYear" name="maxYear" min="$minYear" max ="$maxYear" value ="$maxYear">
 _END;
 
 // runtime:
