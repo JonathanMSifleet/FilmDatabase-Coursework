@@ -11,7 +11,7 @@ echo <<<_END
         <div class="headertitle"> 
 
             <h1>Movie Database presentation</h1>
-            <a href="#" class="btn js-scroll-to-searchmovies">Search Movie</a>
+            <a href="#" class="btno js-scroll-to-searchmovies">Search Movie</a>
         
         </div> 
        
@@ -28,7 +28,7 @@ echo <<<_END
                 <div class="col2 span-1-of-22 piccol">
                     <h1>Join the community</h1>
                     
-                    <a class="btn" href="">Login or Sign up</a>
+                    <a class="btno" href="">Login or Sign up</a>
                     
                 </div>     
             </div>
@@ -142,7 +142,7 @@ echo <<<_END
 
         </div>
     
-        <input class="btn" type="submit" value="Submit">
+        <input class="btno" type="submit" value="Submit">
     </form> 
     </section>
     
