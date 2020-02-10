@@ -48,14 +48,28 @@ html * {
     margin-left: 2%;
 }
 
-#search {
+#searchBox {
+    float: left;
+}
+
+#searchBox {
     background-color: #dcdcdc;
-    float: right;
-    clear: both;
+    float: top;
+    width: 85%;
 }
 
 #searchContent {
     margin: 2% 2% 2% 2%;
+}
+
+#searchContent li {
+    float: left;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+#searchContent ul {
+    list-style-type: none;
 }
 
 .pageContainer {

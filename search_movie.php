@@ -41,35 +41,6 @@ if (!isset($_POST['search'])) {
 function displayUI($connection, $listOfLanguages, $listOfProdCompanies, $listOfProdCountries
 ) {
 	echo <<<_END
-<div id='search'>
-	<div id='searchContent'>
-		<input type="text" name="search" minlength="0" maxlength="128" value="Search" required>
-		Search for: <br>
-		<input type="submit" value="Submit">
-		<select name = "searchType">
-			<option value = "name" selected>Name</option>
-			<option value = "actorName">Actor name</option>
-			<option value = "genre">Genre</option>
-			<option value = "keyword">Keyword</option>
-			<option value = "prodCompany">Production Company</option>
-			<option value = "prodCountry">Country</option>
-		</select>
-		<br><br>
-		Order by:<br>
-		<select name = "orderType">
-			<option value = "popularity" selected>Popularity</option>
-			<option value = "rating">Rating</option>
-			<option value = "genre">Genre</option>
-			<option value = "year">Year</option>
-		</select>
-		<br>
-		<input type="radio" class ='radio' name="order" value="asc" checked>Ascending
-		<br>
-		<input type="radio" class='radio' name="order" value="desc">Descending
-	</div>
-</div>
-
-
 <!-- Sidebar: -->
 
 <form action="" method="post" style='width: 15%; margin: 0; padding: 0; float: left;'>
@@ -277,8 +248,40 @@ _END;
     	</div>
 	</div>
 </div>
+</div>
+</div>
 </form>
 <br>
+
+<div id='searchBox'>
+	<div id='searchContent'>
+	<ul>
+		<li><input type="text" name="search" minlength="0" maxlength="128" value="Search" required></li>
+		<li>Search for:</li>
+		<li>
+		<select name = "searchType">
+			<option value = "name" selected>Name</option>
+			<option value = "actorName">Actor name</option>
+			<option value = "genre">Genre</option>
+			<option value = "keyword">Keyword</option>
+			<option value = "prodCompany">Production Company</option>
+			<option value = "prodCountry">Country</option>
+		</select>
+		</li>
+		<li> Order by:<br> </li>
+		<li>
+		<select name = "orderType">
+			<option value = "popularity" selected>Popularity</option>
+			<option value = "rating">Rating</option>
+			<option value = "genre">Genre</option>
+			<option value = "year">Year</option>
+		</select>
+		</li>
+		<li><input type="radio" class ='radio' name="order" value="asc" checked>Ascending</li>
+		<li><input type="radio" class='radio' name="order" value="desc">Descending</li>
+	</ul>
+	</div>
+</div>
 _END;
 }
 
