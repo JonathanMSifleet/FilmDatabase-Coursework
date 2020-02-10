@@ -6,7 +6,16 @@ if (!isset($_SESSION['gotLists'])) {
 	$listOfLanguages = getListOfLanguages($connection);
 	$listOfProdCompanies = getListOfProdCompanies($connection);
 	$listOfProdCountries = getListOfProdCountries($connection);
+	$_SESSION['languages'] = $listOfLanguages;
+	$_SESSION['companies'] = $listOfProdCompanies;
+	$_SESSION['countries'] = $listOfProdCountries;
 	$_SESSION['gotLists'] = true;
+}
+
+if ($_SESSION['gotLists'] == true) {
+	$listOfLanguages = $_SESSION['languages'];
+	$listOfProdCompanies = $_SESSION['companies'];
+	$listOfProdCountries = $_SESSION['countries'];
 }
 
 ////////////
@@ -15,10 +24,10 @@ if (!isset($_SESSION['gotLists'])) {
 
 
 // initialise variables:
-//$filters['search'] = sanitise($_POST['search'], $connection);
 
+//////////
 if (!isset($_POST['search'])) {
-	displayUI($connection);
+	displayUI($connection, $listOfLanguages, $listOfProdCompanies, $listOfProdCountries);
 } else {
 	// sanitise variables:
 
@@ -29,12 +38,14 @@ if (!isset($_POST['search'])) {
 }
 //////////////////////
 
-function displayUI($connection) {
+function displayUI($connection, $listOfLanguages, $listOfProdCompanies, $listOfProdCountries
+) {
 	echo <<<_END
 <div id='search'>
 	<div id='searchContent'>
-		<input type="text" name="search" minlength="0" maxlength="128" value="[add]" required>
+		<input type="text" name="search" minlength="0" maxlength="128" value="Search" required>
 		Search for: <br>
+		<input type="submit" value="Submit">
 		<select name = "searchType">
 			<option value = "name" selected>Name</option>
 			<option value = "actorName">Actor name</option>
@@ -218,7 +229,6 @@ _END;
       					<div class="card-body">
 _END;
 
-	$listOfLanguages = getListOfLanguages($connection);
 	echo "<ul style='list-style-type: none;'>";
 	foreach ($listOfLanguages as $curLanguage) {
 		echo "<li><input type='checkbox' name='$curLanguage' id ='$curLanguage' value ='$curLanguage'>$curLanguage</input></li>";
@@ -239,7 +249,6 @@ _END;
 _END;
 
 	echo "<ul style='list-style-type: none; text-align: left; min-width: 50%; margin:auto;'>";
-	$listOfProdCountries = getListOfProdCountries($connection);
 	foreach ($listOfProdCountries as $curCountry) {
 		echo "<li><input type='checkbox' name='[add]' value ='$curCountry'>$curCountry</input></li><br>";
 	}
@@ -258,9 +267,8 @@ _END;
       			<div class="card-body">
 _END;
 
-	$listOfProductionCompanies = getListOfProdCompanies($connection);
 	echo "<ul style='list-style-type: none;'>";
-	foreach ($listOfProductionCompanies as $curCompany) {
+	foreach ($listOfProdCompanies as $curCompany) {
 		echo "<li><input type='checkbox' name='[add]' value ='$curCompany'>$curCompany</input></li>";
 	}
 	echo "</ul>";
