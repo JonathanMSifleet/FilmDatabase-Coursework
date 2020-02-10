@@ -12,6 +12,29 @@ html * {
     font-size: 20px;
 }
 
+.sliderLabel {
+    background-color: #ffffff;
+}
+
+.card-body {
+    display: inline;
+}
+
+.slider {
+    text-align: left;
+    float: left;
+    width: 70%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.sliderLabel {
+    text-align: left;
+    float: left;
+    margin-top: 2%;
+    margin-left: 2%;
+}
+
 #search {
     background-color: #dcdcdc;
     float: right;
