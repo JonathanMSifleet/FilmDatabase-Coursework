@@ -9,7 +9,6 @@ if (isset($_GET['movieID'])) {
 }
 
 $movieMetadata = getMovieData($connection, $movieID);
-//$movieMetadata = getMovieData($connection, $_GET['movieID']);
 
 echo "<br>";
 
@@ -86,8 +85,10 @@ echo "<br><br>Cast:<br>";
 $castData = getCastData($connection, $movieID, "cast");
 
 foreach ($castData as $row) {
-	print_r($row);
-	echo "<br><br>";
+		echo $row['actor_name'];
+		echo $row['character_name'];
+		echo $row['gender'];
+		echo "<br><br>";
 }
 
 /* echo "<br><br>Crew:<br>";
