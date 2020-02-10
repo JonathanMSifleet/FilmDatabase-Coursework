@@ -3,11 +3,13 @@ html * {
 }
 
 .card {
-    margin: 0 2%;
+    margin: 0 10%;
+    width: 80%;
 }
 
 .card a {
     color: #000;
+    font-size: 20px;
 }
 
 #search {
