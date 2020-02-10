@@ -507,6 +507,46 @@ footer h1 {
     color: white;
 }
 
+.characterContent{
+    background-color: red;
+    color: white;
+}
+
+.Card-list{
+    width: 85vw;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 20px;
+}
+
+.Card-container {
+    font-family: 'Barlow Condensed', Condensed;
+    display: flex;
+    flex-direction: column;
+    background-color: red;
+    color: white;
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 25px;
+    cursor: pointer;
+    -moz-osx-font-smoothing: grayscale;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    transition: transform 0.25s ease-out;
+}
+
+.Card-container a{
+    color: white;
+    text-decoration: none;
+}
+  
+.Card-container:hover {
+    transform: scale(1.05);
+}
+
+
+
 @media only screen and (max-width: 750px) {
     .test {
         padding: 1rem;
