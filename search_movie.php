@@ -6,9 +6,11 @@ if (!isset($_SESSION['gotLists'])) {
 	$listOfLanguages = getListOfLanguages($connection);
 	$listOfProdCompanies = getListOfProdCompanies($connection);
 	$listOfProdCountries = getListOfProdCountries($connection);
+	$listOfGenres = getListOfGenres($connection);
 	$_SESSION['languages'] = $listOfLanguages;
 	$_SESSION['companies'] = $listOfProdCompanies;
 	$_SESSION['countries'] = $listOfProdCountries;
+	$_SESSION['genres'] = $listOfGenres;
 	$_SESSION['gotLists'] = true;
 }
 
@@ -16,18 +18,14 @@ if ($_SESSION['gotLists'] == true) {
 	$listOfLanguages = $_SESSION['languages'];
 	$listOfProdCompanies = $_SESSION['companies'];
 	$listOfProdCountries = $_SESSION['countries'];
+	$listOfGenres = $_SESSION['genres'];
 }
-
-////////////
-/// add genre page
-////////////
-
 
 // initialise variables:
 
 //////////
 if (!isset($_POST['search'])) {
-	displayUI($connection, $listOfLanguages, $listOfProdCompanies, $listOfProdCountries);
+	displayUI($connection, $listOfLanguages, $listOfProdCompanies, $listOfProdCountries, $listOfGenres);
 } else {
 	// sanitise variables:
 
@@ -38,7 +36,7 @@ if (!isset($_POST['search'])) {
 }
 //////////////////////
 
-function displayUI($connection, $listOfLanguages, $listOfProdCompanies, $listOfProdCountries
+function displayUI($connection, $listOfLanguages, $listOfProdCompanies, $listOfProdCountries, $listOfGenres
 ) {
 	echo <<<_END
 <!-- Sidebar: -->
@@ -192,6 +190,26 @@ _END;
 					</div>
 				</div>
 				<br>
+				
+				<div class="card">
+    				<div class="card-header">
+    					<a class="card-link" data-toggle="collapse" href="#collapseGenres">Genres</a>
+    				</div>
+    				<div id="collapseGenres" class="collapse toggle" data-parent="#accordion">
+      					<div class="card-body">
+							<ul style='list-style-type: none;'>
+_END;
+	foreach ($listOfGenres as $curGenre) {
+		echo "<li><input type='checkbox' name='$curGenre' id ='$curGenre' value ='$curGenre'>$curGenre</input></li>";
+	}
+	echo "</ul>";
+
+	echo <<<_END
+						</div>
+   					</div>
+				</div>
+				<br>
+				
  				<div class="card">
     				<div class="card-header">
     					<a class="card-link" data-toggle="collapse" href="#collapseLanguages">Languages</a>
@@ -256,7 +274,7 @@ _END;
 <div id='searchBox'>
 	<div id='searchContent'>
 	<ul>
-		<li><input type="text" name="search" minlength="0" maxlength="128" value="Search" required></li>
+		<li><input type="text" placeholder="Search" minlength="0" maxlength="128" required></li>
 		<li>Search for:</li>
 		<li>
 		<select name = "searchType">
@@ -363,6 +381,24 @@ function getListOfProdCountries($connection) {
 		}
 
 		return $listOfProdCompanies;
+
+	}
+}
+
+function getListOfGenres($connection) {
+	$query = "SELECT DISTINCT(name) FROM genres GROUP BY genre_ID ORDER BY name ASC";
+	$result = mysqli_query($connection, $query);
+
+	if (!$result) {
+		echo mysqli_error($connection);
+	} else {
+		$listOfGenres = array();
+
+		while ($row = mysqli_fetch_array($result)) {
+			$listOfGenres[] = $row[0];
+		}
+
+		return $listOfGenres;
 
 	}
 }
