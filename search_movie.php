@@ -41,7 +41,7 @@ function displayUI($connection, $listOfLanguages, $listOfProdCompanies, $listOfP
 	echo <<<_END
 <!-- Sidebar: -->
 
-<form action="" method="post" style='width: 15%; margin: 0; padding: 0; float: left;'>
+<form action="" id="filterForm" method="post" style='width: 15%; margin: 0; padding: 0; float: left;'>
 <div class ='sidebar-sticky' style='width: 100%; background-color: #ff726f;'>
 	<div id='sidebarContent'>
 		<h2>Filters:</h2>
@@ -267,9 +267,9 @@ _END;
 	</div>
 </div>
 </div>
+<br>
 </div>
 </form>
-<br>
 
 <div id='searchBox'>
 	<div id='searchContent'>

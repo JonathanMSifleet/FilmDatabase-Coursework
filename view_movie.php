@@ -82,26 +82,40 @@ foreach ($prodCompanies as $curCompany) {
 
 ///////////////////////////
 
-// add crew and cast
-echo "<br><br>Crew:<br>";
-$crewData = getCrewCastData($connection, $movieID, "crew");
-
-foreach ($crewData as $row) {
-	print_r($row);
-	echo "<br><br>";
-}
-
 echo "<br><br>Cast:<br>";
-$castData = getCrewCastData($connection, $movieID, "cast");
+$castData = getCastData($connection, $movieID, "cast");
 
 foreach ($castData as $row) {
 	print_r($row);
 	echo "<br><br>";
 }
 
-function getCrewCastData($connection, $movieID, $type) {
+/* echo "<br><br>Crew:<br>";
+$crewData = getCrewData($connection, $movieID, "crew");
 
-	$sql = "SELECT * FROM $type WHERE movie_id=$movieID";
+foreach ($crewData as $row) {
+	print_r($row);
+	echo "<br><br>";
+} */
+
+function getCastData($connection, $movieID) {
+
+	$sql = "SELECT actor_name, character_name, display_order, gender, profile_path FROM cast WHERE movie_id=$movieID ORDER BY display_order ASC";
+
+	$result = mysqli_query($connection, $sql);
+
+	if (!$result) {
+		echo "<br>" . mysqli_error($connection);
+	} else {
+
+		return mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+	}
+}
+
+function getCrewData($connection, $movieID) {
+
+	$sql = "SELECT department, gender, job, crew_name, profile_path FROM crew WHERE movie_id=$movieID";
 
 	$result = mysqli_query($connection, $sql);
 
