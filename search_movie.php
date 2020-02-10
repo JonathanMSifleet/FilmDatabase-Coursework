@@ -2,13 +2,38 @@
 
 require_once "header.php";
 
+if (!isset($_SESSION['gotLists'])) {
+	$listOfLanguages = getListOfLanguages($connection);
+	$listOfProdCompanies = getListOfProdCompanies($connection);
+	$listOfProdCountries = getListOfProdCountries($connection);
+	$_SESSION['gotLists'] = true;
+}
+
 ////////////
 /// add genre page
 ////////////
 
-echo <<<_END
+
+// initialise variables:
+//$filters['search'] = sanitise($_POST['search'], $connection);
+
+if (!isset($_POST['search'])) {
+	displayUI($connection);
+} else {
+	// sanitise variables:
+
+
+	// search database:
+
+
+}
+//////////////////////
+
+function displayUI($connection) {
+	echo <<<_END
 <div id='search'>
 	<div id='searchContent'>
+		<input type="text" name="search" minlength="0" maxlength="128" value="[add]" required>
 		Search for: <br>
 		<select name = "searchType">
 			<option value = "name" selected>Name</option>
@@ -35,9 +60,13 @@ echo <<<_END
 
 
 <!-- Sidebar: -->
-<div class ='sidebar-sticky' style='width: 15%; background-color: #ff726f;'>
+
+<form action="" method="post" style='width: 15%; margin: 0; padding: 0; float: left;'>
+<div class ='sidebar-sticky' style='width: 100%; background-color: #ff726f;'>
 	<div id='sidebarContent'>
 		<h2>Filters:</h2>
+		<input type="submit" value="Submit">
+		<br><br>
 		<div id='accordion'>
 			<div class="card">
     			<div class="card-header">
@@ -53,9 +82,9 @@ echo <<<_END
 			</div>
 _END;
 
-$maxPopularity = getMaxValue($connection, "popularity");
+	$maxPopularity = getMaxValue($connection, "popularity");
 
-echo <<<_END
+	echo <<<_END
 			<br>
 			<div class="card">
     			<div class="card-header">
@@ -72,10 +101,10 @@ echo <<<_END
 _END;
 
 // year:
-$minYear = 1873;
-$maxYear = 2020;
+	$minYear = 1873;
+	$maxYear = 2020;
 
-echo <<<_END
+	echo <<<_END
 			<br>
 			<div class="card">
    				<div class="card-header">
@@ -95,10 +124,10 @@ echo <<<_END
 			</div>
 _END;
 
-$minRuntime = getMinValue($connection, "runtime");
-$maxRuntime = getMaxValue($connection, "runtime");
+	$minRuntime = getMinValue($connection, "runtime");
+	$maxRuntime = getMaxValue($connection, "runtime");
 
-echo <<<_END
+	echo <<<_END
 			<br>
 			<div class="card">
 				<div class="card-header">
@@ -118,9 +147,9 @@ echo <<<_END
 			</div>
 _END;
 
-$maxVotes = getMaxValue($connection, "votes");
+	$maxVotes = getMaxValue($connection, "votes");
 
-echo <<<_END
+	echo <<<_END
 			<br>
 			<div class="card">
 					<div class="card-header">
@@ -136,9 +165,9 @@ echo <<<_END
 				</div>
 _END;
 
-$maxBudget = getMaxValue($connection, "budget");
+	$maxBudget = getMaxValue($connection, "budget");
 
-echo <<<_END
+	echo <<<_END
 				<br>
 				<div class="card">
 					<div class="card-header">
@@ -159,9 +188,9 @@ echo <<<_END
 				</div>
 _END;
 
-$maxRevenue = getMaxValue($connection, "revenue");
+	$maxRevenue = getMaxValue($connection, "revenue");
 
-echo <<<_END
+	echo <<<_END
 				<br>
 				<div class="card">
     				<div class="card-header">
@@ -189,14 +218,14 @@ echo <<<_END
       					<div class="card-body">
 _END;
 
-$listOfLanguages = getListOfLanguages($connection);
-echo "<ul>";
-foreach ($listOfLanguages as $curLanguage) {
-	echo "<li><input type='checkbox' name='$curLanguage' id ='$curLanguage' value ='$curLanguage'>$curLanguage</input></li>";
-}
-echo "</ul>";
+	$listOfLanguages = getListOfLanguages($connection);
+	echo "<ul style='list-style-type: none;'>";
+	foreach ($listOfLanguages as $curLanguage) {
+		echo "<li><input type='checkbox' name='$curLanguage' id ='$curLanguage' value ='$curLanguage'>$curLanguage</input></li>";
+	}
+	echo "</ul>";
 
-echo <<<_END
+	echo <<<_END
 					</div>
    				</div>
 			</div>
@@ -209,13 +238,14 @@ echo <<<_END
       				<div class="card-body">
 _END;
 
-$listOfProdCountries = getListOfProdCountries($connection);
-foreach ($listOfProdCountries as $curCountry) {
-	echo "<li><input type='checkbox' name='[add]' value ='$curCountry'>$curCountry</input></li><br>";
-}
-echo "</ul>";
+	echo "<ul style='list-style-type: none; text-align: left; min-width: 50%; margin:auto;'>";
+	$listOfProdCountries = getListOfProdCountries($connection);
+	foreach ($listOfProdCountries as $curCountry) {
+		echo "<li><input type='checkbox' name='[add]' value ='$curCountry'>$curCountry</input></li><br>";
+	}
+	echo "</ul>";
 
-echo <<<_END
+	echo <<<_END
       			</div>
   			</div>
   		</div>
@@ -228,18 +258,21 @@ echo <<<_END
       			<div class="card-body">
 _END;
 
-$listOfProductionCompanies = getListOfProdCompanies($connection);
-foreach ($listOfProductionCompanies as $curCompany) {
-	echo "<input type='checkbox' name='[add]' value ='$curCompany'>$curCompany</input><br>";
-}
-
-echo <<<_END
+	$listOfProductionCompanies = getListOfProdCompanies($connection);
+	echo "<ul style='list-style-type: none;'>";
+	foreach ($listOfProductionCompanies as $curCompany) {
+		echo "<li><input type='checkbox' name='[add]' value ='$curCompany'>$curCompany</input></li>";
+	}
+	echo "</ul>";
+	echo <<<_END
       		</div>
     	</div>
 	</div>
 </div>
+</form>
 <br>
 _END;
+}
 
 function getMinValue($connection, $maxValToFind) {
 

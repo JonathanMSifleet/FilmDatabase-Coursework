@@ -2,6 +2,15 @@ html * {
     font-family: 'Roboto', sans-serif;
 }
 
+.sliderLabel {
+    background-color: #ffffff;
+}
+
+.sidebar-sticky * {
+    margin: 0;
+    padding: 0;
+}
+
 .card {
     margin: 0 10%;
     width: 80%;
@@ -12,8 +21,12 @@ html * {
     font-size: 20px;
 }
 
-.sliderLabel {
-    background-color: #ffffff;
+.countryCheckbox {
+    float: left;
+}
+
+.countryLabel {
+    float: left;
 }
 
 .card-body {
@@ -507,12 +520,12 @@ footer h1 {
     color: white;
 }
 
-.characterContent{
+.characterContent {
     background-color: red;
     color: white;
 }
 
-.Card-list{
+.Card-list {
     width: 85vw;
     margin: 0 auto;
     display: grid;
@@ -536,15 +549,14 @@ footer h1 {
     transition: transform 0.25s ease-out;
 }
 
-.Card-container a{
+.Card-container a {
     color: white;
     text-decoration: none;
 }
-  
+
 .Card-container:hover {
     transform: scale(1.05);
 }
-
 
 
 @media only screen and (max-width: 750px) {
