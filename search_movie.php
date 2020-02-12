@@ -332,7 +332,7 @@ function getMaxValue($connection, $maxValToFind) {
 }
 
 function getListOfLanguages($connection) {
-	$query = "SELECT name FROM languages GROUP BY iso_639 ORDER BY name ASC";
+	$query = "SELECT name FROM languages ORDER BY name ASC";
 	$result = mysqli_query($connection, $query);
 
 	if (!$result) {
@@ -350,7 +350,7 @@ function getListOfLanguages($connection) {
 }
 
 function getListOfProdCompanies($connection) {
-	$query = "SELECT DISTINCT(name) FROM companies GROUP BY id ORDER BY name ASC";
+	$query = "SELECT name FROM companies ORDER BY name ASC";
 	$result = mysqli_query($connection, $query);
 
 	if (!$result) {
@@ -368,7 +368,7 @@ function getListOfProdCompanies($connection) {
 }
 
 function getListOfProdCountries($connection) {
-	$query = "SELECT DISTINCT(name) FROM countries GROUP BY iso_3166 ORDER BY name ASC";
+	$query = "SELECT name FROM countries ORDER BY name ASC";
 	$result = mysqli_query($connection, $query);
 
 	if (!$result) {
@@ -386,7 +386,7 @@ function getListOfProdCountries($connection) {
 }
 
 function getListOfGenres($connection) {
-	$query = "SELECT DISTINCT(name) FROM genres GROUP BY genre_ID ORDER BY name ASC";
+	$query = "SELECT name FROM genres ORDER BY name ASC";
 	$result = mysqli_query($connection, $query);
 
 	if (!$result) {

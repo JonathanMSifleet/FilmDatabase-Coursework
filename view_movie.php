@@ -31,7 +31,7 @@ _END;
 
 /////////////////////////
 
-$genres = getData($connection, $movieID, "genres", "name");
+$genres = getData($connection, $movieID, "movie_genres", "genre_ID", "name");
 
 echo "<br>Genre(s): ";
 
@@ -41,7 +41,7 @@ foreach ($genres as $curGenre) {
 
 //////////////////////////
 
-$languages = getData($connection, $movieID, "languages", "name");
+$languages = getData($connection, $movieID, "movie_languages", "iso_639","name");
 
 echo "<br>Language(s): ";
 
@@ -51,7 +51,7 @@ foreach ($languages as $curLanguage) {
 
 //////////////////////////
 
-$prodCountries = getData($connection, $movieID, "countries", "name");
+$prodCountries = getData($connection, $movieID, "movie_countries","iso_3166", "name");
 
 echo "<br>Production Country(s): ";
 
@@ -61,7 +61,7 @@ foreach ($prodCountries as $curCountry) {
 
 ///////////////////////////
 
-$keywords = getData($connection, $movieID, "keywords", "name");
+$keywords = getData($connection, $movieID, "movie_keywords", "id","name");
 
 echo "<br>Keywords: ";
 
@@ -71,7 +71,7 @@ foreach ($keywords as $curKeyword) {
 
 ///////////////////////////
 
-$prodCompanies = getData($connection, $movieID, "companies", "name");
+$prodCompanies = getData($connection, $movieID,"movie_companies", "id","name");
 
 echo "<br>Production Companies: ";
 
@@ -82,26 +82,16 @@ foreach ($prodCompanies as $curCompany) {
 ///////////////////////////
 
 echo "<br><br>Cast:<br>";
-$castData = getCastData($connection, $movieID, "cast");
+$castData = getCastData($connection, $movieID);
 
-foreach ($castData as $row) {
-		echo $row['actor_name'];
-		echo $row['character_name'];
-		echo $row['gender'];
-		echo "<br><br>";
-}
+print_r($castData);
 
-/* echo "<br><br>Crew:<br>";
-$crewData = getCrewData($connection, $movieID, "crew");
-
-foreach ($crewData as $row) {
-	print_r($row);
-	echo "<br><br>";
-} */
+//////////////
+/// display crew data
 
 function getCastData($connection, $movieID) {
 
-	$sql = "SELECT actor_name, character_name, display_order, gender, profile_path FROM cast WHERE movie_id=$movieID ORDER BY display_order ASC";
+	$sql = "SELECT character_name, display_order FROM movie_cast ORDER BY display_order ASC";
 
 	$result = mysqli_query($connection, $sql);
 
@@ -146,8 +136,11 @@ function getMovieData($connection, $movieID) {
 
 }
 
-function getData($connection, $movieID, $tableName, $dataToGet) {
-	$sql = "SELECT $dataToGet FROM $tableName WHERE movie_id=$movieID ORDER BY name ASC";
+function getData($connection, $movieID, $tableName, $joinOn, $dataToGet) {
+
+	$joinTable = substr($tableName, 6);
+
+	$sql = "SELECT $dataToGet FROM $tableName INNER JOIN $joinTable USING ($joinOn) WHERE movie_id=$movieID ORDER BY name ASC";
 
 	$result = mysqli_query($connection, $sql);
 
