@@ -91,7 +91,7 @@ print_r($castData);
 
 function getCastData($connection, $movieID) {
 
-	$sql = "SELECT character_name, display_order FROM movie_cast ORDER BY display_order ASC";
+	$sql = "SELECT character_name, display_order FROM movie_cast WHERE movie_ID=$movieID ORDER BY display_order ASC";
 
 	$result = mysqli_query($connection, $sql);
 
