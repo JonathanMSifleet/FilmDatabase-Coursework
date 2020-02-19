@@ -219,12 +219,13 @@ _END;
 								<ul style='list-style-type: none;'>
 _END;
 
-echo "<ul  style='list-style-type: none; text-align= left;'>";
+	echo "<ul  style='list-style-type: none; text-align= left;'>";
 	echo "<li><input type='checkbox' class='boxes' name='$curGenre' id ='$curGenre' value ='$curGenre'>$curGenre</input></li>";
-	}
-	echo "</ul>";
+}
 
-	echo <<<_END
+echo "</ul>";
+
+echo <<<_END
 							</div>
 	                    </div>
 					</div>
@@ -238,13 +239,13 @@ echo "<ul  style='list-style-type: none; text-align= left;'>";
 	                        <div class="card-body">
 _END;
 
-	echo "<ul style='list-style-type: none;  min-width: 50%; word->";
-	foreach ($listOfLanguages as $curLanguage) {
-		echo "<li><input type='checkbox' name='$curLanguage' class='boxes' id ='$curLanguage' value ='$curLanguage'>$curLanguage</input></li>";
-	}
-	echo "</ul>";
+echo "<ul style='list-style-type: none;  min-width: 50%; word->";
+foreach ($listOfLanguages as $curLanguage) {
+	echo "<li><input type='checkbox' name='$curLanguage' class='boxes' id ='$curLanguage' value ='$curLanguage'>$curLanguage</input></li>";
+}
+echo "</ul>";
 
-	echo <<<_END
+echo <<<_END
 							</div>
 	                    </div>
 					</div>
