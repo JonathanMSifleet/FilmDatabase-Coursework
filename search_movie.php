@@ -55,8 +55,7 @@ _END;
 }
 //////////////////////
 
-function displayUI($connection, $listOfLanguages, $listOfGenres
-) {
+function displayUI($connection, $listOfLanguages, $listOfGenres) {
 	echo <<<_END
 <!-- Sidebar: -->
 
@@ -218,11 +217,10 @@ _END;
 	                        <div class="card-body">
 								<ul style='list-style-type: none;'>
 _END;
-
-	echo "<ul  style='list-style-type: none; text-align= left;'>";
-	echo "<li><input type='checkbox' class='boxes' name='$curGenre' id ='$curGenre' value ='$curGenre'>$curGenre</input></li>";
-}
-
+	echo "<ul style='list-style-type: none;  min-width: 50%; word->";
+	foreach ($listOfGenres as $curGenre) {
+		echo "<li><input type='checkbox' class='boxes' name='$curGenre' id ='$curGenre' value ='$curGenre'>$curGenre</input></li>";
+	}
 echo "</ul>";
 
 echo <<<_END
@@ -286,6 +284,7 @@ echo <<<_END
 	</div>
 </div>
 _END;
+
 }
 
 function getMinValue($connection, $maxValToFind) {
