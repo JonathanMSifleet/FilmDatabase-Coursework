@@ -88,103 +88,115 @@ _END;
 echo <<<_END
     <section class="search_movie js--wp-1">
 
-        <form action="/action_page.php">
+        <form action="view_movie.php?movieID=2">
         <h1>Search Movie</h1>
 
         <div class="container">
             <input type="text" placeholder="Search...">
             <div class="search"></div>
         </div>
-
-        <div class="wrapper">
-
-            <div class="characterContent">
     
-                <p>Movie Name:</p>
-                <p>Genre:</p>
-                <p>Original Language:</p>
-                <p>Production companies:</p>
-                <p>Production countries:</p>
-                <p>Release date:</p>
-                <p>Revenue:</p>
-                <p>Rating:</p>
-    
-            </div>
-    
-            <div class="characterImage">
-                <img class="characterImg" src="">
-            </div>
-
-        </div>
-    
-        <input class="btn" type="submit" value="Submit">
+        <input class="btn" type="submit" value="Search">
     </form> 
-    </section>
+    </section>  
+_END;
+
+// creates connection to MYSQLi DB:
+$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+
+// if the connection fails, we need to know, so allow this exit:
+if (!$connection) {
+	die("Connection failed: " . mysqli_connect_error());
+}
+
+$query = "SELECT * FROM `movie` order by RAND() LIMIT 8";
+$result = mysqli_query($connection, $query);
+$n = mysqli_num_rows($result);
+
+
+
+echo <<<_END
+<section>
+<h1>Something to watch</h1>
+<br>
+<div class="Card-list">
+_END;
+
+for($i=0; $i <$n; $i++){
+
+    $row = mysqli_fetch_assoc($result);
+
+    echo <<<_END
     
-<!-- <header class="homeHeader">
+    <div class="Card-container">
 
-<div class="headertitle"> 
+    <a href="view_movie.php?movieID={$row['movie_id']}" id="overlay">
+    <p>Title: {$row['title']}</p>
+    <br>
+    <p>Date: {$row['release_date']}</p>
+    <br>
+    <p>Rating: {$row['rating']}</p>
+    </a>
 
-    <h1>Movie Database presentation</h1>
-    <a href="#" class="btn js-scroll-to-searchmovies">Search Movie</a>
+    </div>
 
-</div> 
+_END;
 
-</header>
+}
+echo <<<_END
+<br>
+</div>
+</section>
+_END;
 
 
- <section class="test">
-<div class="insideDiv">
-    <div class="row2">
-        <div class="col2 span-1-of-22 norcol">
-            <h1>About the site</h1>
-            <p>Well come to the movie database presentation. This is a fully featured web app where you can browse and search content of the latest movies</p>
-        </div>   
-        <div class="col2 span-1-of-22 piccol">
-            <h1>Join the community</h1>
-            
-            <a class="btn" href="sign_in.php">Login or Sign up</a>
-            
-        </div>     
+echo <<<_END
+<section>
+<form action="view_movie.php" method="POST" autocomplete="off">
+    <label>Search a movie:</label>
+    <input type="text" name="title" id="search_movie" />
+ 
+</form>
+
+<div class="col-md-5" style="position: relative; margin-top: -10px; margin-left:35px ">
+    <div class="list-group" id="show-list">
+   
     </div>
 </div>
 </section>
+<br>
+<br>
+<br>
+<br>
+<br>
+_END;
 
-<section class="search_movie js--wp-1">
+echo <<<_END
+<script type="text/javascript">
 
-<form action="/action_page.php" method="POST">
-<h1>Searie</h1>
+$(document).ready(function(){
 
-<div class="container">
-    <input type="text" placeholder="Search...">
-    <div class="search"></div>
-</div>
+    $("#search_movie").keyup(function(){
+        var searchText = $(this).val();
 
-<div class="wrapper">
+        if(searchText != ''){
+            $.ajax({
+                url:'autoc_movie.php',
+                method: 'GET',
+                data: {query: searchText},
+                success:function(response){
+                    $("#show-list").html(response);
+                }
 
-    <div class="characterContent">
-
-        <p>Movie Name:</p>
-        <p>Genre:</p>
-        <p>Original Language:</p>
-        <p>Production companies:</p>
-        <p>Production countries:</p>
-        <p>Release date:</p>
-        <p>Revenue:</p>
-        <p>Rating:</p>
-
-    </div>
-
-    <div class="characterImage">
-        <img class="characterImg" src="">
-    </div>
-
-</div>
-
-<input class="btn" type="submit" value="Submit">
-</form> 
-</section> -->
-
+            });
+        }
+        else{
+            $("#show-list").html('');
+        }
+    });    
+  
+});
+</script>
 _END;
 
 require_once "footer.php";

@@ -1,5 +1,6 @@
 html * {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Barlow Condensed', Condensed;
+    font-size: 20px;
 }
 
 .card {
@@ -35,7 +36,7 @@ h1 {
 }
 
 p {
-    font-size: 14px;
+
     font-weight: 100;
     line-height: 20px;
     letter-spacing: .5px;
@@ -518,6 +519,11 @@ footer h1 {
   
 .Card-container:hover {
     transform: scale(1.05);
+    color: white;
+}
+
+.Card-container a:hover{
+    color: white;
 }
 
 
