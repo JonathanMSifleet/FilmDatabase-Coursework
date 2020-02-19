@@ -9,7 +9,7 @@ echo <<<_END
     <!DOCTYPE html>
     <html lang="en"> 
     <head>
-        <title>MDBT</title>
+        <title>MDPT</title>
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
         <link rel="stylesheet" href="css/mystyle.css">
     	<meta charset="UTF-8">
