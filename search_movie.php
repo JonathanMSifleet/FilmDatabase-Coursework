@@ -18,14 +18,39 @@ if ($_SESSION['gotLists'] == true) {
 // initialise variables:
 
 //////////
-if (!isset($_POST['search'])) {
-	displayUI($connection, $listOfLanguages, $listOfGenres);
-} else {
-	// sanitise variables:
+
+displayUI($connection, $listOfLanguages, $listOfGenres);
+
+if (isset($_POST['minRating'])) {
+
+	// get variables:
+
+	$minRating = $_POST['minRating'];
+	$minPopularity = $_POST['minPopularity'];
+	$minYear = $_POST['minYear'];
+	$maxYear = $_POST['maxYear'];
+	$minRuntime = $_POST['minRuntime'];
+	$maxRuntime = $_POST['maxRuntime'];
+	$minVotes = $_POST['minVotes'];
+	$minBudget = $_POST['minBudget'];
+	$minRevenue = $_POST['minRevenue'];
+	$maxRevenue = $_POST['maxRevenue'];
+
+	echo <<<_END
+		$minRating
+		$minPopularity
+		$minYear 
+		$maxYear
+		$minRuntime
+		$maxRuntime
+		$minVotes
+		$minBudget
+		$minRevenue
+		$maxRevenue
+_END;
 
 
 	// search database:
-
 
 }
 //////////////////////
@@ -49,7 +74,7 @@ function displayUI($connection, $listOfLanguages, $listOfGenres
 	                <div id="collapseRating" class="collapse toggle" data-parent="#accordion">
 	                    <div class="card-body">
 							Minimum Rating: <br>
-							<input type ="range" id="minRatingSlider" class="slider" min ="0" max ="10" step="0.1" value="0">
+							<input type ="range" id="minRatingSlider" name="minRating" class="slider" min ="0" max ="10" step="0.1" value="0">
 							<label id="minRatingLabel" for="minRatingSlider" class ="sliderLabel">0</label>
 						</div>
 					</div>
@@ -67,7 +92,7 @@ _END;
 	                <div id="collapsePopularity" class="collapse toggle" data-parent="#accordion">
 	                    <div class="card-body">
 							Minimum popularity: <br>
-							<input type ="range" id="minPopSlider" class="slider" min ="0" max ="$maxPopularity" value="0">
+							<input type ="range" id="minPopSlider" name="minPopularity" class="slider" min ="0" max ="$maxPopularity" value="0">
 							<label id="minPopLabel" for="minPopSlider" class ="sliderLabel">0</label>
 	                    </div>
 	                </div>
@@ -87,11 +112,11 @@ _END;
 	                <div id="collapseYear" class="collapse toggle" data-parent="#accordion">
 	                    <div class="card-body">
 							<label for="minYear">Minimum Year</label>
-							<input type ="range" id="minYearSlider" class="slider" min ="$minYear" max ="$maxYear" step="1" value="0">
+							<input type ="range" id="minYearSlider" name="minYear" class="slider" min ="$minYear" max ="$maxYear" step="1" value="0">
 							<label id="minYearLabel" for="minYear" class ="sliderLabel">$minYear</label>
 							<br><br><br>
 							<label for="maxYear">Maximum Year</label>
-							<input type ="range" id="maxYearSlider" class="slider" min="$minYear" max ="$maxYear" step="1" value ="$maxYear">
+							<input type ="range" id="maxYearSlider" name="maxYear" class="slider" min="$minYear" max ="$maxYear" step="1" value ="$maxYear">
 	                        <label id="maxYearLabel" for="maxYear" class ="sliderLabel">$maxYear</label>
 	                    </div>
 					</div>
@@ -110,11 +135,11 @@ _END;
 					<div id="collapseRuntime" class="collapse toggle" data-parent="#accordion">
 						<div class="card-body">
 							<label for="minRuntimeSlider" >Minimum runtime</label>
-							<input type ="range" id="minRuntimeSlider" class="slider"  id="minRuntimeSlider" class="slider" min ="$minRuntime" max ="$maxRuntime" value="$minRuntime">
+							<input type ="range" id="minRuntimeSlider" name="minRuntime" class="slider"  id="minRuntimeSlider" class="slider" min ="$minRuntime" max ="$maxRuntime" value="$minRuntime">
 							<label id="minRuntimeLabel" for="minRuntimeSlider" class ="sliderLabel">$minRuntime</label>
 							<br><br><br>
 							<label for="maxRuntime">Maximum runtime</label>
-							<input type ="range" id="maxRuntimeSlider" class="slider" min ="$minRuntime" max ="$maxRuntime" value="$maxRuntime">
+							<input type ="range" id="maxRuntimeSlider" name="maxRuntime" class="slider" min ="$minRuntime" max ="$maxRuntime" value="$maxRuntime">
 							<label id="maxRuntimeLabel" for="maxRuntime" class ="sliderLabel">$maxRuntime</label>
 						</div>
 					</div>
@@ -132,7 +157,7 @@ _END;
 						<div id="collapseVotes" class="collapse toggle" data-parent="#accordion">
 							<div class="card-body">
 								<label for="minVotesSlider">Minimum number of votes:</label>
-								<input type ="range" id="minVotesSlider" class="slider" min ="0" max ="$maxVotes" value="0">
+								<input type ="range" id="minVotesSlider" name="minVotes" class="slider" min ="0" max ="$maxVotes" value="0">
 								<label id="minVotesLabel" for="minVotesSlider" class ="sliderLabel">0</label>
 							</div>
 						</div>
@@ -150,12 +175,12 @@ _END;
 						<div id="collapseBudget" class="collapse toggle" data-parent="#accordion">
 							<div class="card-body">
 								<label for="minBudgetSlider">Minimum</label>
-								<input type ="range" id="minBudgetSlider" class="slider" min ="0" max ="$maxBudget" value ="0">
+								<input type ="range" id="minBudgetSlider" name="minBudget" class="slider" min ="0" max ="$maxBudget" value ="0">
 								<br>
 								<label id="minBudgetLabel" for="minBudgetSlider" class ="sliderLabel">0</label>
 								<br><br><br>
 								<label for="maxBudgetSlider">Maximum</label>
-								<input type ="range" id="maxBudgetSlider" class="slider" min="0" max ="$maxBudget" value="$maxBudget">
+								<input type ="range" id="maxBudgetSlider" name ="maxBudget" class="slider" min="0" max ="$maxBudget" value="$maxBudget">
 								<label id="maxBudgetLabel" for="maxBudgetSlider" class ="sliderLabel">$maxBudget</label>
 							</div>
 						</div>
@@ -173,12 +198,12 @@ _END;
 	                    <div id="collapseRevenue" class="collapse toggle" data-parent="#accordion">
 	                        <div class="card-body">
 								<label for="minRevenueSlider">Minimum</label>
-								<input type ="range" id="minRevenueSlider" class="slider" min ="0" max ="$maxRevenue" value="0">
+								<input type ="range" id="minRevenueSlider" name="minRevenue" class="slider" min ="0" max ="$maxRevenue" value="0">
 								<br>
 								<label id="minRevenueLabel" for="minRevenueSlider" class ="sliderLabel">0</label>
 								<br><br><br>
 								<label for="maxRevenueSlider">Maximum</label>
-								<input type ="range" id="maxRevenueSlider" class="slider" min="0" max ="$maxRevenue" value ="$maxRevenue">
+								<input type ="range" id="maxRevenueSlider" name="maxRevenue" class="slider" min="0" max ="$maxRevenue" value ="$maxRevenue">
 								<label id="maxRevenueLabel" for="maxRevenueSlider" class ="sliderLabel">$maxRevenue</label>
 	                        </div>
 						</div>
