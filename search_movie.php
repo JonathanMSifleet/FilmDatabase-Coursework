@@ -41,9 +41,14 @@ if (!isset($_POST['search'])) {
 function displayUI($connection, $listOfLanguages, $listOfProdCompanies, $listOfProdCountries
 ) {
 	echo <<<_END
+    
+    
 <div id='search'>
+
 	<div id='searchContent'>
+    
 		<input type="text" name="search" minlength="0" maxlength="128" value="Search" required>
+        
 		Search for: <br>
 		<input type="submit" value="Submit">
 		<select name = "searchType">
@@ -72,7 +77,7 @@ function displayUI($connection, $listOfLanguages, $listOfProdCompanies, $listOfP
 
 <!-- Sidebar: -->
 
-<form action="" method="post" style='width: 15%; margin: 0; padding: 0; float: left;'>
+<form action="" method="post" style='width: 25%; margin: 0; padding: 0; float: left;'>
 <div class ='sidebar-sticky' style='width: 100%; background-color: #ff726f;'>
 	<div id='sidebarContent'>
 		<h2>Filters:</h2>
@@ -229,9 +234,9 @@ _END;
       					<div class="card-body">
 _END;
 
-	echo "<ul style='list-style-type: none;'>";
+	echo "<ul  style='list-style-type: none; text-align= left;'>";
 	foreach ($listOfLanguages as $curLanguage) {
-		echo "<li><input type='checkbox' name='$curLanguage' id ='$curLanguage' value ='$curLanguage'>$curLanguage</input></li>";
+		echo "<li><label><input type='checkbox' class='boxes' name='$curLanguage' id ='$curLanguage' value ='$curLanguage'>$curLanguage</input></label></li>";
 	}
 	echo "</ul>";
 
@@ -248,9 +253,9 @@ _END;
       				<div class="card-body">
 _END;
 
-	echo "<ul style='list-style-type: none; text-align: left; min-width: 50%; margin:auto;'>";
+	echo "<ul style='list-style-type: none;  min-width: 50%; word->";
 	foreach ($listOfProdCountries as $curCountry) {
-		echo "<li><input type='checkbox' name='[add]' value ='$curCountry'>$curCountry</input></li><br>";
+		echo "<li><input type='checkbox' name='[add]'class='boxes' value ='$curCountry' >$curCountry</input></li><br>";
 	}
 	echo "</ul>";
 
