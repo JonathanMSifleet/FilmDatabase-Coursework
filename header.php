@@ -13,6 +13,7 @@ echo <<<_END
       <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
       <link rel="stylesheet" href="css/mystyle.css">
     	<meta charset="UTF-8">
+      
     	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     	<link rel="stylesheet" type="text/css" href="css/grid.css">
     	<link rel="stylesheet" type="text/css" href="css/searchbar.css">
@@ -20,22 +21,18 @@ echo <<<_END
     	<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed&display=swap" rel="stylesheet">
     	<link href="https://fonts.googleapis.com/css?family=Barlow&display=swap" rel="stylesheet">
     	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+      
     	<!-- Bootstrap: -->
     	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.5/waypoints.min.js"></script>
-
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-      <!-- jQuery UI library -->
+      
+      <script src="js/sliderValues.js"></script>
+    
       <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-
- 
-      
-      
 	</head>
     <h1>Movie Database Presentation Tool</h1>
 

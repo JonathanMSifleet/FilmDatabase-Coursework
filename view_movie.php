@@ -31,7 +31,6 @@ else if (isset($_GET['movieID'])) {
 }
 
 $movieMetadata = getMovieData($connection, $movieID);
-//$movieMetadata = getMovieData($connection, $_GET['movieID']);
 
 echo "<br>";
 
@@ -54,7 +53,7 @@ _END;
 
 /////////////////////////
 
-$genres = getData($connection, $movieID, "genres", "name");
+$genres = getData($connection, $movieID, "movie_genres", "genre_ID", "name");
 
 echo "<br>Genre(s): ";
 
@@ -64,7 +63,7 @@ foreach ($genres as $curGenre) {
 
 //////////////////////////
 
-$languages = getData($connection, $movieID, "languages", "name");
+$languages = getData($connection, $movieID, "movie_languages", "iso_639","name");
 
 echo "<br>Language(s): ";
 
@@ -74,7 +73,7 @@ foreach ($languages as $curLanguage) {
 
 //////////////////////////
 
-$prodCountries = getData($connection, $movieID, "countries", "name");
+$prodCountries = getData($connection, $movieID, "movie_countries","iso_3166", "name");
 
 echo "<br>Production Country(s): ";
 
@@ -84,7 +83,7 @@ foreach ($prodCountries as $curCountry) {
 
 ///////////////////////////
 
-$keywords = getData($connection, $movieID, "keywords", "name");
+$keywords = getData($connection, $movieID, "movie_keywords", "id","name");
 
 echo "<br>Keywords: ";
 
@@ -94,7 +93,7 @@ foreach ($keywords as $curKeyword) {
 
 ///////////////////////////
 
-$prodCompanies = getData($connection, $movieID, "companies", "name");
+$prodCompanies = getData($connection, $movieID,"movie_companies", "id","name");
 
 echo "<br>Production Companies: ";
 
@@ -104,26 +103,32 @@ foreach ($prodCompanies as $curCompany) {
 
 ///////////////////////////
 
-// add crew and cast
-echo "<br><br>Crew:<br>";
-$crewData = getCrewCastData($connection, $movieID, "crew");
-
-foreach ($crewData as $row) {
-	print_r($row);
-	echo "<br><br>";
-}
-
 echo "<br><br>Cast:<br>";
-$castData = getCrewCastData($connection, $movieID, "cast");
+$castData = getCastData($connection, $movieID);
 
-foreach ($castData as $row) {
-	print_r($row);
-	echo "<br><br>";
+print_r($castData);
+
+//////////////
+/// display crew data
+
+function getCastData($connection, $movieID) {
+
+	$sql = "SELECT character_name, display_order FROM movie_cast WHERE movie_ID=$movieID ORDER BY display_order ASC";
+
+	$result = mysqli_query($connection, $sql);
+
+	if (!$result) {
+		echo "<br>" . mysqli_error($connection);
+	} else {
+
+		return mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+	}
 }
 
-function getCrewCastData($connection, $movieID, $type) {
+function getCrewData($connection, $movieID) {
 
-	$sql = "SELECT * FROM $type WHERE movie_id=$movieID";
+	$sql = "SELECT department, gender, job, crew_name, profile_path FROM crew WHERE movie_id=$movieID";
 
 	$result = mysqli_query($connection, $sql);
 
@@ -153,8 +158,11 @@ function getMovieData($connection, $movieID) {
 
 }
 
-function getData($connection, $movieID, $tableName, $dataToGet) {
-	$sql = "SELECT $dataToGet FROM $tableName WHERE movie_id=$movieID ORDER BY name ASC";
+function getData($connection, $movieID, $tableName, $joinOn, $dataToGet) {
+
+	$joinTable = substr($tableName, 6);
+
+	$sql = "SELECT $dataToGet FROM $tableName INNER JOIN $joinTable USING ($joinOn) WHERE movie_id=$movieID ORDER BY name ASC";
 
 	$result = mysqli_query($connection, $sql);
 
