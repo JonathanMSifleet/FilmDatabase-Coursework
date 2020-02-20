@@ -2,7 +2,29 @@
 
 require_once "header.php";
 
-if (isset($_GET['movieID'])) {
+if(isset($_POST['title'])){
+
+	$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+
+	// if the connection fails, we need to know, so allow this exit:
+	if (!$connection) {
+		die("Connection failed: " . mysqli_connect_error());
+	}
+
+	$Title = $_POST['title'];
+
+	$query = "SELECT title, movie_id FROM movie WHERE title = '$Title' ";
+	$result = mysqli_query($connection, $query);
+	  
+	while($row = mysqli_fetch_array($result) ){
+		
+		$movieID = $row['movie_id'];
+		
+	}
+	
+}
+else if (isset($_GET['movieID'])) {
+
 	$movieID = $_GET['movieID'];
 } else {
 	$movieID = 19995;
@@ -164,4 +186,5 @@ function displayPoster($posterPath) {
 	echo '<img src="data:image/jpeg;base64,' . $imageData . '" height="auto" width="500px">';
 }
 
+require_once "footer.php";
 ?>
