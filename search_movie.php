@@ -25,6 +25,7 @@ if (isset($_POST['minRating'])) {
 
 	// get variables:
 
+	$searchValue = $_POST['searchValue'];
 	$minRating = $_POST['minRating'];
 	$minPopularity = $_POST['minPopularity'];
 	$minYear = $_POST['minYear'];
@@ -49,18 +50,18 @@ if (isset($_POST['minRating'])) {
 	}
 
 	echo <<<_END
-		$minRating
-		$minPopularity
-		$minYear 
-		$maxYear
-		$minRuntime
-		$maxRuntime
-		$minVotes
-		$minBudget
-		$minRevenue
-		$maxRevenue
-		$genres
-		$languages
+		Minimum rating: $minRating <br>
+		Minimum popularity: $minPopularity <br>
+		Minimum year: $minYear <br>
+		Maximum year: $maxYear <br>
+		Minimum runtime: $minRuntime <br>
+		Maximum runtime: $maxRuntime <br>
+		Minimum votes: $minVotes <br>
+		Minimum budget: $minBudget <br>
+		Minimum revenue: $minRevenue <br>
+		Max revenue: $maxRevenue <br>
+		Genres: $genres <br>
+		Languages: $languages <br>
 _END;
 
 
@@ -264,12 +265,11 @@ _END;
 	        </div>
 		<br>
 	</div>
-</form>
 
 <div id='searchBox'>
 	<div id='searchContent'>
 	<ul>
-		<li><input type="text" placeholder="Search" minlength="0" maxlength="128" required></li>
+		<li><input type="text" placeholder="Search" name="searchValue" minlength="0" maxlength="128" required></li>
 		<li>Search for:</li>
 		<li>
 		<select name = "searchType">
@@ -296,6 +296,7 @@ _END;
 	</ul>
 	</div>
 </div>
+</form>
 _END;
 
 }
