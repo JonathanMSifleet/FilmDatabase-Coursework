@@ -115,15 +115,24 @@ foreach ($castData as $castMember) {
 	$creditName = $castMember['credit_name'];
 	$profilePath = $castMember['profile_path'];
 
-	$posterURL = "https://image.tmdb.org/t/p/original" . $profilePath;
-	$imageData = base64_encode(file_get_contents($posterURL));
+	$hasPicture = false;
 
+	if ($profilePath != "" || $profilePath != null) {
+		$posterURL = "https://image.tmdb.org/t/p/original" . $profilePath;
+		$imageData = base64_encode(file_get_contents($posterURL));
+		$hasPicture = true;
+	}
+	
 	echo <<<_END
 	<div>
     	<div class="card">
         	<div class="card-body">
 _END;
-	echo '<img class="card-img-top" src="data:image/jpeg;base64,' . $imageData . '" style="height: auto; width: 15vw;">';
+
+	if ($hasPicture) {
+		echo '<img class="card-img-top" src="data:image/jpeg;base64,' . $imageData . '" style="height: auto; width: 15vw;">';
+	}
+
 	echo <<<_END
                 <h5 class="card-title">$creditName</h5>
                 <p class="card-text">$characterName</p>
