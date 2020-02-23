@@ -158,7 +158,7 @@ echo <<<_END
  
 </form>
 
-<div class="col-md-5" style="position: relative; margin-top: -10px; margin-left:35px ">
+<div class="col-md-5" style="position: relative; margin-top: 5px; margin-left:35px ">
     <div class="list-group" id="show-list">
    
     </div>
