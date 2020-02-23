@@ -105,8 +105,6 @@ foreach ($prodCompanies as $curCompany) {
 echo "<br><br>Cast:<br>";
 $castData = getCastData($connection, $movieID);
 
-// character_name, credit_name, profile_path, gender
-
 echo "<div class='container-fluid'>";
 echo "<div class='row justify-content-center'>";
 
@@ -122,7 +120,7 @@ foreach ($castData as $castMember) {
 		$imageData = base64_encode(file_get_contents($posterURL));
 		$hasPicture = true;
 	}
-	
+
 	echo <<<_END
 	<div>
     	<div class="card">
@@ -134,8 +132,53 @@ _END;
 	}
 
 	echo <<<_END
-                <h5 class="card-title">$creditName</h5>
+                <h4 class="card-title">$creditName</h4>
                 <p class="card-text">$characterName</p>
+            </div>
+		</div>
+	</div>
+_END;
+}
+echo "</div";
+echo "</div";
+
+///////////////////
+
+
+echo "<br><br>Crew::<br>";
+$crewData = getCrewData($connection, $movieID);
+
+echo "<div class='container-fluid'>";
+echo "<div class='row justify-content-center'>";
+
+foreach ($crewData as $crewMember) {
+	$department = $crewMember['department'];
+	$job = $crewMember['job'];
+	$creditName = $crewMember['credit_name'];
+	$profilePath = $crewMember['profile_path'];
+
+	$hasPicture = false;
+
+	if ($profilePath != "" || $profilePath != null) {
+		$posterURL = "https://image.tmdb.org/t/p/original" . $profilePath;
+		$imageData = base64_encode(file_get_contents($posterURL));
+		$hasPicture = true;
+	}
+
+	echo <<<_END
+	<div>
+    	<div class="card">
+        	<div class="card-body">
+_END;
+
+	if ($hasPicture) {
+		echo '<img class="card-img-top" src="data:image/jpeg;base64,' . $imageData . '" style="height: auto; width: 15vw;">';
+	}
+
+	echo <<<_END
+                <h4 class="card-title">$creditName</h4>
+                <h5 class="card-title">$department</h5>
+                <p class="card-text">$job</p>
             </div>
 		</div>
 	</div>
@@ -161,7 +204,7 @@ function getCastData($connection, $movieID) {
 
 function getCrewData($connection, $movieID) {
 
-	$sql = "SELECT department, gender, job, crew_name, profile_path FROM crew WHERE movie_id=$movieID";
+	$sql = "SELECT department, job, credit_name, profile_path FROM movie_crew INNER JOIN credits USING(credit_id) WHERE movie_id=$movieID ORDER BY department ASC, job ASC, credit_name ASC";
 
 	$result = mysqli_query($connection, $sql);
 
