@@ -36,6 +36,18 @@ if (isset($_POST['minRating'])) {
 	$minRevenue = $_POST['minRevenue'];
 	$maxRevenue = $_POST['maxRevenue'];
 
+	if (isset($_POST['genreCheckboxes'])) {
+		$genres = implode(',', $_POST['genreCheckboxes']);
+	} else {
+		$genres = "";
+	}
+
+	if (isset($_POST['languageCheckboxes'])) {
+		$languages = implode(',', $_POST['languageCheckboxes']);
+	} else {
+		$languages = "";
+	}
+
 	echo <<<_END
 		$minRating
 		$minPopularity
@@ -47,13 +59,14 @@ if (isset($_POST['minRating'])) {
 		$minBudget
 		$minRevenue
 		$maxRevenue
+		$genres
+		$languages
 _END;
 
 
 	// search database:
 
 }
-//////////////////////
 
 function displayUI($connection, $listOfLanguages, $listOfGenres) {
 	echo <<<_END
@@ -150,100 +163,100 @@ _END;
 	echo <<<_END
 				<br>
 				<div class="card">
-						<div class="card-header">
-							<a class="collapsed card-link" data-toggle="collapse" href="#collapseVotes">Votes</a>
-						</div>
-						<div id="collapseVotes" class="collapse toggle" data-parent="#accordion">
-							<div class="card-body">
-								<label for="minVotesSlider">Minimum number of votes:</label>
-								<input type ="range" id="minVotesSlider" name="minVotes" class="slider" min ="0" max ="$maxVotes" value="0">
-								<label id="minVotesLabel" for="minVotesSlider" class ="sliderLabel">0</label>
-							</div>
+					<div class="card-header">
+						<a class="collapsed card-link" data-toggle="collapse" href="#collapseVotes">Votes</a>
+					</div>
+					<div id="collapseVotes" class="collapse toggle" data-parent="#accordion">
+						<div class="card-body">
+							<label for="minVotesSlider">Minimum number of votes:</label>
+							<input type ="range" id="minVotesSlider" name="minVotes" class="slider" min ="0" max ="$maxVotes" value="0">
+							<label id="minVotesLabel" for="minVotesSlider" class ="sliderLabel">0</label>
 						</div>
 					</div>
+				</div>
 _END;
 
 	$maxBudget = getMaxValue($connection, "budget");
 
 	echo <<<_END
-					<br>
-					<div class="card">
-						<div class="card-header">
-							<a class="collapsed card-link" data-toggle="collapse" href="#collapseBudget">Budget</a>
-						</div>
-						<div id="collapseBudget" class="collapse toggle" data-parent="#accordion">
-							<div class="card-body">
-								<label for="minBudgetSlider">Minimum</label>
-								<input type ="range" id="minBudgetSlider" name="minBudget" class="slider" min ="0" max ="$maxBudget" value ="0">
-								<br>
-								<label id="minBudgetLabel" for="minBudgetSlider" class ="sliderLabel">0</label>
-								<br><br><br>
-								<label for="maxBudgetSlider">Maximum</label>
-								<input type ="range" id="maxBudgetSlider" name ="maxBudget" class="slider" min="0" max ="$maxBudget" value="$maxBudget">
-								<label id="maxBudgetLabel" for="maxBudgetSlider" class ="sliderLabel">$maxBudget</label>
-							</div>
+				<br>
+				<div class="card">
+					<div class="card-header">
+						<a class="collapsed card-link" data-toggle="collapse" href="#collapseBudget">Budget</a>
+					</div>
+					<div id="collapseBudget" class="collapse toggle" data-parent="#accordion">
+						<div class="card-body">
+							<label for="minBudgetSlider">Minimum</label>
+							<input type ="range" id="minBudgetSlider" name="minBudget" class="slider" min ="0" max ="$maxBudget" value ="0">
+							<br>
+							<label id="minBudgetLabel" for="minBudgetSlider" class ="sliderLabel">0</label>
+							<br><br><br>
+							<label for="maxBudgetSlider">Maximum</label>
+							<input type ="range" id="maxBudgetSlider" name ="maxBudget" class="slider" min="0" max ="$maxBudget" value="$maxBudget">
+							<label id="maxBudgetLabel" for="maxBudgetSlider" class ="sliderLabel">$maxBudget</label>
 						</div>
 					</div>
+				</div>
 _END;
 
 	$maxRevenue = getMaxValue($connection, "revenue");
 
 	echo <<<_END
-					<br>
-					<div class="card">
-	                    <div class="card-header">
-	                        <a class="collapsed card-link" data-toggle="collapse" href="#collapseRevenue">Revenue</a>
-	                    </div>
-	                    <div id="collapseRevenue" class="collapse toggle" data-parent="#accordion">
-	                        <div class="card-body">
-								<label for="minRevenueSlider">Minimum</label>
-								<input type ="range" id="minRevenueSlider" name="minRevenue" class="slider" min ="0" max ="$maxRevenue" value="0">
-								<br>
-								<label id="minRevenueLabel" for="minRevenueSlider" class ="sliderLabel">0</label>
-								<br><br><br>
-								<label for="maxRevenueSlider">Maximum</label>
-								<input type ="range" id="maxRevenueSlider" name="maxRevenue" class="slider" min="0" max ="$maxRevenue" value ="$maxRevenue">
-								<label id="maxRevenueLabel" for="maxRevenueSlider" class ="sliderLabel">$maxRevenue</label>
-	                        </div>
-						</div>
+				<br>
+				<div class="card">
+                    <div class="card-header">
+                        <a class="collapsed card-link" data-toggle="collapse" href="#collapseRevenue">Revenue</a>
+                    </div>
+                    <div id="collapseRevenue" class="collapse toggle" data-parent="#accordion">
+                        <div class="card-body">
+							<label for="minRevenueSlider">Minimum</label>
+							<input type ="range" id="minRevenueSlider" name="minRevenue" class="slider" min ="0" max ="$maxRevenue" value="0">
+							<br>
+							<label id="minRevenueLabel" for="minRevenueSlider" class ="sliderLabel">0</label>
+							<br><br><br>
+							<label for="maxRevenueSlider">Maximum</label>
+							<input type ="range" id="maxRevenueSlider" name="maxRevenue" class="slider" min="0" max ="$maxRevenue" value ="$maxRevenue">
+							<label id="maxRevenueLabel" for="maxRevenueSlider" class ="sliderLabel">$maxRevenue</label>
+                        </div>
 					</div>
-					<br>
-					
-					<div class="card">
-	                    <div class="card-header">
-	                        <a class="card-link" data-toggle="collapse" href="#collapseGenres">Genres</a>
-	                    </div>
-	                    <div id="collapseGenres" class="collapse toggle" data-parent="#accordion">
-	                        <div class="card-body">
-								<ul style='list-style-type: none;'>
+				</div>
+				<br>
+				
+				<div class="card">
+                    <div class="card-header">
+                        <a class="card-link" data-toggle="collapse" href="#collapseGenres">Genres</a>
+                    </div>
+                    <div id="collapseGenres" class="collapse toggle" data-parent="#accordion">
+                        <div class="card-body">
+							<ul style='list-style-type: none;'>
 _END;
 	echo "<ul style='list-style-type: none;  min-width: 50%; word->";
 	foreach ($listOfGenres as $curGenre) {
-		echo "<li><input type='checkbox' class='boxes' name='$curGenre' id ='$curGenre' value ='$curGenre'>$curGenre</input></li>";
+		echo "<li><input type='checkbox' class='boxes' name='genreCheckboxes[]' value ='$curGenre'>$curGenre</input></li>";
 	}
-echo "</ul>";
+	echo "</ul>";
 
-echo <<<_END
-							</div>
-	                    </div>
-					</div>
-					<br>
-					
-	                <div class="card">
-	                    <div class="card-header">
-	                        <a class="card-link" data-toggle="collapse" href="#collapseLanguages">Languages</a>
-	                    </div>
-	                    <div id="collapseLanguages" class="collapse toggle" data-parent="#accordion">
-	                        <div class="card-body">
+	echo <<<_END
+						</div>
+                    </div>
+				</div>
+				<br>
+				
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-link" data-toggle="collapse" href="#collapseLanguages">Languages</a>
+                    </div>
+                    <div id="collapseLanguages" class="collapse toggle" data-parent="#accordion">
+                        <div class="card-body">
 _END;
 
-echo "<ul style='list-style-type: none;  min-width: 50%; word->";
-foreach ($listOfLanguages as $curLanguage) {
-	echo "<li><input type='checkbox' name='$curLanguage' class='boxes' id ='$curLanguage' value ='$curLanguage'>$curLanguage</input></li>";
-}
-echo "</ul>";
+	echo "<ul style='list-style-type: none;  min-width: 50%; word->";
+	foreach ($listOfLanguages as $curLanguage) {
+		echo "<li><input type='checkbox' name='languageCheckboxes[]' class='boxes'  value ='$curLanguage'>$curLanguage</input></li>";
+	}
+	echo "</ul>";
 
-echo <<<_END
+	echo <<<_END
 							</div>
 	                    </div>
 					</div>
