@@ -10,21 +10,21 @@ label,.boxes{
 }
 */
 
-ul{
+ul {
     text-align: left;
 }
 
-input[type="checkbox"]
-{
-  width: 13px;
-  height: 13px;
-  padding: 0;
-  margin:0;
-  vertical-align: middle;
-  position: relative;
-  top: -1px;
-  *overflow: hidden;
+input[type="checkbox"] {
+    width: 13px;
+    height: 13px;
+    padding: 0;
+    margin: 0;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+    *overflow: hidden;
 }
+
 /*
 .boxes {
   width: 13px;
@@ -623,10 +623,9 @@ footer h1 {
     color: white;
 }
 
-.Card-container a:hover{
+.Card-container a:hover {
     color: white;
 }
-
 
 @media only screen and (max-width: 750px) {
     .test {

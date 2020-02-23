@@ -2,7 +2,7 @@
 
 require_once "header.php";
 
-if(isset($_POST['title'])){
+if (isset($_POST['title'])) {
 
 	$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 
@@ -15,15 +15,14 @@ if(isset($_POST['title'])){
 
 	$query = "SELECT title, movie_id FROM movie WHERE title = '$Title' ";
 	$result = mysqli_query($connection, $query);
-	  
-	while($row = mysqli_fetch_array($result) ){
-		
+
+	while ($row = mysqli_fetch_array($result)) {
+
 		$movieID = $row['movie_id'];
-		
+
 	}
-	
-}
-else if (isset($_GET['movieID'])) {
+
+} else if (isset($_GET['movieID'])) {
 
 	$movieID = $_GET['movieID'];
 } else {
@@ -63,7 +62,7 @@ foreach ($genres as $curGenre) {
 
 //////////////////////////
 
-$languages = getData($connection, $movieID, "movie_languages", "iso_639","name");
+$languages = getData($connection, $movieID, "movie_languages", "iso_639", "name");
 
 echo "<br>Language(s): ";
 
@@ -73,7 +72,7 @@ foreach ($languages as $curLanguage) {
 
 //////////////////////////
 
-$prodCountries = getData($connection, $movieID, "movie_countries","iso_3166", "name");
+$prodCountries = getData($connection, $movieID, "movie_countries", "iso_3166", "name");
 
 echo "<br>Production Country(s): ";
 
@@ -83,7 +82,7 @@ foreach ($prodCountries as $curCountry) {
 
 ///////////////////////////
 
-$keywords = getData($connection, $movieID, "movie_keywords", "id","name");
+$keywords = getData($connection, $movieID, "movie_keywords", "id", "name");
 
 echo "<br>Keywords: ";
 
@@ -93,7 +92,7 @@ foreach ($keywords as $curKeyword) {
 
 ///////////////////////////
 
-$prodCompanies = getData($connection, $movieID,"movie_companies", "id","name");
+$prodCompanies = getData($connection, $movieID, "movie_companies", "id", "name");
 
 echo "<br>Production Companies: ";
 
@@ -106,14 +105,39 @@ foreach ($prodCompanies as $curCompany) {
 echo "<br><br>Cast:<br>";
 $castData = getCastData($connection, $movieID);
 
-print_r($castData);
+// character_name, credit_name, profile_path, gender
 
-//////////////
-/// display crew data
+echo "<div class='container-fluid'>";
+echo "<div class='row justify-content-center'>";
+
+foreach ($castData as $castMember) {
+	$characterName = $castMember['character_name'];
+	$creditName = $castMember['credit_name'];
+	$profilePath = $castMember['profile_path'];
+
+	$posterURL = "https://image.tmdb.org/t/p/original" . $profilePath;
+	$imageData = base64_encode(file_get_contents($posterURL));
+
+	echo <<<_END
+	<div>
+    	<div class="card">
+        	<div class="card-body">
+_END;
+	echo '<img class="card-img-top" src="data:image/jpeg;base64,' . $imageData . '" style="height: auto; width: 15vw;">';
+	echo <<<_END
+                <h5 class="card-title">$creditName</h5>
+                <p class="card-text">$characterName</p>
+            </div>
+		</div>
+	</div>
+_END;
+}
+echo "</div";
+echo "</div";
 
 function getCastData($connection, $movieID) {
 
-	$sql = "SELECT character_name, display_order FROM movie_cast WHERE movie_ID=$movieID ORDER BY display_order ASC";
+	$sql = "SELECT character_name, credit_name, profile_path FROM movie_cast INNER JOIN credits USING(credit_id) WHERE movie_ID=$movieID ORDER BY display_order ASC";
 
 	$result = mysqli_query($connection, $sql);
 
