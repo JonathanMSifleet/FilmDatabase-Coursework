@@ -1,5 +1,5 @@
 html * {
-    font-family: 'Barlow Condensed', Condensed;
+    font-family: 'Roboto', Condensed;
     font-size: 20px;
 }
 
@@ -598,7 +598,7 @@ footer h1 {
 }
 
 .Card-container {
-    font-family: 'Barlow Condensed', Condensed;
+    font-family: 'Roboto', Condensed;
     display: flex;
     flex-direction: column;
     background-color: red;
