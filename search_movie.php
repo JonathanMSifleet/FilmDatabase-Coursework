@@ -27,17 +27,17 @@ if (isset($_POST['minRating'])) {
 
 	// get variables:
 
-	$searchValue = $_POST['searchValue'];
-	$minRating = $_POST['minRating'];
-	$minPopularity = $_POST['minPopularity'];
-	$minYear = $_POST['minYear'];
-	$maxYear = $_POST['maxYear'];
-	$minRuntime = $_POST['minRuntime'];
-	$maxRuntime = $_POST['maxRuntime'];
-	$minVotes = $_POST['minVotes'];
-	$minBudget = $_POST['minBudget'];
-	$minRevenue = $_POST['minRevenue'];
-	$maxRevenue = $_POST['maxRevenue'];
+	$searchValue = sanitise($_POST['searchValue'], $connection);
+	$minRating = sanitise($_POST['minRating'], $connection);
+	$minPopularity = sanitise($_POST['minPopularity'], $connection);
+	$minYear = sanitise($_POST['minYear'], $connection);
+	$maxYear = sanitise($_POST['maxYear'], $connection);
+	$minRuntime = sanitise($_POST['minRuntime'], $connection);
+	$maxRuntime = sanitise($_POST['maxRuntime'], $connection);
+	$minVotes = sanitise($_POST['minVotes'], $connection);
+	$minBudget = sanitise($_POST['minBudget'], $connection);
+	$minRevenue = sanitise($_POST['minRevenue'], $connection);
+	$maxRevenue = sanitise($_POST['maxRevenue'], $connection);
 
 	if (isset($_POST['genreCheckboxes'])) {
 		$genres = implode(',', $_POST['genreCheckboxes']);

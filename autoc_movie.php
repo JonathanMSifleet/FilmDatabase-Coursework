@@ -10,7 +10,7 @@
     
     if(isset($_GET['query'])){
 
-        $inpText = $_GET['query'];
+        $inpText = sanitise($_GET['query'], $connection);
 
         $query = "SELECT title, movie_id, YEAR(release_date) AS 'year' FROM `movie` WHERE title LIKE '%$inpText%' LIMIT 10";
 
