@@ -2,16 +2,14 @@
 
 require_once "header.php";
 
-if (isset($_POST['credit'])) {
+$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 
-	$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+// if the connection fails, we need to know, so allow this exit:
+if (!$connection) {
+	die("Connection failed: " . mysqli_connect_error());
+}
 
-	// if the connection fails, we need to know, so allow this exit:
-	if (!$connection) {
-		die("Connection failed: " . mysqli_connect_error());
-	}
-
-} else if (isset($_GET['credit'])) {
+if (isset($_GET['credit'])) {
 	$creditID = $_GET['credit'];
 } else {
 	$creditID = 3896;
@@ -19,50 +17,43 @@ if (isset($_POST['credit'])) {
 
 $creditData = getCreditData($connection, $creditID);
 
-$creditName = "";
-$profilePath = "";
-
 foreach ($creditData as $curCredit) {
-	$creditName = $curCredit['credit_name'];
-	$profilePath = $curCredit['profile_path'];
+	echo "<h1>{$curCredit['credit_name']}</h1>";
+	displayPicture($curCredit['profile_path'], "viewActorImage");
 	break;
 }
 
-echo "<h1>$creditName</h1>";
-displayPicture($profilePath, "viewActorImage");
-
-
 $listOfFilms = getListOfFilms($connection, $creditID);
 
+echo "<div class='container-fluid'>";
+echo "<div class='row justify-content-center'>";
+
 foreach ($listOfFilms as $curFilm) {
-	$title = $curFilm['title'];
 	$poster_path = $curFilm['poster_path'];
-	$release_date = $curFilm['release_date'];
-	$tagline = $curFilm['tagline'];
-	$rating = $curFilm['rating'];
-	$overview = $curFilm['overview'];
-	$characterName = $curFilm['character_name'];
+
+	$releaseDate = substr($curFilm['release_date'], 0, 4);
 
 	echo <<<_END
-	<div>
-    	<div class="card">
-        	<div class="card-body">
+	<div class="cardContainerOuter">
+    	<div class="cardContainerInner rounded">
+        	<div class="card">
 _END;
 
 	if ($poster_path != "" || $poster_path != null) {
-		displayPicture($poster_path, "moviePoster");
+		displayPicture($poster_path, "movieCreditCard");
 	}
 
 	echo <<<_END
-                <h4 class="card-title">$title</h4>
-                <h5 class="card-title">$characterName</h5>
-                <p class="card-text">$overview</p>
+	            <div class="card-body">
+	                <h4 class="card-title"><a href="view_movie.php?movieID={$curFilm['movie_id']}">{$curFilm['title']} ($releaseDate)</a></h4>
+	                <h5 class="card-title">{$curFilm['character_name']}</h5>
+            	</div>
             </div>
 		</div>
 	</div>
 _END;
-
 }
+echo "</div></div</div>";
 
 function getCreditData($connection, $creditID) {
 
@@ -78,7 +69,7 @@ function getCreditData($connection, $creditID) {
 
 function getListOfFilms($connection, $creditID) {
 
-	$sql = "SELECT DISTINCT title, poster_path, release_date, tagline, rating, overview, character_name FROM movie INNER JOIN movie_cast USING (movie_id) WHERE credit_id = '$creditID' ORDER BY popularity DESC";
+	$sql = "SELECT DISTINCT title, poster_path, release_date, character_name, movie_id FROM movie INNER JOIN movie_cast USING (movie_id) WHERE credit_id = '$creditID' ORDER BY popularity DESC";
 	$result = mysqli_query($connection, $sql);
 
 	if (!$result) {

@@ -108,7 +108,7 @@ _END;
 
 	echo <<<_END
 	            <div class="card-body">
-   	            	<a href="view_actor.php?credit={$castMember['credit_id']}"><h4 class="card-title">{$castMember['credit_name']}</h4></a>
+   	            	<h4 class="card-title"><a href="view_actor.php?credit={$castMember['credit_id']}">{$castMember['credit_name']}</a></h4>
                 	<p class="card-text">{$castMember['character_name']}</p>
             	</div>
             </div>
