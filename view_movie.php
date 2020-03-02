@@ -22,15 +22,15 @@ echo "<title>{$movieMetadata['title']}</title>";
 displayPicture($movieMetadata['poster_path'], "moviePoster");
 
 $releaseDate = date('d-m-Y', strtotime($movieMetadata['release_date']));
-$revenue = '$' . $movieMetadata['revenue'];
-$budget = '$' . $movieMetadata['budget'];
+$revenue = number_format($movieMetadata['revenue']);
+$budget = number_format($movieMetadata['budget']);
+
 echo <<<_END
 	<br>Title: {$movieMetadata['title']}
 	<br>Rating: {$movieMetadata['rating']} ({$movieMetadata['votes']})
-	<br>Popularity: {$movieMetadata['popularity']}
 	<br>Tagline: {$movieMetadata['tagline']}
 	<br>Overview: {$movieMetadata['overview']} 
-	<br>Release date: $releaseDate
+	<br>Release date: {$releaseDate}
 	<br>Revenue: {$revenue}
 	<br>Budget: {$budget}
 	<br>Runtime {$movieMetadata['runtime']} minutes
