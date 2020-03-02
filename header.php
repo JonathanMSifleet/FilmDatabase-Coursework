@@ -2,7 +2,6 @@
 
 set_time_limit(6000);
 session_start();
-require_once "helper.php";
 
 ?>
 

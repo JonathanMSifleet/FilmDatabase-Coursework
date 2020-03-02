@@ -1,13 +1,7 @@
 <?php
 
 require_once "header.php";
-
-$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-
-// if the connection fails, we need to know, so allow this exit:
-if (!$connection) {
-	die("Connection failed: " . mysqli_connect_error());
-}
+require_once "helper.php";
 
 if (isset($_GET['credit'])) {
 	$creditID = $_GET['credit'];

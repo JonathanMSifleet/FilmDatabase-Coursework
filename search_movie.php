@@ -1,6 +1,7 @@
 <?php
 
 require_once "header.php";
+require_once "helper.php";
 
 echo "<title>Search</title>";
 

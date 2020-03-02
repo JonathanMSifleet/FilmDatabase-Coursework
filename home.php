@@ -1,6 +1,8 @@
 <?php
 
 require_once "header.php";
+require_once "helper.php";
+
 // main page
 echo <<<_END
 <title>MDPT</title>
@@ -33,14 +35,6 @@ echo <<<_END
         </div>
     </section>
 _END;
-
-// creates connection to MYSQLi DB:
-$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-
-// if the connection fails, we need to know, so allow this exit:
-if (!$connection) {
-	die("Connection failed: " . mysqli_connect_error());
-}
 
 $query = "SELECT title, movie_id, release_date, rating FROM `movie` WHERE votes > 100 ORDER BY rating DESC LIMIT 8";
 $result = mysqli_query($connection, $query);
@@ -99,18 +93,9 @@ echo <<<_END
     </section>  
 _END;
 
-// creates connection to MYSQLi DB:
-$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-
-// if the connection fails, we need to know, so allow this exit:
-if (!$connection) {
-	die("Connection failed: " . mysqli_connect_error());
-}
-
 $query = "SELECT * FROM `movie` order by RAND() LIMIT 8";
 $result = mysqli_query($connection, $query);
 $n = mysqli_num_rows($result);
-
 
 echo <<<_END
 <section>
