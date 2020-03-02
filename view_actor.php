@@ -29,6 +29,8 @@ foreach ($creditData as $curCredit) {
 }
 
 echo "<h1>$creditName</h1>";
+displayPicture($profilePath, "viewActorImage");
+
 
 $listOfFilms = getListOfFilms($connection, $creditID);
 
@@ -41,22 +43,14 @@ foreach ($listOfFilms as $curFilm) {
 	$overview = $curFilm['overview'];
 	$characterName = $curFilm['character_name'];
 
-	$hasPicture = false;
-	$imageData = "";
-	if ($poster_path != "" || $poster_path != null) {
-		$posterURL = "https://image.tmdb.org/t/p/original" . $poster_path;
-		$imageData = base64_encode(file_get_contents($posterURL));
-		$hasPicture = true;
-	}
-
 	echo <<<_END
 	<div>
     	<div class="card">
         	<div class="card-body">
 _END;
 
-	if ($hasPicture) {
-		echo '<img src="data:image/jpeg;base64,' . $imageData . '" height="auto" width="500px">';
+	if ($poster_path != "" || $poster_path != null) {
+		displayPicture($poster_path, "moviePoster");
 	}
 
 	echo <<<_END
@@ -69,8 +63,6 @@ _END;
 _END;
 
 }
-
-displayPicture($profilePath);
 
 function getCreditData($connection, $creditID) {
 
@@ -95,12 +87,6 @@ function getListOfFilms($connection, $creditID) {
 		return mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}
 
-}
-
-function displayPicture($profilePath) {
-	$pictureURL = "https://image.tmdb.org/t/p/original" . $profilePath;
-	$imageData = base64_encode(file_get_contents($pictureURL));
-	echo '<img class="card-img-top" src="data:image/jpeg;base64,' . $imageData . '" style="height: auto; width: 15vw;">';
 }
 
 require_once "footer.php";

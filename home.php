@@ -152,23 +152,12 @@ _END;
 
 echo <<<_END
 <section>
-<form action="view_movie.php" method="POST" autocomplete="off">
+<form action="view_movie.php" method="POST" autocomplete="off" id="homeSearchMovie">
     <label>Search a movie:</label>
     <input type="text" name="title" id="search_movie" />
  
 </form>
-
-<div class="col-md-5" style="position: relative; margin-top: -10px; margin-left:35px ">
-    <div class="list-group" id="show-list">
-   
-    </div>
-</div>
 </section>
-<br>
-<br>
-<br>
-<br>
-<br>
 _END;
 
 echo <<<_END

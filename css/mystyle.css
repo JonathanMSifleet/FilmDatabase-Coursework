@@ -627,6 +627,37 @@ footer h1 {
     color: white;
 }
 
+#filterForm {
+    width: 15%;
+    margin: 0;
+    padding: 0;
+    float: left;
+}
+
+#moviePoster {
+    height: auto;
+    width: 20vw;
+}
+
+#actorPicture {
+    height: auto;
+    width: 30vh;
+}
+
+#viewActorImage {
+    height: auto;
+    width: 20vw;
+}
+
+#homeSearchMovie {
+    margin-bottom: 10vh;
+}
+
+#searchMovieSidebar {
+    width: 100%;
+    background-color: #ff726f;
+}
+
 @media only screen and (max-width: 750px) {
     .test {
         padding: 1rem;

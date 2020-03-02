@@ -33,7 +33,7 @@ $movieMetadata = getMovieData($connection, $movieID);
 
 echo "<br>";
 
-displayPoster($movieMetadata['poster_path']);
+displayPicture($movieMetadata['poster_path'], "moviePoster");
 
 $releaseDate = date('d-m-Y', strtotime($movieMetadata['release_date']));
 $revenue = '$' . $movieMetadata['revenue'];
@@ -128,7 +128,7 @@ foreach ($castData as $castMember) {
 _END;
 
 	if ($hasPicture) {
-		echo '<img class="card-img-top" src="data:image/jpeg;base64,' . $imageData . '" style="height: auto; width: 15vw;">';
+		echo '<img class="card-img-top" src="data:image/jpeg;base64,' . $imageData . '" id ="moviePoster">';
 	}
 
 	echo <<<_END
@@ -157,22 +157,14 @@ foreach ($crewData as $crewMember) {
 	$creditName = $crewMember['credit_name'];
 	$profilePath = $crewMember['profile_path'];
 
-	$hasPicture = false;
-
-	if ($profilePath != "" || $profilePath != null) {
-		$posterURL = "https://image.tmdb.org/t/p/original" . $profilePath;
-		$imageData = base64_encode(file_get_contents($posterURL));
-		$hasPicture = true;
-	}
-
 	echo <<<_END
 	<div>
     	<div class="card">
         	<div class="card-body">
 _END;
 
-	if ($hasPicture) {
-		echo '<img class="card-img-top" src="data:image/jpeg;base64,' . $imageData . '" style="height: auto; width: 15vw;">';
+	if ($profilePath != "" || $profilePath != null) {
+		displayPicture($profilePath, "moviePoster");
 	}
 
 	echo <<<_END

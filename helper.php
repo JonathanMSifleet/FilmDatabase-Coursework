@@ -324,4 +324,10 @@ function contains($needle, $haystack) {
 	}
 }
 
+function displayPicture($picturePath, $elementID) {
+	$pictureURL = "https://image.tmdb.org/t/p/original" . $picturePath;
+	$imageData = base64_encode(file_get_contents($pictureURL));
+	echo '<img class="card-img-top" src="data:image/jpeg;base64,' . $imageData . '" id=' . $elementID . '>';
+}
+
 ?>
