@@ -17,7 +17,7 @@ if (isset($_GET['movieID'])) {
 
 $movieMetadata = getMovieData($connection, $movieID);
 
-echo "<title>" . $movieMetadata['title'] . "</title>";
+echo "<title>{$movieMetadata['title']}</title>";
 
 displayPicture($movieMetadata['poster_path'], "moviePoster");
 
@@ -36,89 +36,7 @@ echo <<<_END
 	<br>Runtime {$movieMetadata['runtime']} minutes
 _END;
 
-/////////////////////////
-
-$genres = getData($connection, $movieID, "movie_genres", "genre_ID", "name");
-
-echo "<br>Genre(s): ";
-
-foreach ($genres as $curGenre) {
-	echo $curGenre . ", ";
-}
-
-//////////////////////////
-
-$languages = getData($connection, $movieID, "movie_languages", "iso_639", "name");
-
-echo "<br>Language(s): ";
-
-foreach ($languages as $curLanguage) {
-	echo $curLanguage . ", ";
-}
-
-//////////////////////////
-
-$prodCountries = getData($connection, $movieID, "movie_countries", "iso_3166", "name");
-
-echo "<br>Production Country(s): ";
-
-foreach ($prodCountries as $curCountry) {
-	echo $curCountry . ", ";
-}
-
-///////////////////////////
-
-$keywords = getData($connection, $movieID, "movie_keywords", "id", "name");
-
-echo "<br>Keywords: ";
-
-foreach ($keywords as $curKeyword) {
-	echo $curKeyword . ", ";
-}
-
-///////////////////////////
-
-$prodCompanies = getData($connection, $movieID, "movie_companies", "id", "name");
-
-echo "<br>Production Companies: ";
-
-foreach ($prodCompanies as $curCompany) {
-	echo $curCompany . ", ";
-}
-
-///////////////////////////
-
-echo "<br><br><h2>Cast</h2>";
-$castData = getCastData($connection, $movieID);
-
-echo "<div class='container-fluid'>";
-echo "<div class='row justify-content-center'>";
-
-foreach ($castData as $castMember) {
-	$profilePath = $castMember['profile_path'];
-	echo <<<_END
-	<div class="cardContainerOuter">
-    	<div class="cardContainerInner rounded">
-        	<div class="card">
-_END;
-
-	if ($profilePath != "" || $profilePath != null) {
-		displayPicture($profilePath, "movieCreditCard");
-	}
-
-	echo <<<_END
-	            <div class="card-body">
-   	            	<h4 class="card-title"><a href="view_actor.php?credit={$castMember['credit_id']}">{$castMember['credit_name']}</a></h4>
-                	<p class="card-text">{$castMember['character_name']}</p>
-            	</div>
-            </div>
-		</div>
-	</div>
-_END;
-}
-echo "</div></div</div>";
-
-///////////////////
+displayMetadata($connection, $movieID);
 
 echo "<br><br><h2>Crew</h2>";
 $crewData = getCrewData($connection, $movieID);
@@ -141,7 +59,7 @@ _END;
 
 	echo <<<_END
 	            <div class="card-body">
-	                <h4 class="card-title">{$crewMember['credit_name']}</h4>
+     	           <h4 class="card-title"><a href="view_credit.php?credit={$crewMember['credit_id']}">{$crewMember['credit_name']}</a></h4>
 	                <h5 class="card-text">{$crewMember['department']}</h5>
 	                <p class="card-text">{$crewMember['job']}</p>
 	            </div>
@@ -150,8 +68,7 @@ _END;
 	</div>
 _END;
 }
-echo "</div";
-echo "</div";
+echo "</div></div";
 
 function getCastData($connection, $movieID) {
 
@@ -170,7 +87,7 @@ function getCastData($connection, $movieID) {
 
 function getCrewData($connection, $movieID) {
 
-	$sql = "SELECT department, job, credit_name, profile_path FROM movie_crew INNER JOIN credits USING(credit_id) WHERE movie_id=$movieID ORDER BY department ASC, job ASC, credit_name ASC";
+	$sql = "SELECT department, job, credit_name, profile_path, credit_id FROM movie_crew INNER JOIN credits USING(credit_id) WHERE movie_id=$movieID ORDER BY department ASC, job ASC, credit_name ASC";
 
 	$result = mysqli_query($connection, $sql);
 
@@ -220,6 +137,88 @@ function getData($connection, $movieID, $tableName, $joinOn, $dataToGet) {
 
 		return $arrayOfData;
 	}
+}
+
+function displayMetadata($connection, $movieID) {
+	$genres = getData($connection, $movieID, "movie_genres", "genre_ID", "name");
+
+	echo "<br>Genre(s): ";
+
+	foreach ($genres as $curGenre) {
+		echo $curGenre . ", ";
+	}
+
+//////////////////////////
+
+	$languages = getData($connection, $movieID, "movie_languages", "iso_639", "name");
+
+	echo "<br>Language(s): ";
+
+	foreach ($languages as $curLanguage) {
+		echo $curLanguage . ", ";
+	}
+
+//////////////////////////
+
+	$prodCountries = getData($connection, $movieID, "movie_countries", "iso_3166", "name");
+
+	echo "<br>Production Country(s): ";
+
+	foreach ($prodCountries as $curCountry) {
+		echo $curCountry . ", ";
+	}
+
+///////////////////////////
+
+	$keywords = getData($connection, $movieID, "movie_keywords", "id", "name");
+
+	echo "<br>Keywords: ";
+
+	foreach ($keywords as $curKeyword) {
+		echo $curKeyword . ", ";
+	}
+
+///////////////////////////
+
+	$prodCompanies = getData($connection, $movieID, "movie_companies", "id", "name");
+
+	echo "<br>Production Companies: ";
+
+	foreach ($prodCompanies as $curCompany) {
+		echo $curCompany . ", ";
+	}
+
+///////////////////////////
+
+	echo "<br><br><h2>Cast</h2>";
+	$castData = getCastData($connection, $movieID);
+
+	echo "<div class='container-fluid'>";
+	echo "<div class='row justify-content-center'>";
+
+	foreach ($castData as $castMember) {
+		$profilePath = $castMember['profile_path'];
+		echo <<<_END
+	<div class="cardContainerOuter">
+    	<div class="cardContainerInner rounded">
+        	<div class="card">
+_END;
+
+		if ($profilePath != "" || $profilePath != null) {
+			displayPicture($profilePath, "movieCreditCard");
+		}
+
+		echo <<<_END
+	            <div class="card-body">
+   	            	<h4 class="card-title"><a href="view_credit.php?credit={$castMember['credit_id']}">{$castMember['credit_name']}</a></h4>
+                	<p class="card-text">{$castMember['character_name']}</p>
+            	</div>
+            </div>
+		</div>
+	</div>
+_END;
+	}
+	echo "</div></div</div>";
 }
 
 require_once "footer.php";
