@@ -2,6 +2,8 @@
 
 require_once "header.php";
 
+echo "<title>Search</title>";
+
 if (!isset($_SESSION['gotLists'])) {
 	$listOfLanguages = getListOfLanguages($connection);
 	$listOfGenres = getListOfGenres($connection);

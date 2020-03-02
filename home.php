@@ -1,10 +1,9 @@
 <?php
 
 require_once "header.php";
-
 // main page
 echo <<<_END
-
+<title>MDPT</title>
     <header class="homeHeader">
 
         <div class="headertitle"> 

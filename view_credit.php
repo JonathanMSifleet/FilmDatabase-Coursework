@@ -18,6 +18,7 @@ if (isset($_GET['credit'])) {
 $creditData = getCreditData($connection, $creditID);
 
 foreach ($creditData as $curCredit) {
+	echo "<title>{$curCredit['credit_name']}</title>";
 	echo "<h1>{$curCredit['credit_name']}</h1>";
 	displayPicture($curCredit['profile_path'], "viewActorImage");
 	break;
