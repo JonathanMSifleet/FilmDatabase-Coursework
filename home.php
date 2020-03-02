@@ -48,7 +48,6 @@ $result = mysqli_query($connection, $query);
 $n = mysqli_num_rows($result);
 
 
-
 echo <<<_END
 <section>
 <h1>Highest rated movies</h1>
@@ -56,11 +55,11 @@ echo <<<_END
 <div class="Card-list">
 _END;
 
-for($i=0; $i <$n; $i++){
+for ($i = 0; $i < $n; $i++) {
 
-    $row = mysqli_fetch_assoc($result);
+	$row = mysqli_fetch_assoc($result);
 
-    echo <<<_END
+	echo <<<_END
     
     <div class="Card-container">
 
@@ -114,7 +113,6 @@ $result = mysqli_query($connection, $query);
 $n = mysqli_num_rows($result);
 
 
-
 echo <<<_END
 <section>
 <h1>Something to watch</h1>
@@ -122,11 +120,11 @@ echo <<<_END
 <div class="Card-list">
 _END;
 
-for($i=0; $i <$n; $i++){
+for ($i = 0; $i < $n; $i++) {
 
-    $row = mysqli_fetch_assoc($result);
+	$row = mysqli_fetch_assoc($result);
 
-    echo <<<_END
+	echo <<<_END
     
     <div class="Card-container">
 
