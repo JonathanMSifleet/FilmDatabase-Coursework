@@ -2,6 +2,8 @@
 
 require_once "header.php";
 
+echo "<title>Search</title>";
+
 if (!isset($_SESSION['gotLists'])) {
 	$listOfLanguages = getListOfLanguages($connection);
 	$listOfGenres = getListOfGenres($connection);
@@ -73,8 +75,8 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 	echo <<<_END
 <!-- Sidebar: -->
 
-<form action="" id="filterForm" method="post" style='width: 15%; margin: 0; padding: 0; float: left;'>
-	<div class ='sidebar-sticky' style='width: 100%; background-color: #ff726f;'>
+<form action="" id="filterForm" method="post">
+	<div class ='sidebar-sticky' id ="searchMovieSidebar"'>
 		<div id='sidebarContent'>
 			<h2>Filters:</h2>
 			<input type="submit" value="Submit">

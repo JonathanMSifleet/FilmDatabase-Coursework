@@ -1,10 +1,9 @@
 <?php
 
 require_once "header.php";
-
 // main page
 echo <<<_END
-
+<title>MDPT</title>
     <header class="homeHeader">
 
         <div class="headertitle"> 
@@ -48,7 +47,6 @@ $result = mysqli_query($connection, $query);
 $n = mysqli_num_rows($result);
 
 
-
 echo <<<_END
 <section>
 <h1>Highest rated movies</h1>
@@ -56,11 +54,11 @@ echo <<<_END
 <div class="Card-list">
 _END;
 
-for($i=0; $i <$n; $i++){
+for ($i = 0; $i < $n; $i++) {
 
-    $row = mysqli_fetch_assoc($result);
+	$row = mysqli_fetch_assoc($result);
 
-    echo <<<_END
+	echo <<<_END
     
     <div class="Card-container">
 
@@ -114,7 +112,6 @@ $result = mysqli_query($connection, $query);
 $n = mysqli_num_rows($result);
 
 
-
 echo <<<_END
 <section>
 <h1>Something to watch</h1>
@@ -122,11 +119,11 @@ echo <<<_END
 <div class="Card-list">
 _END;
 
-for($i=0; $i <$n; $i++){
+for ($i = 0; $i < $n; $i++) {
 
-    $row = mysqli_fetch_assoc($result);
+	$row = mysqli_fetch_assoc($result);
 
-    echo <<<_END
+	echo <<<_END
     
     <div class="Card-container">
 
@@ -152,23 +149,19 @@ _END;
 
 echo <<<_END
 <section>
-<form action="view_movie.php" method="POST" autocomplete="off">
+<form action="view_movie.php" method="POST" autocomplete="off" id="homeSearchMovie">
     <label>Search a movie:</label>
     <input type="text" name="title" id="search_movie" />
  
 </form>
 
-<div class="col-md-5" style="position: relative; margin-top: 5px; margin-left:35px ">
+<div class="col-md-5" style="position: relative; margin-top: 10px; margin-left:35px ">
     <div class="list-group" id="show-list">
    
     </div>
 </div>
+
 </section>
-<br>
-<br>
-<br>
-<br>
-<br>
 _END;
 
 echo <<<_END

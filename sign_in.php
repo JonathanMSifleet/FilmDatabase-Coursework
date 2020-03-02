@@ -3,6 +3,8 @@
 // execute the header script:
 require_once "header.php";
 
+echo "<title>Sign in</title>";
+
 $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 
 // if the connection fails, we need to know, so allow this exit:

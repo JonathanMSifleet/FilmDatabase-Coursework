@@ -2,28 +2,14 @@
 
 require_once "header.php";
 
-if (isset($_POST['title'])) {
+$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 
-	$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+// if the connection fails, we need to know, so allow this exit:
+if (!$connection) {
+	die("Connection failed: " . mysqli_connect_error());
+}
 
-	// if the connection fails, we need to know, so allow this exit:
-	if (!$connection) {
-		die("Connection failed: " . mysqli_connect_error());
-	}
-
-	$Title = $_POST['title'];
-
-	$query = "SELECT title, movie_id FROM movie WHERE title = '$Title' ";
-	$result = mysqli_query($connection, $query);
-
-	while ($row = mysqli_fetch_array($result)) {
-
-		$movieID = $row['movie_id'];
-
-	}
-
-} else if (isset($_GET['movieID'])) {
-
+if (isset($_GET['movieID'])) {
 	$movieID = $_GET['movieID'];
 } else {
 	$movieID = 19995;
@@ -31,165 +17,62 @@ if (isset($_POST['title'])) {
 
 $movieMetadata = getMovieData($connection, $movieID);
 
-echo "<br>";
+echo "<title>{$movieMetadata['title']}</title>";
 
-displayPoster($movieMetadata['poster_path']);
+displayPicture($movieMetadata['poster_path'], "moviePoster");
 
 $releaseDate = date('d-m-Y', strtotime($movieMetadata['release_date']));
-$revenue = '$' . $movieMetadata['revenue'];
-$budget = '$' . $movieMetadata['budget'];
+$revenue = number_format($movieMetadata['revenue']);
+$budget = number_format($movieMetadata['budget']);
+
 echo <<<_END
 	<br>Title: {$movieMetadata['title']}
 	<br>Rating: {$movieMetadata['rating']} ({$movieMetadata['votes']})
-	<br>Popularity: {$movieMetadata['popularity']}
 	<br>Tagline: {$movieMetadata['tagline']}
 	<br>Overview: {$movieMetadata['overview']} 
-	<br>Release date: $releaseDate
+	<br>Release date: {$releaseDate}
 	<br>Revenue: {$revenue}
 	<br>Budget: {$budget}
 	<br>Runtime {$movieMetadata['runtime']} minutes
 _END;
 
-/////////////////////////
+displayMetadata($connection, $movieID);
 
-$genres = getData($connection, $movieID, "movie_genres", "genre_ID", "name");
-
-echo "<br>Genre(s): ";
-
-foreach ($genres as $curGenre) {
-	echo $curGenre . ", ";
-}
-
-//////////////////////////
-
-$languages = getData($connection, $movieID, "movie_languages", "iso_639", "name");
-
-echo "<br>Language(s): ";
-
-foreach ($languages as $curLanguage) {
-	echo $curLanguage . ", ";
-}
-
-//////////////////////////
-
-$prodCountries = getData($connection, $movieID, "movie_countries", "iso_3166", "name");
-
-echo "<br>Production Country(s): ";
-
-foreach ($prodCountries as $curCountry) {
-	echo $curCountry . ", ";
-}
-
-///////////////////////////
-
-$keywords = getData($connection, $movieID, "movie_keywords", "id", "name");
-
-echo "<br>Keywords: ";
-
-foreach ($keywords as $curKeyword) {
-	echo $curKeyword . ", ";
-}
-
-///////////////////////////
-
-$prodCompanies = getData($connection, $movieID, "movie_companies", "id", "name");
-
-echo "<br>Production Companies: ";
-
-foreach ($prodCompanies as $curCompany) {
-	echo $curCompany . ", ";
-}
-
-///////////////////////////
-
-echo "<br><br>Cast:<br>";
-$castData = getCastData($connection, $movieID);
-
-echo "<div class='container-fluid'>";
-echo "<div class='row justify-content-center'>";
-
-foreach ($castData as $castMember) {
-	$characterName = $castMember['character_name'];
-	$creditName = $castMember['credit_name'];
-	$profilePath = $castMember['profile_path'];
-
-	$hasPicture = false;
-
-	if ($profilePath != "" || $profilePath != null) {
-		$posterURL = "https://image.tmdb.org/t/p/original" . $profilePath;
-		$imageData = base64_encode(file_get_contents($posterURL));
-		$hasPicture = true;
-	}
-
-	echo <<<_END
-	<div>
-    	<div class="card">
-        	<div class="card-body">
-_END;
-
-	if ($hasPicture) {
-		echo '<img class="card-img-top" src="data:image/jpeg;base64,' . $imageData . '" style="height: auto; width: 15vw;">';
-	}
-
-	echo <<<_END
-                <h4 class="card-title">$creditName</h4>
-                <p class="card-text">$characterName</p>
-            </div>
-		</div>
-	</div>
-_END;
-}
-echo "</div";
-echo "</div";
-
-///////////////////
-
-
-echo "<br><br>Crew::<br>";
+echo "<br><br><h2>Crew</h2>";
 $crewData = getCrewData($connection, $movieID);
 
 echo "<div class='container-fluid'>";
 echo "<div class='row justify-content-center'>";
 
 foreach ($crewData as $crewMember) {
-	$department = $crewMember['department'];
-	$job = $crewMember['job'];
-	$creditName = $crewMember['credit_name'];
 	$profilePath = $crewMember['profile_path'];
 
-	$hasPicture = false;
-
-	if ($profilePath != "" || $profilePath != null) {
-		$posterURL = "https://image.tmdb.org/t/p/original" . $profilePath;
-		$imageData = base64_encode(file_get_contents($posterURL));
-		$hasPicture = true;
-	}
-
 	echo <<<_END
-	<div>
-    	<div class="card">
-        	<div class="card-body">
+	<div class="cardContainerOuter">
+    	<div class="cardContainerInner rounded">
+        	<div class="card">
 _END;
 
-	if ($hasPicture) {
-		echo '<img class="card-img-top" src="data:image/jpeg;base64,' . $imageData . '" style="height: auto; width: 15vw;">';
+	if ($profilePath != "" || $profilePath != null) {
+		displayPicture($profilePath, "movieCreditCard");
 	}
 
 	echo <<<_END
-                <h4 class="card-title">$creditName</h4>
-                <h5 class="card-title">$department</h5>
-                <p class="card-text">$job</p>
+	            <div class="card-body">
+     	           <h4 class="card-title"><a href="view_credit.php?credit={$crewMember['credit_id']}">{$crewMember['credit_name']}</a></h4>
+	                <h5 class="card-text">{$crewMember['department']}</h5>
+	                <p class="card-text">{$crewMember['job']}</p>
+	            </div>
             </div>
 		</div>
 	</div>
 _END;
 }
-echo "</div";
-echo "</div";
+echo "</div></div";
 
 function getCastData($connection, $movieID) {
 
-	$sql = "SELECT character_name, credit_name, profile_path FROM movie_cast INNER JOIN credits USING(credit_id) WHERE movie_ID=$movieID ORDER BY display_order ASC";
+	$sql = "SELECT credit_id, character_name, credit_name, profile_path FROM movie_cast INNER JOIN credits USING(credit_id) WHERE movie_ID=$movieID ORDER BY display_order ASC";
 
 	$result = mysqli_query($connection, $sql);
 
@@ -204,7 +87,7 @@ function getCastData($connection, $movieID) {
 
 function getCrewData($connection, $movieID) {
 
-	$sql = "SELECT department, job, credit_name, profile_path FROM movie_crew INNER JOIN credits USING(credit_id) WHERE movie_id=$movieID ORDER BY department ASC, job ASC, credit_name ASC";
+	$sql = "SELECT department, job, credit_name, profile_path, credit_id FROM movie_crew INNER JOIN credits USING(credit_id) WHERE movie_id=$movieID ORDER BY department ASC, job ASC, credit_name ASC";
 
 	$result = mysqli_query($connection, $sql);
 
@@ -256,10 +139,86 @@ function getData($connection, $movieID, $tableName, $joinOn, $dataToGet) {
 	}
 }
 
-function displayPoster($posterPath) {
-	$posterURL = "https://image.tmdb.org/t/p/original" . $posterPath;
-	$imageData = base64_encode(file_get_contents($posterURL));
-	echo '<img src="data:image/jpeg;base64,' . $imageData . '" height="auto" width="500px">';
+function displayMetadata($connection, $movieID) {
+	$genres = getData($connection, $movieID, "movie_genres", "genre_ID", "name");
+
+	echo "<br>Genre(s): ";
+
+	foreach ($genres as $curGenre) {
+		echo $curGenre . ", ";
+	}
+
+//////////////////////////
+
+	$languages = getData($connection, $movieID, "movie_languages", "iso_639", "name");
+
+	echo "<br>Language(s): ";
+
+	foreach ($languages as $curLanguage) {
+		echo $curLanguage . ", ";
+	}
+
+//////////////////////////
+
+	$prodCountries = getData($connection, $movieID, "movie_countries", "iso_3166", "name");
+
+	echo "<br>Production Country(s): ";
+
+	foreach ($prodCountries as $curCountry) {
+		echo $curCountry . ", ";
+	}
+
+///////////////////////////
+
+	$keywords = getData($connection, $movieID, "movie_keywords", "id", "name");
+
+	echo "<br>Keywords: ";
+
+	foreach ($keywords as $curKeyword) {
+		echo $curKeyword . ", ";
+	}
+
+///////////////////////////
+
+	$prodCompanies = getData($connection, $movieID, "movie_companies", "id", "name");
+
+	echo "<br>Production Companies: ";
+
+	foreach ($prodCompanies as $curCompany) {
+		echo $curCompany . ", ";
+	}
+
+///////////////////////////
+
+	echo "<br><br><h2>Cast</h2>";
+	$castData = getCastData($connection, $movieID);
+
+	echo "<div class='container-fluid'>";
+	echo "<div class='row justify-content-center'>";
+
+	foreach ($castData as $castMember) {
+		$profilePath = $castMember['profile_path'];
+		echo <<<_END
+	<div class="cardContainerOuter">
+    	<div class="cardContainerInner rounded">
+        	<div class="card">
+_END;
+
+		if ($profilePath != "" || $profilePath != null) {
+			displayPicture($profilePath, "movieCreditCard");
+		}
+
+		echo <<<_END
+	            <div class="card-body">
+   	            	<h4 class="card-title"><a href="view_credit.php?credit={$castMember['credit_id']}">{$castMember['credit_name']}</a></h4>
+                	<p class="card-text">{$castMember['character_name']}</p>
+            	</div>
+            </div>
+		</div>
+	</div>
+_END;
+	}
+	echo "</div></div</div>";
 }
 
 require_once "footer.php";
