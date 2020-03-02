@@ -458,9 +458,10 @@ html {
 }
 
 .row {
-    max-width: 1140px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
+    align: centre;
+    clear: right;
+    height: auto;
 }
 
 .row2 {
@@ -639,6 +640,14 @@ footer h1 {
     width: 20vw;
 }
 
+#movieCreditCard {
+    height: auto;
+    width: 12vw;
+    display: flex;
+    padding: 0;
+    margin: auto;
+}
+
 #actorPicture {
     height: auto;
     width: 30vh;
@@ -656,6 +665,29 @@ footer h1 {
 #searchMovieSidebar {
     width: 100%;
     background-color: #ff726f;
+}
+
+.container-fluid {
+    margin-top: 1vh;
+    margin-bottom: 7vh;
+    width: auto;
+}
+
+.card {
+    width: 14vw;
+    margin: 1%;
+}
+
+.cardContainerOuter {
+    padding: 0;
+    margin: 1%;
+}
+
+.cardContainerInner {
+    margin: 0;
+    padding: 0;
+    width: 96%;
+    float: left;
 }
 
 @media only screen and (max-width: 750px) {
