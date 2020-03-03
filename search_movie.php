@@ -41,7 +41,7 @@ if (isset($_POST['minRating'])) {
 	$orderDirection = sanitise($_POST['order'], $connection);
 	$orderBy = sanitise($_POST['orderType'], $connection);
 
-	if($orderBy == "year") {
+	if ($orderBy == "year") {
 		$orderBy = "release_date";
 	}
 
@@ -58,7 +58,7 @@ if (isset($_POST['minRating'])) {
 	}
 
 	echo <<<_END
-		Genres: $genres <br>
+		Genres IDS: $genres <br>
 		Languages: $languages <br>
 _END;
 
@@ -69,7 +69,9 @@ _END;
 
 	// search database:
 	$query = <<<_END
-	SELECT title FROM movie 
+	SELECT DISTINCT title FROM movie 
+	INNER JOIN movie_genres USING (movie_ID)
+	INNER JOIN genres USING (genre_ID)
 	WHERE title LIKE '%{$searchValue}%' 
 	AND rating > {$minRating} 
 	AND (SUBSTR(release_date,1,4) BETWEEN {$minYear} AND {$maxYear})
@@ -84,7 +86,7 @@ _END;
 	if (!$result) {
 		echo mysqli_error($connection);
 	} else {
-		echo  mysqli_num_rows($result) . "<br>";
+		echo mysqli_num_rows($result) . "<br>";
 
 		while ($row = mysqli_fetch_array($result)) {
 			print_r($row);
@@ -229,7 +231,7 @@ _END;
 _END;
 	echo "<ul style='list-style-type: none;  min-width: 50%; word->";
 	foreach ($listOfGenres as $curGenre) {
-		echo "<li><input type='checkbox' class='boxes' name='genreCheckboxes[]' value ='$curGenre'>$curGenre</input></li>";
+		echo "<li><input type='checkbox' class='boxes' name='genreCheckboxes[]' value =" . $curGenre['genre_ID'] . ">" . $curGenre['name'] . "</input></li>";
 	}
 	echo "</ul>";
 
@@ -248,7 +250,7 @@ _END;
 
 	echo "<ul style='list-style-type: none;  min-width: 50%; word->";
 	foreach ($listOfLanguages as $curLanguage) {
-		echo "<li><input type='checkbox' name='languageCheckboxes[]' class='boxes'  value ='$curLanguage'>$curLanguage</input></li>";
+		echo "<li><input type='checkbox' name='languageCheckboxes[]' class='boxes' value =" . $curLanguage['iso_639'] . ">" . $curLanguage['name'] . "</input></li>";
 	}
 	echo "</ul>";
 
@@ -329,7 +331,7 @@ function getMaxValue($connection, $maxValToFind) {
 }
 
 function getListOfLanguages($connection) {
-	$query = "SELECT name FROM languages ORDER BY name ASC";
+	$query = "SELECT name, iso_639 FROM languages ORDER BY name ASC";
 	$result = mysqli_query($connection, $query);
 
 	if (!$result) {
@@ -337,8 +339,8 @@ function getListOfLanguages($connection) {
 	} else {
 		$listOfLanguages = array();
 
-		while ($row = mysqli_fetch_array($result)) {
-			$listOfLanguages[] = $row[0];
+		while ($row = mysqli_fetch_assoc($result)) {
+			$listOfLanguages[] = $row;
 		}
 
 		return $listOfLanguages;
@@ -347,16 +349,17 @@ function getListOfLanguages($connection) {
 }
 
 function getListOfGenres($connection) {
-	$query = "SELECT name FROM genres ORDER BY name ASC";
+	$query = "SELECT name, genre_ID FROM genres ORDER BY name ASC";
 	$result = mysqli_query($connection, $query);
 
 	if (!$result) {
 		echo mysqli_error($connection);
 	} else {
+
 		$listOfGenres = array();
 
-		while ($row = mysqli_fetch_array($result)) {
-			$listOfGenres[] = $row[0];
+		while ($row = mysqli_fetch_assoc($result)) {
+			$listOfGenres[] = $row;
 		}
 
 		return $listOfGenres;
