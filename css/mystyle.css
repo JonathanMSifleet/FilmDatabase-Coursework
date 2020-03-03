@@ -3,13 +3,6 @@ html * {
     font-size: 20px;
 }
 
-/*
-label,.boxes{
-    display: inline-block;
-    vertical-align: middle;
-}
-*/
-
 ul {
     text-align: left;
 }
@@ -24,33 +17,6 @@ input[type="checkbox"] {
     top: -1px;
     *overflow: hidden;
 }
-
-/*
-.boxes {
-  width: 13px;
-  height: 13px;
-  padding: 0;
-  margin:0;
-  vertical-align: bottom;
-  position: relative;
-  top: -1px;
-  *overflow: hidden;
-}
-
-label {
-  display: block;
-  padding-left: 15px;
-  text-indent: -15px;
-}
-*/
-
-/*
-.boxes{
-    position: relative;
-    left:inherit;
-    top: 28px;
-}
-*/
 
 .sliderLabel {
     background-color: #ffffff;
@@ -91,6 +57,10 @@ label {
     margin-right: 2%;
 }
 
+#navbar {
+    height: 8vh;
+}
+
 .sliderLabel {
     text-align: left;
     float: left;
@@ -98,28 +68,21 @@ label {
     margin-left: 2%;
 }
 
-#searchBox {
-    float: left;
-}
-
-#searchBox {
-    background-color: #dcdcdc;
-    float: top;
-    width: 85%;
-}
-
 #searchContent {
-    margin: 2% 2% 2% 2%;
+    width: 85%;
+    float: left;
+    margin: 0;
+    padding: 0.5% 0;
+    background-color: #dcdcdc;
+    list-style-type: none;
+    display: flex;
+    align-items: flex-start;
 }
 
 #searchContent li {
+    width: auto;
     float: left;
-    margin-left: 1%;
-    margin-right: 1%;
-}
-
-#searchContent ul {
-    list-style-type: none;
+    margin: auto 1vw auto 0.5vw;
 }
 
 .pageContainer {
@@ -344,6 +307,7 @@ input {
 body {
     background-color: #fff;
     color: #727272;
+    height: 100%;
 }
 
 #main {
@@ -434,7 +398,7 @@ body {
     display: block;
 }
 
-h2 {
+h3 {
     text-align: center;
     padding-bottom: 15px;
     color: #333;
@@ -455,6 +419,7 @@ html {
     font-size: 20px;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+    height: 100%;
 }
 
 .row {
@@ -664,7 +629,9 @@ footer h1 {
 
 #searchMovieSidebar {
     width: 100%;
+    height: 100%;
     background-color: #ff726f;
+    float: left;
 }
 
 .container-fluid {
@@ -675,7 +642,7 @@ footer h1 {
 
 .card {
     width: 14vw;
-    margin: 1%;
+    margin: 1.5vh auto 0;
 }
 
 .cardContainerOuter {
@@ -690,8 +657,10 @@ footer h1 {
     float: left;
 }
 
-@media only screen and (max-width: 750px) {
-    .test {
-        padding: 1rem;
-    }
+#searchMovieButton {
+    width: 80%;
+}
+
+#radioList {
+    list-style-type: none;
 }

@@ -28,7 +28,6 @@ if (isset($_POST['minRating'])) {
 
 	// get variables:
 
-	$searchValue = sanitise($_POST['searchValue'], $connection);
 	$minRating = sanitise($_POST['minRating'], $connection);
 	$minPopularity = sanitise($_POST['minPopularity'], $connection);
 	$minYear = sanitise($_POST['minYear'], $connection);
@@ -39,6 +38,10 @@ if (isset($_POST['minRating'])) {
 	$minBudget = sanitise($_POST['minBudget'], $connection);
 	$minRevenue = sanitise($_POST['minRevenue'], $connection);
 	$maxRevenue = sanitise($_POST['maxRevenue'], $connection);
+
+	$searchValue = sanitise($_POST['searchValue'], $connection);
+	$orderDirection = sanitise($_POST['order'], $connection);
+	$orderBy = sanitise($_POST['orderType'], $connection);
 
 	if (isset($_POST['genreCheckboxes'])) {
 		$genres = implode(',', $_POST['genreCheckboxes']);
@@ -53,6 +56,8 @@ if (isset($_POST['minRating'])) {
 	}
 
 	echo <<<_END
+		Search term: "$searchValue" <br>
+		Order by: $orderBy $orderDirection <br>
 		Minimum rating: $minRating <br>
 		Minimum popularity: $minPopularity <br>
 		Minimum year: $minYear <br>
@@ -67,7 +72,6 @@ if (isset($_POST['minRating'])) {
 		Languages: $languages <br>
 _END;
 
-
 	// search database:
 
 }
@@ -75,13 +79,12 @@ _END;
 function displayUI($connection, $listOfLanguages, $listOfGenres) {
 	echo <<<_END
 <!-- Sidebar: -->
-
+<div>
 <form action="" id="filterForm" method="post">
 	<div class ='sidebar-sticky' id ="searchMovieSidebar"'>
-		<div id='sidebarContent'>
-			<h2>Filters:</h2>
-			<input type="submit" value="Submit">
-			<br><br>
+			<h3>Filters:</h3>
+			<input type="submit" value="Submit" class="rounded" id="searchMovieButton">
+			<br>
 			<div id='accordion'>
 				<div class="card">
 	                <div class="card-header">
@@ -100,7 +103,6 @@ _END;
 	$maxPopularity = getMaxValue($connection, "popularity");
 
 	echo <<<_END
-				<br>
 				<div class="card">
 	                <div class="card-header">
 	                    <a class="collapsed card-link" data-toggle="collapse" href="#collapsePopularity">Popularity</a>
@@ -120,7 +122,6 @@ _END;
 	$maxYear = 2020;
 
 	echo <<<_END
-				<br>
 				<div class="card">
 	                <div class="card-header">
 	                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseYear">Year</a>
@@ -143,7 +144,6 @@ _END;
 	$maxRuntime = getMaxValue($connection, "runtime");
 
 	echo <<<_END
-				<br>
 				<div class="card">
 					<div class="card-header">
 						<a class="collapsed card-link" data-toggle="collapse" href="#collapseRuntime">Runtime</a>
@@ -165,7 +165,6 @@ _END;
 	$maxVotes = getMaxValue($connection, "votes");
 
 	echo <<<_END
-				<br>
 				<div class="card">
 					<div class="card-header">
 						<a class="collapsed card-link" data-toggle="collapse" href="#collapseVotes">Votes</a>
@@ -183,7 +182,6 @@ _END;
 	$maxBudget = getMaxValue($connection, "budget");
 
 	echo <<<_END
-				<br>
 				<div class="card">
 					<div class="card-header">
 						<a class="collapsed card-link" data-toggle="collapse" href="#collapseBudget">Budget</a>
@@ -206,7 +204,6 @@ _END;
 	$maxRevenue = getMaxValue($connection, "revenue");
 
 	echo <<<_END
-				<br>
 				<div class="card">
                     <div class="card-header">
                         <a class="collapsed card-link" data-toggle="collapse" href="#collapseRevenue">Revenue</a>
@@ -224,7 +221,6 @@ _END;
                         </div>
 					</div>
 				</div>
-				<br>
 				
 				<div class="card">
                     <div class="card-header">
@@ -244,7 +240,6 @@ _END;
 						</div>
                     </div>
 				</div>
-				<br>
 				
                 <div class="card">
                     <div class="card-header">
@@ -265,14 +260,11 @@ _END;
 	                    </div>
 					</div>
 	            </div>
+            <br>
 	        </div>
-		<br>
 	</div>
-
-<div id='searchBox'>
-	<div id='searchContent'>
-	<ul>
-		<li><input type="text" placeholder="Search" name="searchValue" minlength="0" maxlength="128" required></li>
+	<ul id='searchContent'>
+		<li><input type="text" placeholder="Movie name" name="searchValue" minlength="0" maxlength="128" required></li>
 		<li>Search for:</li>
 		<li>
 		<select name = "searchType">
@@ -294,11 +286,19 @@ _END;
 			<option value = "year">Year</option>
 		</select>
 		</li>
-		<li><input type="radio" class ='radio' name="order" value="asc" checked>Ascending</li>
-		<li><input type="radio" class='radio' name="order" value="desc">Descending</li>
+		<li>
+			<ul id="radioList">
+				<li>
+					<input type="radio" class ='radio' name="order" value="ASC" id="asc" checked>Ascending
+				</li>
+				<li>
+					<input type="radio" class='radio' name="order" value="DESC" id="desc">Descending
+				</li>
+			</ul>
+		</li>
+		
+
 	</ul>
-	</div>
-</div>
 </form>
 _END;
 
