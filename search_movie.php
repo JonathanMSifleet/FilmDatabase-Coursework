@@ -29,7 +29,6 @@ if (isset($_POST['minRating'])) {
 	// get variables:
 
 	$minRating = sanitise($_POST['minRating'], $connection);
-	$minPopularity = sanitise($_POST['minPopularity'], $connection);
 	$minYear = sanitise($_POST['minYear'], $connection);
 	$maxYear = sanitise($_POST['maxYear'], $connection);
 	$minRuntime = sanitise($_POST['minRuntime'], $connection);
@@ -37,11 +36,14 @@ if (isset($_POST['minRating'])) {
 	$minVotes = sanitise($_POST['minVotes'], $connection);
 	$minBudget = sanitise($_POST['minBudget'], $connection);
 	$minRevenue = sanitise($_POST['minRevenue'], $connection);
-	$maxRevenue = sanitise($_POST['maxRevenue'], $connection);
 
 	$searchValue = sanitise($_POST['searchValue'], $connection);
 	$orderDirection = sanitise($_POST['order'], $connection);
 	$orderBy = sanitise($_POST['orderType'], $connection);
+
+	if($orderBy == "year") {
+		$orderBy = "release_date";
+	}
 
 	if (isset($_POST['genreCheckboxes'])) {
 		$genres = implode(',', $_POST['genreCheckboxes']);
@@ -56,24 +58,39 @@ if (isset($_POST['minRating'])) {
 	}
 
 	echo <<<_END
-		Search term: "$searchValue" <br>
-		Order by: $orderBy $orderDirection <br>
-		Minimum rating: $minRating <br>
-		Minimum popularity: $minPopularity <br>
-		Minimum year: $minYear <br>
-		Maximum year: $maxYear <br>
-		Minimum runtime: $minRuntime <br>
-		Maximum runtime: $maxRuntime <br>
-		Minimum votes: $minVotes <br>
-		Minimum budget: $minBudget <br>
-		Minimum revenue: $minRevenue <br>
-		Max revenue: $maxRevenue <br>
 		Genres: $genres <br>
 		Languages: $languages <br>
 _END;
 
-	// search database:
+	/*
+		Genres: $genres <br>
+		Languages: $languages <br>
+	 */
 
+	// search database:
+	$query = <<<_END
+	SELECT title FROM movie 
+	WHERE title LIKE '%{$searchValue}%' 
+	AND rating > {$minRating} 
+	AND (SUBSTR(release_date,1,4) BETWEEN {$minYear} AND {$maxYear})
+	AND runtime BETWEEN {$minRuntime} AND {$maxRuntime}
+	AND votes > {$minVotes}
+	AND budget > {$minBudget}
+	AND revenue > {$minRevenue}
+	ORDER BY {$orderBy} {$orderDirection}
+_END;
+	$result = mysqli_query($connection, $query);
+
+	if (!$result) {
+		echo mysqli_error($connection);
+	} else {
+		echo  mysqli_num_rows($result) . "<br>";
+
+		while ($row = mysqli_fetch_array($result)) {
+			print_r($row);
+			echo "<br>";
+		}
+	}
 }
 
 function displayUI($connection, $listOfLanguages, $listOfGenres) {
@@ -97,23 +114,6 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 							<label id="minRatingLabel" for="minRatingSlider" class ="sliderLabel">0</label>
 						</div>
 					</div>
-				</div>
-_END;
-
-	$maxPopularity = getMaxValue($connection, "popularity");
-
-	echo <<<_END
-				<div class="card">
-	                <div class="card-header">
-	                    <a class="collapsed card-link" data-toggle="collapse" href="#collapsePopularity">Popularity</a>
-	                </div>
-	                <div id="collapsePopularity" class="collapse toggle" data-parent="#accordion">
-	                    <div class="card-body">
-							Minimum popularity: <br>
-							<input type ="range" id="minPopSlider" name="minPopularity" class="slider" min ="0" max ="$maxPopularity" value="0">
-							<label id="minPopLabel" for="minPopSlider" class ="sliderLabel">0</label>
-	                    </div>
-	                </div>
 				</div>
 _END;
 
@@ -214,10 +214,7 @@ _END;
 							<input type ="range" id="minRevenueSlider" name="minRevenue" class="slider" min ="0" max ="$maxRevenue" value="0">
 							<br>
 							<label id="minRevenueLabel" for="minRevenueSlider" class ="sliderLabel">0</label>
-							<br><br><br>
-							<label for="maxRevenueSlider">Maximum</label>
-							<input type ="range" id="maxRevenueSlider" name="maxRevenue" class="slider" min="0" max ="$maxRevenue" value ="$maxRevenue">
-							<label id="maxRevenueLabel" for="maxRevenueSlider" class ="sliderLabel">$maxRevenue</label>
+							<br>
                         </div>
 					</div>
 				</div>
@@ -282,7 +279,6 @@ _END;
 		<select name = "orderType">
 			<option value = "popularity" selected>Popularity</option>
 			<option value = "rating">Rating</option>
-			<option value = "genre">Genre</option>
 			<option value = "year">Year</option>
 		</select>
 		</li>

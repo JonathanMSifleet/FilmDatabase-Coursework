@@ -8,10 +8,6 @@ function initialiseWebPage() {
     minRatingSlider.addEventListener("input", updateMinRatingLabel);
     const minRatingLabel = document.getElementById("minRatingLabel");
 
-    const minPopSlider = document.getElementById("minPopSlider");
-    minPopSlider.addEventListener("input", updateMinPopLabel);
-    const minPopLabel = document.getElementById("minPopLabel");
-
     const minYearSlider = document.getElementById("minYearSlider");
     minYearSlider.addEventListener("input", updateMinYearLabel);
     const minYearLabel = document.getElementById("minYearLabel");
@@ -44,16 +40,8 @@ function initialiseWebPage() {
     minRevenueSlider.addEventListener("input", updateMinRevenueLabel);
     const minRevenueLabel = document.getElementById("minRevenueLabel");
 
-    const maxRevenueSlider = document.getElementById("maxRevenueSlider");
-    maxRevenueSlider.addEventListener("input", updateMaxRevenueLabel);
-    const maxRevenueLabel = document.getElementById("maxRevenueLabel");
-
     function updateMinRatingLabel() {
         minRatingLabel.innerHTML = minRatingSlider.value;
-    }
-
-    function updateMinPopLabel() {
-        minPopLabel.innerHTML = minPopSlider.value;
     }
 
     function updateMinYearLabel() {
