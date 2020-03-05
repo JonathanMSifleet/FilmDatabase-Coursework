@@ -59,19 +59,16 @@ if (isset($_POST['minRating'])) {
 
 	echo <<<_END
 		Genres IDS: $genres <br>
-		Languages: $languages <br>
+		Languages: "$languages" <br>
 _END;
-
-	/*
-		Genres: $genres <br>
-		Languages: $languages <br>
-	 */
 
 	// search database:
 	$query = <<<_END
 	SELECT DISTINCT title FROM movie 
 	INNER JOIN movie_genres USING (movie_ID)
 	INNER JOIN genres USING (genre_ID)
+	INNER JOIN movie_languages USING (movie_ID)
+	INNER JOIN languages USING (iso_639)
 	WHERE title LIKE '%{$searchValue}%' 
 	AND rating > {$minRating} 
 	AND (SUBSTR(release_date,1,4) BETWEEN {$minYear} AND {$maxYear})
@@ -79,6 +76,7 @@ _END;
 	AND votes > {$minVotes}
 	AND budget > {$minBudget}
 	AND revenue > {$minRevenue}
+	AND (genre_ID IN ({$genres}))
 	ORDER BY {$orderBy} {$orderDirection}
 _END;
 	$result = mysqli_query($connection, $query);
