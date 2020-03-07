@@ -52,15 +52,11 @@ if (isset($_POST['minRating'])) {
 	}
 
 	if (isset($_POST['languageCheckboxes'])) {
-		$languages = implode(',', $_POST['languageCheckboxes']);
+		$languages = implode("','", $_POST['languageCheckboxes']);
+		$languages = "'" . $languages . "'";
 	} else {
 		$languages = "";
 	}
-
-	echo <<<_END
-		Genres IDS: $genres <br>
-		Languages: "$languages" <br>
-_END;
 
 	// search database:
 	$query = <<<_END
@@ -76,15 +72,29 @@ _END;
 	AND votes > {$minVotes}
 	AND budget > {$minBudget}
 	AND revenue > {$minRevenue}
-	AND (genre_ID IN ({$genres}))
-	ORDER BY {$orderBy} {$orderDirection}
 _END;
+
+	if ($genres !== "") {
+		$query = <<<_END
+		{$query}
+		AND (genre_ID IN ({$genres}))
+_END;
+	}
+
+	if ($languages !== "") {
+		$query = <<<_END
+		{$query}
+		AND (iso_639 IN ({$languages}))
+_END;
+	}
+
+	$query = $query . " ORDER BY {$orderBy} {$orderDirection}";
 	$result = mysqli_query($connection, $query);
 
 	if (!$result) {
 		echo mysqli_error($connection);
 	} else {
-		echo mysqli_num_rows($result) . "<br>";
+		echo "Number of results: ". mysqli_num_rows($result) . "<br>";
 
 		while ($row = mysqli_fetch_array($result)) {
 			print_r($row);
