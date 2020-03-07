@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 ////// MySQL credentials:
 $dbhost = 'localhost';
@@ -37,7 +38,6 @@ function sanitiseUserData($connection, &$username, &$email, &$password, &$firstn
 }
 
 // displays the account creation form:
-
 
 // inserts new account into database:
 function createAccount($connection, $username, $email, $password, $firstname, $surname, $arrayOfAccountCreationErrors) {
@@ -89,7 +89,6 @@ function createAccount($connection, $username, $email, $password, $firstname, $s
 		echo "Account creation failed, please check the errors shown above and try again<br>";
 	}
 }
-
 
 function displayCreateAccountForm($username, $email, $password, $firstname, $surname, $arrayOfAccountErrors) {
 
@@ -153,7 +152,6 @@ function displayCreateAccountForm($username, $email, $password, $firstname, $sur
 _END;
 }
 
-
 function displaySignInPrompt($username, $username_val, $password, $password_val) {
 	// show the form that allows users to log in
 	// Note we use an HTTP POST request to avoid their password appearing in the URL:
@@ -180,7 +178,6 @@ function displaySignInPrompt($username, $username_val, $password, $password_val)
 _END;
 
 }
-
 
 // initialises every element in an array with a null value
 function initEmptyArray(&$array, $size) {

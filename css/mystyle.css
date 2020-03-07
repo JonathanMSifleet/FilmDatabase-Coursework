@@ -594,7 +594,7 @@ footer h1 {
 }
 
 #filterForm {
-    width: 15%;
+    width: 12vw;
     margin: 0;
     padding: 0;
     float: left;
@@ -628,10 +628,14 @@ footer h1 {
 }
 
 #searchMovieSidebar {
-    width: 100%;
+    width: 12vw;
     height: 100%;
     background-color: #ff726f;
-    float: left;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
 }
 
 .container-fluid {
@@ -641,8 +645,12 @@ footer h1 {
 }
 
 .card {
-    width: 14vw;
-    margin: 1.5vh auto 0;
+    width: 90%;
+    margin: 0 auto;
+    padding-left: 1%;
+    padding-right: 1%;
+    background-color: transparent;
+    overflow-y: auto;
 }
 
 .cardContainerOuter {
@@ -663,4 +671,17 @@ footer h1 {
 
 #radioList {
     list-style-type: none;
+}
+
+#accordion {
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#filterTitle {
+    height: 10vh;
+    margin: 0;
+    padding: 0;
 }

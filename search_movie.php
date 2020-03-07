@@ -1,6 +1,4 @@
 <?php
-
-require_once "header.php";
 require_once "helper.php";
 
 echo "<title>Search</title>";
@@ -18,11 +16,8 @@ if ($_SESSION['gotLists'] == true) {
 	$listOfGenres = $_SESSION['genres'];
 }
 
-// initialise variables:
-
-//////////
-
 displayUI($connection, $listOfLanguages, $listOfGenres);
+require_once "header.php";
 
 if (isset($_POST['minRating'])) {
 
@@ -94,7 +89,7 @@ _END;
 	if (!$result) {
 		echo mysqli_error($connection);
 	} else {
-		echo "Number of results: ". mysqli_num_rows($result) . "<br>";
+		echo "Number of results: " . mysqli_num_rows($result) . "<br>";
 
 		while ($row = mysqli_fetch_array($result)) {
 			print_r($row);
@@ -106,12 +101,13 @@ _END;
 function displayUI($connection, $listOfLanguages, $listOfGenres) {
 	echo <<<_END
 <!-- Sidebar: -->
-<div>
 <form action="" id="filterForm" method="post">
 	<div class ='sidebar-sticky' id ="searchMovieSidebar"'>
-			<h3>Filters:</h3>
-			<input type="submit" value="Submit" class="rounded" id="searchMovieButton">
-			<br>
+			<div id = "filterTitle">
+				<h3>Filters:</h3>
+				<input type="submit" value="Submit" class="rounded" id="searchMovieButton">
+			</div>
+
 			<div id='accordion'>
 				<div class="card">
 	                <div class="card-header">
@@ -267,9 +263,8 @@ _END;
 	                    </div>
 					</div>
 	            </div>
-            <br>
 	        </div>
-	</div>
+		<div>
 	<ul id='searchContent'>
 		<li><input type="text" placeholder="Movie name" name="searchValue" minlength="0" maxlength="128" required></li>
 		<li>Search for:</li>
@@ -302,9 +297,9 @@ _END;
 				</li>
 			</ul>
 		</li>
-		
 
 	</ul>
+	</div>
 </form>
 _END;
 
