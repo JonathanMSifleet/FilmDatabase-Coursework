@@ -74,7 +74,7 @@ if (isset($_POST['minRating'])) {
 	AND budget > {$minBudget}
 	AND revenue > {$minRevenue}";
 
-	if($showNullResults) {
+	if ($showNullResults) {
 		$query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
 	LEFT OUTER JOIN movie_genres USING (movie_ID)
 	LEFT OUTER JOIN genres USING (genre_ID)
@@ -98,8 +98,6 @@ if (isset($_POST['minRating'])) {
 	}
 
 	$query = $query . " ORDER BY  `$orderBy` $orderDirection";
-
-	echo $query . "<br>";
 
 	$result = mysqli_query($connection, $query);
 
@@ -405,12 +403,34 @@ _END;
 
 	foreach ($results as $curResult) {
 
-		$releaseDate = date('d-m-Y', strtotime($curResult['release_date']));
-		$revenue = number_format($curResult['revenue']);
-		$budget = number_format($curResult['budget']);
+		$runtime = $curResult['runtime'];
+		if ($runtime == null or $runtime == "") {
+			$runtime = "Unknown";
+		}
+
+		$releaseDate = $curResult['release_date'];
+		if ($releaseDate == null or $releaseDate == "") {
+			$releaseDate = "Unknown";
+		} else {
+			$releaseDate = date('d-m-Y', strtotime($curResult['release_date']));
+		}
+
+		$revenue = $curResult['revenue'];
+		if ($revenue == null or $revenue == "") {
+			$revenue = "Unknown";
+		} else {
+			$revenue = number_format($revenue);
+		}
+
+		$budget = $curResult['budget'];
+		if ($budget == null or $budget == "") {
+			$budget = "Unknown";
+		} else {
+			$budget = number_format($budget);
+		}
 
 		echo "<tr>";
-		echo "<td><a href = 'view_movie.php?movieID={$curResult['movie_id']}'>" . $curResult['title'] . "</a></td><td>{$releaseDate}</td><td>{$curResult['rating']}</td><td>{$curResult['runtime']}</td><td>{$revenue}</td><td>{$budget}</td>";
+		echo "<td><a href = 'view_movie.php?movieID={$curResult['movie_id']}'>" . $curResult['title'] . "</a></td><td>{$releaseDate}</td><td>{$curResult['rating']}</td><td>{$runtime}</td><td>{$revenue}</td><td>{$budget}</td>";
 		echo "</tr>";
 	}
 	echo "</table>";
