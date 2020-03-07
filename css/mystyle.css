@@ -68,8 +68,14 @@ input[type="checkbox"] {
     margin-left: 2%;
 }
 
+#searchContentWrapper {
+    padding: 0;
+    margin: 0 0 0 12vw;
+    width: 88vw;
+}
+
 #searchContent {
-    width: 85%;
+    width: 100%;
     float: left;
     margin: 0;
     padding: 0.5% 0;
@@ -594,7 +600,6 @@ footer h1 {
 }
 
 #filterForm {
-    width: 12vw;
     margin: 0;
     padding: 0;
     float: left;
@@ -650,7 +655,7 @@ footer h1 {
     padding-left: 1%;
     padding-right: 1%;
     background-color: transparent;
-    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .cardContainerOuter {
