@@ -16,8 +16,8 @@ echo "<title>{$movieMetadata['title']}</title>";
 displayPicture($movieMetadata['poster_path'], "moviePoster");
 
 $releaseDate = date('d-m-Y', strtotime($movieMetadata['release_date']));
-$revenue = number_format($movieMetadata['revenue']);
-$budget = number_format($movieMetadata['budget']);
+$revenue = "$" . number_format($movieMetadata['revenue']);
+$budget = "$" . number_format($movieMetadata['budget']);
 
 echo <<<_END
 	<br>Title: {$movieMetadata['title']}
@@ -93,7 +93,6 @@ function getCrewData($connection, $movieID) {
 
 	}
 }
-
 
 function getMovieData($connection, $movieID) {
 

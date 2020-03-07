@@ -1,7 +1,6 @@
 <?php
 
 require_once "helper.php";
-require_once "helper.php";
 
 if (isset($_GET['query'])) {
 

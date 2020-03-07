@@ -54,7 +54,7 @@ if (isset($_POST['minRating'])) {
 
 	// search database:
 	$query = <<<_END
-	SELECT DISTINCT title FROM movie 
+	SELECT DISTINCT title, release_date, movie_id, revenue, runtime, rating FROM movie 
 	INNER JOIN movie_genres USING (movie_ID)
 	INNER JOIN genres USING (genre_ID)
 	INNER JOIN movie_languages USING (movie_ID)
@@ -90,10 +90,14 @@ _END;
 	} else {
 		echo "Number of results: " . mysqli_num_rows($result) . "<br>";
 
+		$resultsToDisplay = array();
+
 		while ($row = mysqli_fetch_array($result)) {
-			print_r($row);
-			echo "<br>";
+			$resultsToDisplay[] = $row;
 		}
+
+		displayResults($resultsToDisplay);
+
 	}
 }
 
@@ -103,7 +107,7 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 <form action="" id="filterForm" method="post">
 	<div id="searchContentWrapper">
 		<ul id='searchContent'>
-			<li><input type="text" placeholder="Movie name" name="searchValue" minlength="0" maxlength="128" required></li>
+			<li><input type="text" placeholder="Search..." name="searchValue" minlength="0" maxlength="128"></li>
 			<li>Search for:</li>
 			<li>
 			<select name = "searchType">
@@ -366,6 +370,34 @@ function getListOfGenres($connection) {
 		return $listOfGenres;
 
 	}
+}
+
+function displayResults($results) {
+
+	$numResults = count($results);
+
+	//title, release_date, movie_id, revenue, runtime, rating
+
+	echo <<<_END
+	<div id = 'searchResults'>
+		<p>Number of results: {$numResults}</p>
+		<table id="resultsTable">	
+		<th>Title</th><th>Release date</th><th>Rating</th><th>Runtime (minutes) </th><th>Revenue ($)</th>
+_END;
+
+	foreach ($results as $curResult) {
+
+		$releaseDate = date('d-m-Y', strtotime($curResult['release_date']));
+		$revenue = number_format($curResult['revenue']);
+
+		echo "<tr>";
+		echo "<td><a href = 'view_movie.php?movieID={$curResult['movie_id']}'>" . $curResult['title'] ."</a></td><td>{$releaseDate}</td><td>{$curResult['rating']}</td><td>{$curResult['runtime']}</td><td>{$revenue}</td>";
+		echo "</tr>";
+	}
+	echo "</table>";
+
+	echo "</div>";
+
 }
 
 ?>

@@ -605,6 +605,7 @@ footer h1 {
     margin: 0;
     padding: 0;
     float: left;
+    height: 0;
 }
 
 #moviePoster {
@@ -691,4 +692,20 @@ footer h1 {
     height: 10vh;
     margin: 0;
     padding: 0;
+}
+
+#searchResults {
+    padding:0;
+    margin: 6vh 0 0 12vw;
+}
+
+#searchResults table, #searchResults tr, #searchResults th, #searchResults td {
+    border: 1px solid black;
+}
+
+#searchResults table {
+    width: 99%;
+    padding: 1%;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
 }
