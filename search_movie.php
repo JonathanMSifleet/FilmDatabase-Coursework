@@ -74,6 +74,21 @@ if (isset($_POST['minRating'])) {
 	AND budget > {$minBudget}
 	AND revenue > {$minRevenue}";
 
+	if($showNullResults) {
+		$query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
+	RIGHT OUTER JOIN movie_genres USING (movie_ID)
+	RIGHT OUTER JOIN genres USING (genre_ID)
+	RIGHT OUTER JOIN movie_languages USING (movie_ID)
+	RIGHT OUTER JOIN languages USING (iso_639)
+	WHERE title LIKE '%{$searchValue}%' 
+	AND (rating > {$minRating} OR rating IS NULL)
+	AND ((SUBSTR(release_date,1,4) BETWEEN {$minYear} AND {$maxYear}) OR release_date IS NULL)
+	AND (runtime BETWEEN {$minRuntime} AND {$maxRuntime} OR runtime IS NULL)
+	AND (votes > {$minVotes} OR votes IS NULL)
+	AND (budget > {$minBudget} OR budget IS NULL)
+	AND (revenue > {$minRevenue} OR revenue IS NULL )";
+	}
+
 	if ($genres !== "") {
 		$query = $query . " AND (genre_ID IN ({$genres}))";
 	}
@@ -84,7 +99,7 @@ if (isset($_POST['minRating'])) {
 
 	$query = $query . " ORDER BY  `$orderBy` $orderDirection";
 
-	//echo $query . "<br>";
+	echo $query . "<br>";
 
 	$result = mysqli_query($connection, $query);
 
