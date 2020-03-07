@@ -696,16 +696,16 @@ footer h1 {
 
 #searchResults {
     padding:0;
-    margin: 6vh 0 0 12vw;
+    margin: 10vh 0 0 12vw;
 }
 
 #searchResults table, #searchResults tr, #searchResults th, #searchResults td {
     border: 1px solid black;
+    padding: 0.25%;
 }
 
 #searchResults table {
     width: 99%;
-    padding: 1%;
     margin-left: 0.5%;
     margin-right: 0.5%;
 }

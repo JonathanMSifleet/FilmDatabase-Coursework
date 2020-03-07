@@ -35,6 +35,12 @@ if (isset($_POST['minRating'])) {
 	$orderDirection = sanitise($_POST['order'], $connection);
 	$orderBy = sanitise($_POST['orderType'], $connection);
 
+	$showNullResults = false;
+
+	if (!empty($_POST['showNullResults'])) {
+		$showNullResults = true;
+	}
+
 	if ($orderBy == "year") {
 		$orderBy = "release_date";
 	}
@@ -52,9 +58,10 @@ if (isset($_POST['minRating'])) {
 		$languages = "";
 	}
 
+	$query = "";
+
 	// search database:
-	$query = <<<_END
-	SELECT DISTINCT title, release_date, movie_id, revenue, runtime, rating FROM movie 
+	$query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
 	INNER JOIN movie_genres USING (movie_ID)
 	INNER JOIN genres USING (genre_ID)
 	INNER JOIN movie_languages USING (movie_ID)
@@ -65,31 +72,25 @@ if (isset($_POST['minRating'])) {
 	AND runtime BETWEEN {$minRuntime} AND {$maxRuntime}
 	AND votes > {$minVotes}
 	AND budget > {$minBudget}
-	AND revenue > {$minRevenue}
-_END;
+	AND revenue > {$minRevenue}";
 
 	if ($genres !== "") {
-		$query = <<<_END
-		{$query}
-		AND (genre_ID IN ({$genres}))
-_END;
+		$query = $query . " AND (genre_ID IN ({$genres}))";
 	}
 
 	if ($languages !== "") {
-		$query = <<<_END
-		{$query}
-		AND (iso_639 IN ({$languages}))
-_END;
+		$query = $query . " AND (iso_639 IN ({$languages}))";
 	}
 
-	$query = $query . " ORDER BY {$orderBy} {$orderDirection}";
+	$query = $query . " ORDER BY  `$orderBy` $orderDirection";
+
+	//echo $query . "<br>";
+
 	$result = mysqli_query($connection, $query);
 
 	if (!$result) {
 		echo mysqli_error($connection);
 	} else {
-		echo "Number of results: " . mysqli_num_rows($result) . "<br>";
-
 		$resultsToDisplay = array();
 
 		while ($row = mysqli_fetch_array($result)) {
@@ -111,13 +112,9 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 			<li>Search for:</li>
 			<li>
 			<select name = "searchType">
-				<option value = "name" selected>Name</option>
+				<option value = "name" selected>Movie name</option>
 				<option value = "director">Director</option>
 				<option value = "actorName">Actor name</option>
-				<option value = "genre">Genre</option>
-				<option value = "keyword">Keyword</option>
-				<option value = "prodCompany">Production Company</option>
-				<option value = "prodCountry">Country</option>
 			</select>
 			</li>
 			<li> Order by:<br> </li>
@@ -126,6 +123,9 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 				<option value = "popularity" selected>Popularity</option>
 				<option value = "rating">Rating</option>
 				<option value = "year">Year</option>
+				<option value = "runtime">Runtime</option>
+				<option value = "budget">Budget</option>
+				<option value = "revenue">Revenue</option>
 			</select>
 			</li>
 			<li>
@@ -137,6 +137,9 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 						<input type="radio" class='radio' name="order" value="DESC" id="desc">Descending
 					</li>
 				</ul>
+			</li>
+			<li>
+				<input type="checkbox" name="showNullResults"> Show films with missing data
 			</li>
 		</ul>
 	</div>
@@ -382,16 +385,17 @@ function displayResults($results) {
 	<div id = 'searchResults'>
 		<p>Number of results: {$numResults}</p>
 		<table id="resultsTable">	
-		<th>Title</th><th>Release date</th><th>Rating</th><th>Runtime (minutes) </th><th>Revenue ($)</th>
+		<th>Title</th><th>Release date</th><th>Rating</th><th>Runtime (minutes) </th><th>Revenue ($)</th><th>Budget ($)</th>
 _END;
 
 	foreach ($results as $curResult) {
 
 		$releaseDate = date('d-m-Y', strtotime($curResult['release_date']));
 		$revenue = number_format($curResult['revenue']);
+		$budget = number_format($curResult['budget']);
 
 		echo "<tr>";
-		echo "<td><a href = 'view_movie.php?movieID={$curResult['movie_id']}'>" . $curResult['title'] ."</a></td><td>{$releaseDate}</td><td>{$curResult['rating']}</td><td>{$curResult['runtime']}</td><td>{$revenue}</td>";
+		echo "<td><a href = 'view_movie.php?movieID={$curResult['movie_id']}'>" . $curResult['title'] . "</a></td><td>{$releaseDate}</td><td>{$curResult['rating']}</td><td>{$curResult['runtime']}</td><td>{$revenue}</td><td>{$budget}</td>";
 		echo "</tr>";
 	}
 	echo "</table>";
