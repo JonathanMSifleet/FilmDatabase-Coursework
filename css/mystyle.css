@@ -72,11 +72,13 @@ input[type="checkbox"] {
     padding: 0;
     margin: 0 0 0 12vw;
     width: 88vw;
+    top: 0;
 }
 
 #searchContent {
     width: 100%;
-    float: left;
+    position: absolute;
+    top: 15vh;
     margin: 0;
     padding: 0.5% 0;
     background-color: #dcdcdc;

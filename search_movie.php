@@ -99,7 +99,8 @@ _END;
 
 function displayUI($connection, $listOfLanguages, $listOfGenres) {
 	require_once "header.php";
-echo <<<_END
+	echo <<<_END
+<form action="" id="filterForm" method="post">
 	<div id="searchContentWrapper">
 		<ul id='searchContent'>
 			<li><input type="text" placeholder="Movie name" name="searchValue" minlength="0" maxlength="128" required></li>
@@ -135,11 +136,6 @@ echo <<<_END
 			</li>
 		</ul>
 	</div>
-_END;
-
-	echo <<<_END
-<!-- Sidebar: -->
-<form action="" id="filterForm" method="post">
 	<div class ='sidebar-sticky' id ="searchMovieSidebar"'>
 		<div id = "filterTitle">
 			<h3>Filters:</h3>
