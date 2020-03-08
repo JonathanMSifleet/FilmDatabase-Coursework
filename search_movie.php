@@ -186,12 +186,12 @@ _END;
 				<div id="collapseBudget" class="collapse toggle" data-parent="#accordion">
 					<div class="card-body">
 						<label for="minBudgetSlider">Minimum</label>
-						<input type ="range" id="minBudgetSlider" name="minBudget" class="slider" min ="0" max ="$maxBudget" value ="0">
+						<input type ="range" id="minBudgetSlider" name="minBudget" class="slider" min ="0" max ="$maxBudget" step="1000" value ="0">
 						<br>
 						<label id="minBudgetLabel" for="minBudgetSlider" class ="sliderLabel">0</label>
 						<br><br><br>
 						<label for="maxBudgetSlider">Maximum</label>
-						<input type ="range" id="maxBudgetSlider" name ="maxBudget" class="slider" min="0" max ="$maxBudget" value="$maxBudget">
+						<input type ="range" id="maxBudgetSlider" name ="maxBudget" class="slider" min="0" max ="$maxBudget" step="1000" value="$maxBudget">
 						<label id="maxBudgetLabel" for="maxBudgetSlider" class ="sliderLabel">$maxBudget</label>
 					</div>
 				</div>
@@ -208,7 +208,7 @@ _END;
                 <div id="collapseRevenue" class="collapse toggle" data-parent="#accordion">
                     <div class="card-body">
 						<label for="minRevenueSlider">Minimum</label>
-						<input type ="range" id="minRevenueSlider" name="minRevenue" class="slider" min ="0" max ="$maxRevenue" value="0">
+						<input type ="range" id="minRevenueSlider" name="minRevenue" class="slider" min ="0" max ="$maxRevenue" step="1000" value="0">
 						<br>
 						<label id="minRevenueLabel" for="minRevenueSlider" class ="sliderLabel">0</label>
 						<br>
@@ -413,7 +413,7 @@ function buildQuery($searchParameters) {
 			$query = $query . " LEFT OUTER JOIN movie_crew USING (movie_ID) LEFT OUTER JOIN credits USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%' AND job = 'director'";
 			break;
 		case "actorName" :
-			$query = $query . " WHERE title LIKE '%{$searchParameters['searchValue']}%'";
+			$query = $query . " LEFT OUTER JOIN movie_cast USING (movie_ID) LEFT OUTER JOIN credits USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%'";
 	}
 
 	$query = $query . addFilters($searchParameters);
