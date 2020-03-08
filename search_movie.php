@@ -20,8 +20,6 @@ displayUI($connection, $listOfLanguages, $listOfGenres);
 
 if (isset($_POST['minRating'])) {
 
-	// get variables:
-
 	$searchParameters = array();
 	$searchParameters['minRating'] = sanitise($_POST['minRating'], $connection);
 	$searchParameters['minYear'] = sanitise($_POST['minYear'], $connection);
@@ -34,7 +32,7 @@ if (isset($_POST['minRating'])) {
 	$searchParameters['searchValue'] = sanitise($_POST['searchValue'], $connection);
 	$searchParameters['orderDirection'] = sanitise($_POST['order'], $connection);
 	$searchParameters['orderBy'] = sanitise($_POST['orderType'], $connection);
-
+	$searchParameters['searchType'] = sanitise($_POST['searchType'], $connection);
 	$searchParameters['showNullResults'] = false;
 
 	$query = buildQuery($searchParameters);
@@ -398,36 +396,26 @@ function buildQuery($searchParameters) {
 		$searchParameters['languages'] = "'" . $searchParameters['languages'] . "'";
 	}
 
-	$query = "";
+	// name director actorName
 
-	// search database:
-	if (!$searchParameters['showNullResults']) {
-		$query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
-	INNER JOIN movie_genres USING (movie_ID)
-	INNER JOIN genres USING (genre_ID)
-	INNER JOIN movie_languages USING (movie_ID)
-	INNER JOIN languages USING (iso_639)
-	WHERE title LIKE '%{$searchParameters['searchValue']}%' 
-	AND rating > {$searchParameters['minRating']} 
-	AND (SUBSTR(release_date,1,4) BETWEEN {$searchParameters['minYear']} AND {$searchParameters['maxYear']})
-	AND runtime BETWEEN {$searchParameters['minRuntime']} AND {$searchParameters['maxRuntime']}
-	AND votes > {$searchParameters['minVotes']}
-	AND budget > {$searchParameters['minBudget']}
-	AND revenue > {$searchParameters['minRevenue']}";
-	} else {
-		$query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
+	$query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
 	LEFT OUTER JOIN movie_genres USING (movie_ID)
 	LEFT OUTER JOIN genres USING (genre_ID)
 	LEFT OUTER JOIN movie_languages USING (movie_ID)
 	LEFT OUTER JOIN languages USING (iso_639)
-	WHERE title LIKE '%{$searchParameters['searchValue']}%'
-	AND (SUBSTR(release_date,1,4) BETWEEN {$searchParameters['minYear']} AND {$searchParameters['maxYear']} OR release_date IS NULL)
-	AND (rating > {$searchParameters['minRating']} OR rating IS NULL)
-	AND (runtime BETWEEN {$searchParameters['minRuntime']} AND {$searchParameters['maxRuntime']} OR runtime IS NULL)
-	AND (votes > {$searchParameters['minVotes']} OR votes IS NULL)
-	AND (budget > {$searchParameters['minBudget']} OR budget IS NULL)
-	AND (revenue > {$searchParameters['minRevenue']} OR revenue IS NULL )";
+	LEFT OUTER JOIN movie_crew USING (movie_ID)
+	LEFT OUTER JOIN credits USING (credit_id)";
+
+	switch ($searchParameters['searchType']) {
+		case "name" :
+			$query = $query . " WHERE title LIKE '%{$searchParameters['searchValue']}%'";
+			break;
+		case "director" :
+			$query = $query . " WHERE credit_name LIKE '%{$searchParameters['searchValue']}%' AND job = 'director'";
+			break;
 	}
+
+	$query = $query . addFilters($searchParameters);
 
 	if ($searchParameters['genres'] !== "") {
 		$query = $query . " AND (genre_ID IN ({$searchParameters['genres']}))";
@@ -443,4 +431,34 @@ function buildQuery($searchParameters) {
 
 }
 
+function addFilters($searchParameters) {
+
+	$filters = "";
+
+	if (!$searchParameters['showNullResults']) {
+		$filters = $filters . <<<_END
+	AND rating > {$searchParameters['minRating']} 
+	AND (SUBSTR(release_date,1,4) BETWEEN {$searchParameters['minYear']} AND {$searchParameters['maxYear']})
+	AND runtime BETWEEN {$searchParameters['minRuntime']} AND {$searchParameters['maxRuntime']}
+	AND votes > {$searchParameters['minVotes']}
+	AND budget > {$searchParameters['minBudget']}
+	AND revenue > {$searchParameters['minRevenue']}";
+_END;
+	} else {
+		$filters = $filters . <<<_END
+	AND (SUBSTR(release_date,1,4) BETWEEN {$searchParameters['minYear']} AND {$searchParameters['maxYear']} OR release_date IS NULL)
+	AND (rating > {$searchParameters['minRating']} OR rating IS NULL)
+	AND (runtime BETWEEN {$searchParameters['minRuntime']} AND {$searchParameters['maxRuntime']} OR runtime IS NULL)
+	AND (votes > {$searchParameters['minVotes']} OR votes IS NULL)
+	AND (budget > {$searchParameters['minBudget']} OR budget IS NULL)
+	AND (revenue > {$searchParameters['minRevenue']} OR revenue IS NULL)
+_END;
+	}
+
+	return $filters;
+
+}
+
 ?>
+
+
