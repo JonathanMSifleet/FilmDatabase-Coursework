@@ -47,7 +47,7 @@ if (isset($_POST['minRating'])) {
 			$resultsToDisplay[] = $row;
 		}
 
-		displayResults($resultsToDisplay);
+		displayResults($resultsToDisplay, $searchParameters['searchValue']);
 
 	}
 }
@@ -325,7 +325,7 @@ function getListOfGenres($connection) {
 	}
 }
 
-function displayResults($results) {
+function displayResults($results, $searchFor) {
 
 	$numResults = count($results);
 
@@ -333,6 +333,7 @@ function displayResults($results) {
 
 	echo <<<_END
 	<div id = 'searchResults'>
+		<p>Searching for "{$searchFor}"</p>
 		<p>Number of results: {$numResults}</p>
 		<table id="resultsTable">	
 		<th>Title</th><th>Release date</th><th>Rating</th><th>Runtime (minutes) </th><th>Revenue ($)</th><th>Budget ($)</th>
@@ -402,17 +403,17 @@ function buildQuery($searchParameters) {
 	LEFT OUTER JOIN movie_genres USING (movie_ID)
 	LEFT OUTER JOIN genres USING (genre_ID)
 	LEFT OUTER JOIN movie_languages USING (movie_ID)
-	LEFT OUTER JOIN languages USING (iso_639)
-	LEFT OUTER JOIN movie_crew USING (movie_ID)
-	LEFT OUTER JOIN credits USING (credit_id)";
+	LEFT OUTER JOIN languages USING (iso_639)";
 
 	switch ($searchParameters['searchType']) {
 		case "name" :
 			$query = $query . " WHERE title LIKE '%{$searchParameters['searchValue']}%'";
 			break;
 		case "director" :
-			$query = $query . " WHERE credit_name LIKE '%{$searchParameters['searchValue']}%' AND job = 'director'";
+			$query = $query . " LEFT OUTER JOIN movie_crew USING (movie_ID) LEFT OUTER JOIN credits USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%' AND job = 'director'";
 			break;
+		case "actorName" :
+			$query = $query . " WHERE title LIKE '%{$searchParameters['searchValue']}%'";
 	}
 
 	$query = $query . addFilters($searchParameters);
