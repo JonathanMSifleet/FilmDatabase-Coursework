@@ -22,83 +22,22 @@ if (isset($_POST['minRating'])) {
 
 	// get variables:
 
-	$minRating = sanitise($_POST['minRating'], $connection);
-	$minYear = sanitise($_POST['minYear'], $connection);
-	$maxYear = sanitise($_POST['maxYear'], $connection);
-	$minRuntime = sanitise($_POST['minRuntime'], $connection);
-	$maxRuntime = sanitise($_POST['maxRuntime'], $connection);
-	$minVotes = sanitise($_POST['minVotes'], $connection);
-	$minBudget = sanitise($_POST['minBudget'], $connection);
-	$minRevenue = sanitise($_POST['minRevenue'], $connection);
+	$searchParameters = array();
+	$searchParameters['minRating'] = sanitise($_POST['minRating'], $connection);
+	$searchParameters['minYear'] = sanitise($_POST['minYear'], $connection);
+	$searchParameters['maxYear'] = sanitise($_POST['maxYear'], $connection);
+	$searchParameters['minRuntime'] = sanitise($_POST['minRuntime'], $connection);
+	$searchParameters['maxRuntime'] = sanitise($_POST['maxRuntime'], $connection);
+	$searchParameters['minVotes'] = sanitise($_POST['minVotes'], $connection);
+	$searchParameters['minBudget'] = sanitise($_POST['minBudget'], $connection);
+	$searchParameters['minRevenue'] = sanitise($_POST['minRevenue'], $connection);
+	$searchParameters['searchValue'] = sanitise($_POST['searchValue'], $connection);
+	$searchParameters['orderDirection'] = sanitise($_POST['order'], $connection);
+	$searchParameters['orderBy'] = sanitise($_POST['orderType'], $connection);
 
-	$searchValue = sanitise($_POST['searchValue'], $connection);
-	$orderDirection = sanitise($_POST['order'], $connection);
-	$orderBy = sanitise($_POST['orderType'], $connection);
+	$searchParameters['showNullResults'] = false;
 
-	$showNullResults = false;
-
-	if (!empty($_POST['showNullResults'])) {
-		$showNullResults = true;
-	}
-
-	if ($orderBy == "year") {
-		$orderBy = "release_date";
-	}
-
-	if (isset($_POST['genreCheckboxes'])) {
-		$genres = implode(',', $_POST['genreCheckboxes']);
-	} else {
-		$genres = "";
-	}
-
-	if (isset($_POST['languageCheckboxes'])) {
-		$languages = implode("','", $_POST['languageCheckboxes']);
-		$languages = "'" . $languages . "'";
-	} else {
-		$languages = "";
-	}
-
-	$query = "";
-
-	// search database:
-	$query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
-	INNER JOIN movie_genres USING (movie_ID)
-	INNER JOIN genres USING (genre_ID)
-	INNER JOIN movie_languages USING (movie_ID)
-	INNER JOIN languages USING (iso_639)
-	WHERE title LIKE '%{$searchValue}%' 
-	AND rating > {$minRating} 
-	AND (SUBSTR(release_date,1,4) BETWEEN {$minYear} AND {$maxYear})
-	AND runtime BETWEEN {$minRuntime} AND {$maxRuntime}
-	AND votes > {$minVotes}
-	AND budget > {$minBudget}
-	AND revenue > {$minRevenue}";
-
-	if ($showNullResults) {
-		$query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
-	LEFT OUTER JOIN movie_genres USING (movie_ID)
-	LEFT OUTER JOIN genres USING (genre_ID)
-	LEFT OUTER JOIN movie_languages USING (movie_ID)
-	LEFT OUTER JOIN languages USING (iso_639)
-	WHERE title LIKE '%{$searchValue}%' 
-	AND (rating > {$minRating} OR rating IS NULL)
-	AND ((SUBSTR(release_date,1,4) BETWEEN {$minYear} AND {$maxYear}) OR release_date IS NULL)
-	AND ((runtime BETWEEN {$minRuntime} AND {$maxRuntime}) OR runtime IS NULL)
-	AND (votes > {$minVotes} OR votes IS NULL)
-	AND (budget > {$minBudget} OR budget IS NULL)
-	AND (revenue > {$minRevenue} OR revenue IS NULL )";
-	}
-
-	if ($genres !== "") {
-		$query = $query . " AND (genre_ID IN ({$genres}))";
-	}
-
-	if ($languages !== "") {
-		$query = $query . " AND (iso_639 IN ({$languages}))";
-	}
-
-	$query = $query . " ORDER BY  `$orderBy` $orderDirection";
-
+	$query = buildQuery($searchParameters);
 	$result = mysqli_query($connection, $query);
 
 	if (!$result) {
@@ -133,9 +72,9 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 			<li> Order by:<br> </li>
 			<li>
 			<select name = "orderType">
-				<option value = "popularity" selected>Popularity</option>
 				<option value = "rating">Rating</option>
-				<option value = "year">Year</option>
+				<option value = "popularity">Popularity</option>
+				<option value = "year" selected>Year</option>
 				<option value = "runtime">Runtime</option>
 				<option value = "budget">Budget</option>
 				<option value = "revenue">Revenue</option>
@@ -144,15 +83,15 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 			<li>
 				<ul id="radioList">
 					<li>
-						<input type="radio" class ='radio' name="order" value="ASC" id="asc" checked>Ascending
+						<input type="radio" class ='radio' name="order" value="ASC" id="asc">Ascending
 					</li>
 					<li>
-						<input type="radio" class='radio' name="order" value="DESC" id="desc">Descending
+						<input type="radio" class='radio' name="order" value="DESC" id="desc" checked>Descending
 					</li>
 				</ul>
 			</li>
 			<li>
-				<input type="checkbox" name="showNullResults"> Show films with missing data
+				<input type="checkbox" name="showNullResults" checked> Show films with missing data
 			</li>
 		</ul>
 	</div>
@@ -436,6 +375,71 @@ _END;
 	echo "</table>";
 
 	echo "</div>";
+
+}
+
+function buildQuery($searchParameters) {
+	if (!empty($_POST['showNullResults'])) {
+		$searchParameters['showNullResults'] = true;
+	}
+
+	if ($searchParameters['orderBy'] == "year") {
+		$searchParameters['orderBy'] = "release_date";
+	}
+
+	$searchParameters['genres'] = "";
+	if (isset($_POST['genreCheckboxes'])) {
+		$searchParameters['genres'] = implode(',', $_POST['genreCheckboxes']);
+	}
+
+	$searchParameters['languages'] = "";
+	if (isset($_POST['languageCheckboxes'])) {
+		$searchParameters['languages'] = implode("','", $_POST['languageCheckboxes']);
+		$searchParameters['languages'] = "'" . $searchParameters['languages'] . "'";
+	}
+
+	$query = "";
+
+	// search database:
+	if (!$searchParameters['showNullResults']) {
+		$query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
+	INNER JOIN movie_genres USING (movie_ID)
+	INNER JOIN genres USING (genre_ID)
+	INNER JOIN movie_languages USING (movie_ID)
+	INNER JOIN languages USING (iso_639)
+	WHERE title LIKE '%{$searchParameters['searchValue']}%' 
+	AND rating > {$searchParameters['minRating']} 
+	AND (SUBSTR(release_date,1,4) BETWEEN {$searchParameters['minYear']} AND {$searchParameters['maxYear']})
+	AND runtime BETWEEN {$searchParameters['minRuntime']} AND {$searchParameters['maxRuntime']}
+	AND votes > {$searchParameters['minVotes']}
+	AND budget > {$searchParameters['minBudget']}
+	AND revenue > {$searchParameters['minRevenue']}";
+	} else {
+		$query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
+	LEFT OUTER JOIN movie_genres USING (movie_ID)
+	LEFT OUTER JOIN genres USING (genre_ID)
+	LEFT OUTER JOIN movie_languages USING (movie_ID)
+	LEFT OUTER JOIN languages USING (iso_639)
+	WHERE title LIKE '%{$searchParameters['searchValue']}%'
+	AND (SUBSTR(release_date,1,4) BETWEEN {$searchParameters['minYear']} AND {$searchParameters['maxYear']} OR release_date IS NULL)
+	AND (rating > {$searchParameters['minRating']} OR rating IS NULL)
+	AND (runtime BETWEEN {$searchParameters['minRuntime']} AND {$searchParameters['maxRuntime']} OR runtime IS NULL)
+	AND (votes > {$searchParameters['minVotes']} OR votes IS NULL)
+	AND (budget > {$searchParameters['minBudget']} OR budget IS NULL)
+	AND (revenue > {$searchParameters['minRevenue']} OR revenue IS NULL )";
+	}
+
+	if ($searchParameters['genres'] !== "") {
+		$query = $query . " AND (genre_ID IN ({$searchParameters['genres']}))";
+	}
+
+	if ($searchParameters['languages'] !== "") {
+		$query = $query . " AND (iso_639 IN ({$searchParameters['languages']}))";
+	}
+
+	$query = $query . " ORDER BY  `{$searchParameters['orderBy']}` {$searchParameters['orderDirection']}";
+
+	return $query;
 
 }
 
