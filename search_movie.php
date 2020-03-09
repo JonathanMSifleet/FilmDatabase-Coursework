@@ -65,6 +65,9 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 				<option value = "name" selected>Movie name</option>
 				<option value = "director">Director</option>
 				<option value = "actorName">Actor name</option>
+				<option value = "keyword">Keyword</option>
+				<option value = "company">Company</option>
+				<option value = "country">Country</option>
 			</select>
 			</li>
 			<li> Order by:<br> </li>
@@ -397,7 +400,6 @@ function buildQuery($searchParameters) {
 		$searchParameters['languages'] = "'" . $searchParameters['languages'] . "'";
 	}
 
-	// name director actorName
 
 	$query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
 	LEFT OUTER JOIN movie_genres USING (movie_ID)
@@ -414,6 +416,16 @@ function buildQuery($searchParameters) {
 			break;
 		case "actorName" :
 			$query = $query . " LEFT OUTER JOIN movie_cast USING (movie_ID) LEFT OUTER JOIN credits USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%'";
+			break;
+		case "keyword":
+			$query = $query . " LEFT OUTER JOIN movie_keywords USING (movie_ID) LEFT OUTER JOIN keywords USING (keyword_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%'";
+			break;
+		case "country":
+			$query = $query . " LEFT OUTER JOIN movie_countries USING (movie_ID) LEFT OUTER JOIN countries USING (iso_3166) WHERE country_name LIKE '%{$searchParameters['searchValue']}%'";
+			break;
+		case "company":
+			$query = $query . " LEFT OUTER JOIN movie_companies USING (movie_ID) LEFT OUTER JOIN companies USING (id) WHERE company_name LIKE '%{$searchParameters['searchValue']}%'";
+			break;
 	}
 
 	$query = $query . addFilters($searchParameters);

@@ -189,7 +189,7 @@ _END;
 
 ///////////////////////////
 
-	$keywords = getData($connection, $movieID, "movie_keywords", "id", "name");
+	$keywords = getData($connection, $movieID, "movie_keywords", "keyword_id", "name");
 
 	echo "<br>Keywords: ";
 
