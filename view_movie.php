@@ -93,11 +93,11 @@ function getMovieData($connection, $movieID) {
 
 }
 
-function getData($connection, $movieID, $tableName, $joinOn, $dataToGet) {
+function getData($connection, $movieID, $tableName, $joinOn, $dataToGet, $orderBy) {
 
 	$joinTable = substr($tableName, 6);
 
-	$sql = "SELECT $dataToGet FROM $tableName INNER JOIN $joinTable USING ($joinOn) WHERE movie_id=$movieID ORDER BY name ASC";
+	$sql = "SELECT $dataToGet FROM $tableName INNER JOIN $joinTable USING ($joinOn) WHERE movie_id=$movieID ORDER BY $orderBy ASC";
 
 	$result = mysqli_query($connection, $sql);
 
@@ -137,7 +137,7 @@ function displayMetadata($connection, $movieID, $movieMetadata) {
 	<br>Runtime {$movieMetadata['runtime']} minutes
 _END;
 
-	$genres = getData($connection, $movieID, "movie_genres", "genre_ID", "name");
+	$genres = getData($connection, $movieID, "movie_genres", "genre_ID", "name", "name");
 
 	echo "<br>Genre(s): ";
 
@@ -150,7 +150,7 @@ _END;
 
 //////////////////////////
 
-	$languages = getData($connection, $movieID, "movie_languages", "iso_639", "name");
+	$languages = getData($connection, $movieID, "movie_languages", "iso_639", "name", "name");
 
 	echo "<br>Language(s): ";
 
@@ -163,7 +163,7 @@ _END;
 
 //////////////////////////
 
-	$prodCountries = getData($connection, $movieID, "movie_countries", "iso_3166", "name");
+	$prodCountries = getData($connection, $movieID, "movie_countries", "iso_3166", "country_name", "country_name");
 
 	echo "<br>Production Country(s): ";
 
@@ -176,7 +176,7 @@ _END;
 
 ///////////////////////////
 
-	$prodCompanies = getData($connection, $movieID, "movie_companies", "id", "name");
+	$prodCompanies = getData($connection, $movieID, "movie_companies", "id", "company_name", "company_name");
 
 	echo "<br>Production Companies: ";
 
@@ -189,7 +189,7 @@ _END;
 
 ///////////////////////////
 
-	$keywords = getData($connection, $movieID, "movie_keywords", "keyword_id", "name");
+	$keywords = getData($connection, $movieID, "movie_keywords", "keyword_id", "name", "name");
 
 	echo "<br>Keywords: ";
 
