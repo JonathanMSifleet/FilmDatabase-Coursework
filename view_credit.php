@@ -48,7 +48,7 @@ _END;
 	</div>
 _END;
 }
-echo "</div></div</div>";
+echo "</div></div>";
 
 function getCreditData($connection, $creditID) {
 

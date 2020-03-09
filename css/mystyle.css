@@ -658,6 +658,7 @@ footer h1 {
 .cardContainerOuter {
     padding: 0;
     margin: 1%;
+    width: 17vw;
 }
 
 .cardContainerInner {
