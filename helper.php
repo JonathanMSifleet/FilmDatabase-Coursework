@@ -327,4 +327,8 @@ function displayPicture($picturePath, $elementID) {
 	echo '<img class="card-img-top" src="data:image/jpeg;base64,' . $imageData . '" id=' . $elementID . '>';
 }
 
+function removeCommaFromListString($input) {
+	return substr($input, 0, strlen($input) -2);
+}
+
 ?>

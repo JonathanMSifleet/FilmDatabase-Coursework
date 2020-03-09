@@ -13,26 +13,9 @@ $movieMetadata = getMovieData($connection, $movieID);
 
 echo "<title>{$movieMetadata['title']}</title>";
 
-displayPicture($movieMetadata['poster_path'], "moviePoster");
+displayMetadata($connection, $movieID, $movieMetadata);
 
-$releaseDate = date('d-m-Y', strtotime($movieMetadata['release_date']));
-$revenue = "$" . number_format($movieMetadata['revenue']);
-$budget = "$" . number_format($movieMetadata['budget']);
-
-echo <<<_END
-	<br>Title: {$movieMetadata['title']}
-	<br>Rating: {$movieMetadata['rating']} ({$movieMetadata['votes']})
-	<br>Tagline: {$movieMetadata['tagline']}
-	<br>Overview: {$movieMetadata['overview']} 
-	<br>Release date: {$releaseDate}
-	<br>Revenue: {$revenue}
-	<br>Budget: {$budget}
-	<br>Runtime {$movieMetadata['runtime']} minutes
-_END;
-
-displayMetadata($connection, $movieID);
-
-echo "<br><br><h2>Crew</h2>";
+echo "<h2>Crew</h2>";
 $crewData = getCrewData($connection, $movieID);
 
 echo "<div class='container-fluid'>";
@@ -132,14 +115,38 @@ function getData($connection, $movieID, $tableName, $joinOn, $dataToGet) {
 	}
 }
 
-function displayMetadata($connection, $movieID) {
+function displayMetadata($connection, $movieID, $movieMetadata) {
+
+	$releaseDate = date('d-m-Y', strtotime($movieMetadata['release_date']));
+	$revenue = "$" . number_format($movieMetadata['revenue']);
+	$budget = "$" . number_format($movieMetadata['budget']);
+
+	echo "<div id='movieDataOuter'>";
+	displayPicture($movieMetadata['poster_path'], "moviePoster");
+
+	echo "<div id='movieDataInner'>";
+
+	echo <<<_END
+	<h1>{$movieMetadata['title']}</h1>
+	<h3>{$movieMetadata['tagline']}</h3>
+	<p>{$movieMetadata['overview']}</p>
+	Rating: {$movieMetadata['rating']} ({$movieMetadata['votes']})
+	<br>Release date: {$releaseDate}
+	<br>Revenue: {$revenue}
+	<br>Budget: {$budget}
+	<br>Runtime {$movieMetadata['runtime']} minutes
+_END;
+
 	$genres = getData($connection, $movieID, "movie_genres", "genre_ID", "name");
 
 	echo "<br>Genre(s): ";
 
+	$tempGenres = "";
 	foreach ($genres as $curGenre) {
-		echo $curGenre . ", ";
+		$tempGenres = $tempGenres . $curGenre . ", ";
 	}
+
+	echo removeCommaFromListString($tempGenres);
 
 //////////////////////////
 
@@ -147,9 +154,12 @@ function displayMetadata($connection, $movieID) {
 
 	echo "<br>Language(s): ";
 
+	$tempLanguage = "";
 	foreach ($languages as $curLanguage) {
-		echo $curLanguage . ", ";
+		$tempLanguage = $tempLanguage . $curLanguage . ", ";
 	}
+
+	echo removeCommaFromListString($tempLanguage);
 
 //////////////////////////
 
@@ -157,19 +167,12 @@ function displayMetadata($connection, $movieID) {
 
 	echo "<br>Production Country(s): ";
 
+	$tempProdCountries = "";
 	foreach ($prodCountries as $curCountry) {
-		echo $curCountry . ", ";
+		$tempProdCountries = $tempProdCountries . $curCountry . ", ";
 	}
 
-///////////////////////////
-
-	$keywords = getData($connection, $movieID, "movie_keywords", "id", "name");
-
-	echo "<br>Keywords: ";
-
-	foreach ($keywords as $curKeyword) {
-		echo $curKeyword . ", ";
-	}
+	echo removeCommaFromListString($tempProdCountries);
 
 ///////////////////////////
 
@@ -177,13 +180,31 @@ function displayMetadata($connection, $movieID) {
 
 	echo "<br>Production Companies: ";
 
+	$tempProdCompanies = "";
 	foreach ($prodCompanies as $curCompany) {
-		echo $curCompany . ", ";
+		$tempProdCompanies = $tempProdCompanies . $curCompany . ", ";
 	}
+
+	echo removeCommaFromListString($tempProdCompanies);
 
 ///////////////////////////
 
-	echo "<br><br><h2>Cast</h2>";
+	$keywords = getData($connection, $movieID, "movie_keywords", "id", "name");
+
+	echo "<br>Keywords: ";
+
+	$tempKeywords = "";
+	foreach ($keywords as $curKeyword) {
+		$tempKeywords = $tempKeywords . $curKeyword . ", ";
+	}
+
+	echo removeCommaFromListString($tempKeywords);
+
+///////////////////////////
+
+	echo "</div></div>";
+
+	echo "<h2>Cast</h2>";
 	$castData = getCastData($connection, $movieID);
 
 	echo "<div class='container-fluid'>";
@@ -211,7 +232,7 @@ _END;
 	</div>
 _END;
 	}
-	echo "</div></div</div>";
+	echo "</div></div></div>";
 }
 
 require_once "footer.php";
