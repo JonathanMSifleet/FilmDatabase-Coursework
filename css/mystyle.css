@@ -690,7 +690,7 @@ footer h1 {
 }
 
 #searchResults {
-    padding:0;
+    padding: 0;
     margin: 10vh 0 0 12vw;
 }
 
@@ -725,4 +725,8 @@ footer h1 {
     width: 76vw;
     margin: 0;
     padding: 1%;
+}
+
+#searchTerm {
+    width: 20vw;
 }

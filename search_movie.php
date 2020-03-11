@@ -72,7 +72,7 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 <form action="" id="filterForm" method="post">
 <div id="searchContentWrapper">
 	<ul id='searchContent'>
-		<li><input type="text" placeholder="Use commas to search for multiple actors" name="searchValue" minlength="0" maxlength="128"></li>
+		<li><input type="text" placeholder="Use commas to search for multiple actors" id="searchTerm" name="searchValue" minlength="0" maxlength="128"></li>
 		<li>Search for:</li>
 		<li>
 		<select id="searchType" name="searchType">
@@ -411,18 +411,43 @@ function buildQuery($searchParameters) {
 	$query = "";
 	switch ($searchParameters['searchType']) {
 		case "name" :
-			$query = $query = "SELECT DISTINCT movie_ID title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
-	LEFT OUTER JOIN movie_genres USING (movie_ID)
-	LEFT OUTER JOIN genres USING (genre_ID)
-	LEFT OUTER JOIN movie_languages USING (movie_ID)
-	LEFT OUTER JOIN languages USING (iso_639)
-	WHERE title LIKE '%{$searchParameters['searchValue']}%'";
+			$searchString = "";
+			if (contains(", ", $searchParameters['searchValue'])) {
+				$searchString = generateSearchString("title", $searchParameters['searchValue']);
+			} else {
+				$searchString = "WHERE title LIKE '%" . $searchParameters['searchValue'] . "%'";
+			}
+
+			$query = "SELECT DISTINCT movie_ID, title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
+			LEFT OUTER JOIN movie_genres USING (movie_ID)
+			LEFT OUTER JOIN genres USING (genre_ID)
+			LEFT OUTER JOIN movie_languages USING (movie_ID)
+			LEFT OUTER JOIN languages USING (iso_639)
+			{$searchString}";
 			break;
+
 		case "director" :
-			$query = "SELECT DISTINCT credit_id, credit_name FROM credits INNER JOIN movie_crew USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%' AND job='director'";
+			$searchString = "";
+			if (contains(", ", $searchParameters['searchValue'])) {
+				$searchString = generateSearchString("credit_name", $searchParameters['searchValue']);
+			} else {
+				$searchString = "WHERE credit_name LIKE '%" . $searchParameters['searchValue'] . "%'";
+			}
+			$query = "SELECT DISTINCT credit_id, credit_name FROM credits 
+    		INNER JOIN movie_crew USING (credit_id) 
+			{$searchString} AND job='director'";
 			break;
+
 		case "actorName" :
-			$query = "SELECT DISTINCT credit_id, credit_name FROM credits INNER JOIN movie_cast USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%'";
+			$searchString = "";
+			if (contains(", ", $searchParameters['searchValue'])) {
+				$searchString = generateSearchString("credit_name", $searchParameters['searchValue']);
+			} else {
+				$searchString = "WHERE credit_name LIKE '%" . $searchParameters['searchValue'] . "%'";
+			}
+			$query = "SELECT DISTINCT credit_id, credit_name FROM credits 
+		    INNER JOIN movie_cast USING (credit_id) 
+			{$searchString}";
 			break;
 	}
 
@@ -435,8 +460,22 @@ function buildQuery($searchParameters) {
 	if ($searchParameters['languages'] !== "") {
 		$query = $query . " AND (iso_639 IN ({$searchParameters['languages']}))";
 	}
-
+	
 	return $query . " ORDER BY `{$searchParameters['orderBy']}` {$searchParameters['orderDirection']}";
+
+}
+
+function generateSearchString($searchColumn, $searchValue) {
+
+	$searchWords = array();
+	$searchWords = explode(", ", $searchValue);
+
+	$searchString = "WHERE ";
+	foreach ($searchWords as $curWord) {
+		$searchString = $searchString . "{$searchColumn} LIKE '%{$curWord}%'" . " OR ";
+	}
+
+	return substr($searchString, 0, strlen($searchString) - 4);
 
 }
 
