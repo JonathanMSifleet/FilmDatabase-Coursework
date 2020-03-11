@@ -28,7 +28,12 @@ require_once "helper.php";
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.5/waypoints.min.js"></script>
 
-    <script src="js/sliderValues.js"></script>
+	<?php
+	if (contains('search_movie.php', $_SERVER['REQUEST_URI'])) {
+		echo "<script src='js/sliderValues.js'></script>";
+		echo "<script src='js/searchMovie.js''></script>";
+	}
+	?>
 
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
