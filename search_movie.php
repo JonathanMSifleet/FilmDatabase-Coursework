@@ -55,7 +55,7 @@ if (isset($_POST['minRating'])) {
 		<p>Number of results: {$numResults}</p>
 		<table id="resultsTable">
 _END;
-		
+
 		if ($searchParameters['searchType'] == "name") {
 			displayMovieResults($resultsToDisplay);
 		} else {
@@ -72,7 +72,7 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 <form action="" id="filterForm" method="post">
 <div id="searchContentWrapper">
 	<ul id='searchContent'>
-		<li><input type="text" placeholder="Search..." name="searchValue" minlength="0" maxlength="128"></li>
+		<li><input type="text" placeholder="Use commas to search for multiple actors" name="searchValue" minlength="0" maxlength="128"></li>
 		<li>Search for:</li>
 		<li>
 		<select id="searchType" name="searchType">
@@ -411,7 +411,7 @@ function buildQuery($searchParameters) {
 	$query = "";
 	switch ($searchParameters['searchType']) {
 		case "name" :
-			$query = $query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
+			$query = $query = "SELECT DISTINCT movie_ID title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
 	LEFT OUTER JOIN movie_genres USING (movie_ID)
 	LEFT OUTER JOIN genres USING (genre_ID)
 	LEFT OUTER JOIN movie_languages USING (movie_ID)
@@ -419,10 +419,10 @@ function buildQuery($searchParameters) {
 	WHERE title LIKE '%{$searchParameters['searchValue']}%'";
 			break;
 		case "director" :
-			$query = "SELECT DISTINCT credit_name, credit_id FROM credits INNER JOIN movie_crew USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%' AND job='director'";
+			$query = "SELECT DISTINCT credit_id, credit_name FROM credits INNER JOIN movie_crew USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%' AND job='director'";
 			break;
 		case "actorName" :
-			$query = "SELECT DISTINCT credit_name, credit_id FROM credits INNER JOIN movie_cast USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%'";
+			$query = "SELECT DISTINCT credit_id, credit_name FROM credits INNER JOIN movie_cast USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%'";
 			break;
 	}
 

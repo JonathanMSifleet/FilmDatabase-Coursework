@@ -67,7 +67,7 @@ function getCreditData($connection, $creditID) {
 
 function getListOfFilms($connection, $creditID) {
 
-	$sql = "SELECT DISTINCT title, poster_path, release_date, character_name, movie_id FROM movie INNER JOIN movie_cast USING (movie_id) WHERE credit_id = '$creditID' ORDER BY popularity DESC";
+	$sql = "SELECT DISTINCT movie_id, title, poster_path, release_date, character_name FROM movie INNER JOIN movie_cast USING (movie_id) WHERE credit_id = '$creditID' ORDER BY popularity DESC";
 	$result = mysqli_query($connection, $sql);
 
 	if (!$result) {
