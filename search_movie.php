@@ -55,7 +55,7 @@ if (isset($_POST['minRating'])) {
 		<p>Number of results: {$numResults}</p>
 		<table id="resultsTable">
 _END;
-
+		
 		if ($searchParameters['searchType'] == "name") {
 			displayMovieResults($resultsToDisplay);
 		} else {
@@ -383,7 +383,7 @@ function displayPersonResults($results) {
 
 	foreach ($results as $curResult) {
 		echo "<tr>";
-		echo "<td><a href = 'view_credit.php?credit={$curResult['credit_id']}'>" . $curResult['credit_name'] . "</a>";
+		echo "<td><a href = 'view_credit.php?credit={$curResult['credit_id']}'>" . $curResult['credit_name'] . "</a></td>";
 		echo "</tr>";
 	}
 }
@@ -422,7 +422,7 @@ function buildQuery($searchParameters) {
 			$query = "SELECT DISTINCT credit_name, credit_id FROM credits INNER JOIN movie_crew USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%' AND job='director'";
 			break;
 		case "actorName" :
-			$query = " LEFT OUTER JOIN movie_cast USING (movie_ID) LEFT OUTER JOIN credits USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%'";
+			$query = "SELECT DISTINCT credit_name, credit_id FROM credits INNER JOIN movie_cast USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%'";
 			break;
 	}
 
