@@ -14,7 +14,10 @@ $creditData = getCreditData($connection, $creditID);
 foreach ($creditData as $curCredit) {
 	echo "<title>{$curCredit['credit_name']}</title>";
 	echo "<h1>{$curCredit['credit_name']}</h1>";
-	displayPicture($curCredit['profile_path'], "viewActorImage");
+
+	if ($curCredit['profile_path'] != null || $curCredit['profile_path'] != "") {
+		displayPicture($curCredit['profile_path'], "viewActorImage");
+	}
 	break;
 }
 
