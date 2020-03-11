@@ -65,9 +65,6 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 				<option value = "name" selected>Movie name</option>
 				<option value = "director">Director</option>
 				<option value = "actorName">Actor name</option>
-				<option value = "keyword">Keyword</option>
-				<option value = "company">Company</option>
-				<option value = "country">Country</option>
 			</select>
 			</li>
 			<li> Order by:<br> </li>
@@ -401,30 +398,22 @@ function buildQuery($searchParameters) {
 	}
 
 
-	$query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
-	LEFT OUTER JOIN movie_genres USING (movie_ID)
-	LEFT OUTER JOIN genres USING (genre_ID)
-	LEFT OUTER JOIN movie_languages USING (movie_ID)
-	LEFT OUTER JOIN languages USING (iso_639)";
+	
 
 	switch ($searchParameters['searchType']) {
 		case "name" :
-			$query = $query . " WHERE title LIKE '%{$searchParameters['searchValue']}%'";
+			$query = $query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
+	LEFT OUTER JOIN movie_genres USING (movie_ID)
+	LEFT OUTER JOIN genres USING (genre_ID)
+	LEFT OUTER JOIN movie_languages USING (movie_ID)
+	LEFT OUTER JOIN languages USING (iso_639)
+	WHERE title LIKE '%{$searchParameters['searchValue']}%'";
 			break;
 		case "director" :
-			$query = $query . " LEFT OUTER JOIN movie_crew USING (movie_ID) LEFT OUTER JOIN credits USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%' AND job = 'director'";
+			$query = "SELECT DISTINCT credit_name FROM credits INNER JOIN movie_crew USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%' AND job='director'";
 			break;
 		case "actorName" :
 			$query = $query . " LEFT OUTER JOIN movie_cast USING (movie_ID) LEFT OUTER JOIN credits USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%'";
-			break;
-		case "keyword":
-			$query = $query . " LEFT OUTER JOIN movie_keywords USING (movie_ID) LEFT OUTER JOIN keywords USING (keyword_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%'";
-			break;
-		case "country":
-			$query = $query . " LEFT OUTER JOIN movie_countries USING (movie_ID) LEFT OUTER JOIN countries USING (iso_3166) WHERE country_name LIKE '%{$searchParameters['searchValue']}%'";
-			break;
-		case "company":
-			$query = $query . " LEFT OUTER JOIN movie_companies USING (movie_ID) LEFT OUTER JOIN companies USING (id) WHERE company_name LIKE '%{$searchParameters['searchValue']}%'";
 			break;
 	}
 
