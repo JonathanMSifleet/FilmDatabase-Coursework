@@ -237,7 +237,7 @@ _END;
                 <div class="card-body">
 					<ul style='list-style-type: none;'>
 _END;
-	echo "<ul style='list-style-type: none;  min-width: 50%; word->";
+	echo "<ul style=list-style-type: none;  min-width: 50%; word->";
 	foreach ($listOfGenres as $curGenre) {
 		echo "<li><input type='checkbox' class='boxes' name='genreCheckboxes[]' value =" . $curGenre['genre_ID'] . ">" . $curGenre['name'] . "</input></li>";
 	}
@@ -256,7 +256,7 @@ _END;
                 <div class="card-body">
 _END;
 
-	echo "<ul style='list-style-type: none;  min-width: 50%; word->";
+	echo "<ul style=list-style-type: none;  min-width: 50%; word->";
 	foreach ($listOfLanguages as $curLanguage) {
 		echo "<li><input type='checkbox' name='languageCheckboxes[]' class='boxes' value =" . $curLanguage['iso_639'] . ">" . $curLanguage['name'] . "</input></li>";
 	}
