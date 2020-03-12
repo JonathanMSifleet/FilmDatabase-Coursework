@@ -112,7 +112,6 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 		<h3>Filters:</h3>
 		<input type="submit" value="Submit" class="rounded" id="searchMovieButton">
 	</div>
-
 	<div id='accordion'>
 		<div class="card">
             <div class="card-header">
@@ -155,20 +154,6 @@ _END;
 	$maxRuntime = getMaxValue($connection, "runtime");
 
 	echo <<<_END
-			<div class="card">
-				<div class="card-header">
-					<a class="collapsed card-link" data-toggle="collapse" href="#collapseRuntime">Runtime</a>
-				</div>
-				<div id="collapseRuntime" class="collapse toggle" data-parent="#accordion">
-					<div class="card-body">
-						<label for="minRuntimeSlider" >Minimum runtime</label>
-						<input type ="range" id="minRuntimeSlider" name="minRuntime" class="slider"  id="minRuntimeSlider" class="slider" min ="$minRuntime" max ="$maxRuntime" value="$minRuntime">
-						<label id="minRuntimeLabel" for="minRuntimeSlider" class ="sliderLabel">$minRuntime</label>
-						<br><br><br>
-						<label for="maxRuntime">Maximum runtime</label>
-						<input type ="range" id="maxRuntimeSlider" name="maxRuntime" class="slider" min ="$minRuntime" max ="$maxRuntime" value="$maxRuntime">
-						<label id="maxRuntimeLabel" for="maxRuntime" class ="sliderLabel">$maxRuntime</label>
-					</div>
 		<div class="card">
 			<div class="card-header">
 				<a class="collapsed card-link" data-toggle="collapse" href="#collapseRuntime">Runtime</a>
@@ -178,7 +163,6 @@ _END;
 					<label for="minRuntimeSlider" >Minimum runtime</label>
 					<input type ="range" id="minRuntimeSlider" name="minRuntime" class="slider"  id="minRuntimeSlider" class="slider" min ="$minRuntime" max ="$maxRuntime" value="$minRuntime">
 					<label id="minRuntimeLabel" for="minRuntimeSlider" class ="sliderLabel">$minRuntime</label>
-					<label id="minRuntimeLabel" for="minRuntimeSlider" class ="sliderLab el">$minRuntime</label>
 					<br><br><br>
 					<label for="maxRuntime">Maximum runtime</label>
 					<input type ="range" id="maxRuntimeSlider" name="maxRuntime" class="slider" min ="$minRuntime" max ="$maxRuntime" value="$maxRuntime">
@@ -253,7 +237,7 @@ _END;
                 <div class="card-body">
 					<ul style='list-style-type: none;'>
 _END;
-	echo "<ul style='list-style-type': none;  min-width: 50%; word->";
+	echo "<ul style='list-style-type: none;  min-width: 50%; word->";
 	foreach ($listOfGenres as $curGenre) {
 		echo "<li><input type='checkbox' class='boxes' name='genreCheckboxes[]' value =" . $curGenre['genre_ID'] . ">" . $curGenre['name'] . "</input></li>";
 	}
@@ -272,7 +256,7 @@ _END;
                 <div class="card-body">
 _END;
 
-	echo "<ul style=list-style-type: none;  min-width: 50%; word->";
+	echo "<ul style='list-style-type: none;  min-width: 50%; word->";
 	foreach ($listOfLanguages as $curLanguage) {
 		echo "<li><input type='checkbox' name='languageCheckboxes[]' class='boxes' value =" . $curLanguage['iso_639'] . ">" . $curLanguage['name'] . "</input></li>";
 	}
@@ -475,7 +459,7 @@ function buildQuery($searchParameters) {
 	if ($searchParameters['languages'] !== "") {
 		$query = $query . " AND (iso_639 IN ({$searchParameters['languages']}))";
 	}
-	
+
 	return $query . " ORDER BY `{$searchParameters['orderBy']}` {$searchParameters['orderDirection']}";
 
 }
@@ -524,5 +508,3 @@ _END;
 }
 
 ?>
-
-
