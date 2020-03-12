@@ -72,7 +72,7 @@ function displayUI($connection, $listOfLanguages, $listOfGenres) {
 <form action="" id="filterForm" method="post">
 <div id="searchContentWrapper">
 	<ul id='searchContent'>
-		<li><input type="text" placeholder="Use commas to search for multiple actors" id="searchTerm" name="searchValue" minlength="0" maxlength="128"></li>
+		<li><input type="text" placeholder="Use commas to search for multiple terms" id="searchTerm" name="searchValue" minlength="0" maxlength="128"></li>
 		<li>Search for:</li>
 		<li>
 		<select id="searchType" name="searchType">
