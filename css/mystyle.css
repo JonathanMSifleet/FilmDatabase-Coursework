@@ -22,7 +22,12 @@ input[type="checkbox"] {
     background-color: #ffffff;
 }
 
+#searchMovieSidebar{
+
+}
 .sidebar-sticky * {
+
+    max-width: 500px;
     margin: 0;
     padding: 0;
 }
@@ -58,6 +63,7 @@ input[type="checkbox"] {
 }
 
 #navbar {
+
     height: 8vh;
 }
 
@@ -69,7 +75,7 @@ input[type="checkbox"] {
 }
 
 #searchContentWrapper {
-    padding: 0;
+    padding: 15vw;
     margin: 0 0 0 12vw;
     width: 88vw;
     top: 0;
@@ -636,9 +642,9 @@ footer h1 {
 }
 
 #searchMovieSidebar {
-    width: 12vw;
+    width: 20vw;
     height: 100%;
-    background-color: #ff726f;
+    background-color: black;
     position: fixed;
     z-index: 1;
     top: 0;
