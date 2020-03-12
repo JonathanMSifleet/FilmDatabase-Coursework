@@ -9,11 +9,13 @@ require_once "helper.php";
         <div class="headertitle">
 
             <h1>Movie Database presentation</h1>
-            <a href="#" class="btn js-scroll-to-searchmovies">Search Movie</a>
+            <a href="#" class="btn1 js-scroll-to-searchmovies">Search Movie</a>
 
         </div>
 
     </header>
+
+
 
 
     <section class="test">
@@ -31,6 +33,21 @@ require_once "helper.php";
                 </div>
             </div>
         </div>
+    </section>
+
+    <section class="js--wp-1">
+        <form action="view_movie.php" method="POST" autocomplete="off" id="homeSearchMovie">
+            <label>Search a movie:</label>
+            <input type="text" name="title" id="search_movie"/>
+
+        </form>
+
+        <div class="col-md-5" style="position: relative; margin-top: -60px; margin-left:35px ">
+            <div class="list-group" id="show-list">
+
+            </div>
+        </div>
+
     </section>
 
 <?php
@@ -71,19 +88,6 @@ _END;
     </div>
     </section>
 
-    <section class="search_movie js--wp-1">
-
-        <form action="view_movie.php?movieID=2">
-            <h1>Search Movie</h1>
-
-            <div class="container">
-                <input type="text" placeholder="Search...">
-                <div class="search"></div>
-            </div>
-
-            <input class="btn" type="submit" value="Search">
-        </form>
-    </section>
 <?php
 
 $query = "SELECT * FROM `movie` order by RAND() LIMIT 8";
@@ -123,20 +127,8 @@ _END;
     <br>
     </div>
     </section>
-    <section>
-        <form action="view_movie.php" method="POST" autocomplete="off" id="homeSearchMovie">
-            <label>Search a movie:</label>
-            <input type="text" name="title" id="search_movie"/>
 
-        </form>
 
-        <div class="col-md-5" style="position: relative; margin-top: 10px; margin-left:35px ">
-            <div class="list-group" id="show-list">
-
-            </div>
-        </div>
-
-    </section>
     <script type="text/javascript">
 
         $(document).ready(function () {

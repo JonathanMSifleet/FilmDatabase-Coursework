@@ -399,21 +399,23 @@ function buildQuery($searchParameters) {
 
 	// name director actorName
 
-	$query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
-	LEFT OUTER JOIN movie_genres USING (movie_ID)
-	LEFT OUTER JOIN genres USING (genre_ID)
-	LEFT OUTER JOIN movie_languages USING (movie_ID)
-	LEFT OUTER JOIN languages USING (iso_639)";
+	
 
 	switch ($searchParameters['searchType']) {
 		case "name" :
-			$query = $query . " WHERE title LIKE '%{$searchParameters['searchValue']}%'";
+			$query = $query = "SELECT DISTINCT title, release_date, movie_id, revenue, budget, runtime, rating FROM movie 
+	LEFT OUTER JOIN movie_genres USING (movie_ID)
+	LEFT OUTER JOIN genres USING (genre_ID)
+	LEFT OUTER JOIN movie_languages USING (movie_ID)
+	LEFT OUTER JOIN languages USING (iso_639)
+	WHERE title LIKE '%{$searchParameters['searchValue']}%'";
 			break;
 		case "director" :
-			$query = $query . " LEFT OUTER JOIN movie_crew USING (movie_ID) LEFT OUTER JOIN credits USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%' AND job = 'director'";
+			$query = "SELECT credit_name FROM credits INNER JOIN movie_crew USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%' AND job='director'";
 			break;
 		case "actorName" :
 			$query = $query . " LEFT OUTER JOIN movie_cast USING (movie_ID) LEFT OUTER JOIN credits USING (credit_id) WHERE credit_name LIKE '%{$searchParameters['searchValue']}%'";
+			break;
 	}
 
 	$query = $query . addFilters($searchParameters);

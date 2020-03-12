@@ -511,7 +511,7 @@ h1 {
     font-weight: 600;
 }
 
-.btn {
+.btn1 {
     text-decoration: none;
     display: block;
     text-align: center;
@@ -527,6 +527,11 @@ h1 {
     width: 200px;
     border: 0;
     cursor: pointer;
+}
+
+.btn1:hover{
+
+    color: white;
 }
 
 .search_movie {
