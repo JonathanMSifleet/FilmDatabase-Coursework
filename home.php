@@ -26,9 +26,7 @@ require_once "helper.php";
                     <p>Well come to the movie database presentation. This is a fully featured web app where you can browse and search content of the latest movies</p>
                 </div>
                 <div class="col2 span-1-of-22 piccol">
-                    <h1>Join the community</h1>
-
-                    <a class="btn" href="">Login or Sign up</a>
+                    <h1>Top </h1>
 
                 </div>
             </div>
