@@ -40,8 +40,8 @@ require_once "helper.php";
 
         </form>
 
-        <div class="col-md-5" style="position: relative; margin-top: -60px; margin-left:35px ">
-            <div class="list-group" id="show-list">
+        <div class="col-md-5" style="position: relative; margin-top: -60px; margin-left:390px ">
+            <div class="list-group" id="show-list" style="text-align: center">
 
             </div>
         </div>
