@@ -447,7 +447,6 @@ function createCompaniesTable($connection, $dataDump) {
 				echo "company name: " . $companyName . ", ID:" . $companyID."<br>";
 			} */
 
-
 			$uniqueKID = md5($movieID . $companyName . $companyID);
 			//insert keyword into table:
 			$sql = "INSERT IGNORE INTO companies (uniqueID, movie_ID, companyName, id) VALUES ('$uniqueKID', $movieID, '$companyName', $companyID)";
@@ -652,7 +651,6 @@ function createCrewTable($connection, $dataDump) {
 		$movieID = $lineAsArray[0];
 		$attributes = $lineAsArray[1];
 		$arrayOfAttributes = explode("|", $attributes);
-
 
 		foreach ($arrayOfAttributes as $curArray) {
 

@@ -328,7 +328,7 @@ function displayPicture($picturePath, $elementID) {
 }
 
 function removeCommaFromListString($input) {
-	return substr($input, 0, strlen($input) -2);
+	return substr($input, 0, strlen($input) - 2);
 }
 
 ?>

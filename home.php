@@ -15,9 +15,6 @@ require_once "helper.php";
 
     </header>
 
-
-
-
     <section class="test">
         <div class="insideDiv">
             <div class="row2">
